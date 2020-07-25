@@ -10,6 +10,7 @@ class CrudAdminRequest
     const ATTRIBUTE_ENTITY_CLASS = 'ddr_crud_admin.entity_class';
     const ATTRIBUTE_DATA = 'ddr_crud_admin.data';
     const ATTRIBUTE_TITLE = 'ddr_crud_admin.title';
+    const ATTRIBUTE_FIELD_DEFINITIONS = 'ddr_cud_admin.field_definitions';
 
     private Request $request;
 
@@ -82,6 +83,16 @@ class CrudAdminRequest
     public function setTitle(string $title): void
     {
         $this->request->attributes->set(self::ATTRIBUTE_TITLE, $title);
+    }
+
+    public function getFieldDefinitions()
+    {
+        return $this->request->attributes->get(self::ATTRIBUTE_FIELD_DEFINITIONS);
+    }
+
+    public function setFieldDefinitions(array $fieldDefinitions)
+    {
+        $this->request->attributes->set(self::ATTRIBUTE_FIELD_DEFINITIONS, $fieldDefinitions);
     }
 
 }

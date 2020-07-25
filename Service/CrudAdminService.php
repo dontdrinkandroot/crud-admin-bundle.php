@@ -7,6 +7,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\CollectionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\TitleProviderInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\DefaultUuidEntity;
@@ -44,6 +45,9 @@ class CrudAdminService
 
     /** @var CollectionProviderInterface[] */
     private array $collectionProviders = [];
+
+    /** @var FieldDefinitionProviderInterface[] */
+    private array $fieldDefinitionProviders = [];
 
     public function __construct(
         ManagerRegistry $managerRegistry,
@@ -211,6 +215,27 @@ class CrudAdminService
         throw new RuntimeException('Could not resolve title');
     }
 
+    public function getFieldDefinitions(CrudAdminRequest $crudAdminRequest): array
+    {
+        $fieldDefinitions = $crudAdminRequest->getFieldDefinitions();
+        if (null !== $fieldDefinitions) {
+            return $fieldDefinitions;
+        }
+
+        foreach ($this->fieldDefinitionProviders as $fieldDefinitionProvider) {
+            if ($fieldDefinitionProvider->supports($crudAdminRequest)) {
+                $fieldDefinitions = $fieldDefinitionProvider->provideFieldDefinitions($crudAdminRequest);
+                if (null !== $fieldDefinitions) {
+                    $crudAdminRequest->setFieldDefinitions($fieldDefinitions);
+
+                    return $fieldDefinitions;
+                }
+            }
+        }
+
+        throw new RuntimeException('Could not resolve field definitions');
+    }
+
     public function addTitleProvider(TitleProviderInterface $titleProvider)
     {
         $this->titleProviders[] = $titleProvider;
@@ -224,5 +249,10 @@ class CrudAdminService
     public function addCollectionProvider(CollectionProviderInterface $collectionProvider)
     {
         $this->collectionProviders[] = $collectionProvider;
+    }
+
+    public function addFieldDefinitionProvider(FieldDefinitionProviderInterface $fieldDefinitionProvider)
+    {
+        $this->fieldDefinitionProviders[] = $fieldDefinitionProvider;
     }
 }

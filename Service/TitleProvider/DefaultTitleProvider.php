@@ -18,7 +18,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTitle(CrudAdminRequest $request): ?string
+    public function provideTitle(CrudAdminRequest $request): string
     {
         return ClassNameUtils::getShortName($request->getEntityClass());
     }

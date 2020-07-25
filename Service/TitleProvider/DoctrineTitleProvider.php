@@ -31,7 +31,7 @@ class DoctrineTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTitle(CrudAdminRequest $request): ?string
+    public function provideTitle(CrudAdminRequest $request): string
     {
         $parts = explode("\\", $request->getEntityClass());
         $lastPart = $parts[count($parts) - 1];

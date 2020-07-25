@@ -8,5 +8,5 @@ use Knp\Component\Pager\Pagination\PaginationInterface;
 
 interface CollectionProviderInterface extends ProviderInterface
 {
-    public function provideCollection(CrudAdminRequest $request): PaginationInterface;
+    public function provideCollection(CrudAdminRequest $request): ?PaginationInterface;
 }

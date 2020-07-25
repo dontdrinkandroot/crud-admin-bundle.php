@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle;
 
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\CollectionProviderCompilerPass;
+use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\FieldDefinitionProviderCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\ItemProviderCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\TitleProviderCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,5 +21,6 @@ class DdrCrudAdminBundle extends Bundle
         $container->addCompilerPass(new TitleProviderCompilerPass());
         $container->addCompilerPass(new ItemProviderCompilerPass());
         $container->addCompilerPass(new CollectionProviderCompilerPass());
+        $container->addCompilerPass(new FieldDefinitionProviderCompilerPass());
     }
 }

@@ -22,3 +22,11 @@ services:
             -
                 name: 'ddr_crud_admin.collection_provider'
                 priority: 255
+
+    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\DoctrineFieldDefinitionProvider:
+        arguments:
+            - '@doctrine'
+        tags:
+            -
+                name: 'ddr_crud_admin.field_definition_provider'
+                priority: 255
