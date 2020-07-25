@@ -9,20 +9,24 @@ class CrudAdminRequest
     const ATTRIBUTE_OPERATION = 'ddr_crud_admin.operation';
     const ATTRIBUTE_ENTITY_CLASS = 'ddr_crud_admin.entity_class';
     const ATTRIBUTE_DATA = 'ddr_crud_admin.data';
-
-    private string $crudOperation;
+    const ATTRIBUTE_TITLE = 'ddr_crud_admin.title';
 
     private Request $request;
 
     public function __construct(string $crudOperation, Request $request)
     {
-        $this->crudOperation = $crudOperation;
         $this->request = $request;
+        $this->setOperation($crudOperation);
     }
 
-    public function getCrudOperation(): string
+    public function getOperation(): string
     {
-        return $this->crudOperation;
+        return $this->request->attributes->get(self::ATTRIBUTE_OPERATION);
+    }
+
+    public function setOperation(string $crudOperation)
+    {
+        $this->request->attributes->set(self::ATTRIBUTE_OPERATION, $crudOperation);
     }
 
     public function getRequest(): Request
@@ -50,6 +54,11 @@ class CrudAdminRequest
         return $this->request->attributes->get(self::ATTRIBUTE_DATA);
     }
 
+    public function setData($data)
+    {
+        $this->request->attributes->set(self::ATTRIBUTE_DATA, $data);
+    }
+
     public function getRedirectRouteAfterSuccess(): ?string
     {
         return $this->request->attributes->get('ddr_crud_admin.redirect_route_after_success');
@@ -64,4 +73,15 @@ class CrudAdminRequest
     {
         return $this->getRequest()->query->getInt('perPage', 10);
     }
+
+    public function getTitle(): ?string
+    {
+        return $this->request->attributes->get(self::ATTRIBUTE_TITLE);
+    }
+
+    public function setTitle(string $title): void
+    {
+        $this->request->attributes->set(self::ATTRIBUTE_TITLE, $title);
+    }
+
 }

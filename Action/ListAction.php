@@ -23,10 +23,12 @@ class ListAction
         $this->crudAdminService->checkAuthorization($crudAdminRequest);
         $entities = $this->crudAdminService->listEntities($crudAdminRequest);
         $template = $this->crudAdminService->getTemplate($crudAdminRequest);
+        $title = $this->crudAdminService->getTitle($crudAdminRequest);
 
         return $this->crudAdminService->render(
             $template,
             [
+                'title' => $title,
                 'entities' => $entities,
                 'page' => $crudAdminRequest->getPage(),
                 'perPage' => $crudAdminRequest->getPerPage()

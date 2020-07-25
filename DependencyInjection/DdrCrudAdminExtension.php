@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
+use Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\TitleProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -19,6 +20,9 @@ class DdrCrudAdminExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $container->registerForAutoconfiguration(TitleProviderInterface::class)
+            ->addTag('ddr_crud_admin.title_provider');
+
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
@@ -28,6 +32,7 @@ class DdrCrudAdminExtension extends Extension
         $bundles = $container->getParameter('kernel.bundles');
 
         if (array_key_exists('DoctrineBundle', $bundles)) {
+            $loader->load('doctrine.yaml');
         }
     }
 }

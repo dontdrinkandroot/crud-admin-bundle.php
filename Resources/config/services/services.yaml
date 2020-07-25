@@ -32,3 +32,9 @@ services:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
         tags: ['controller.service_arguments']
+
+    Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\DefaultTitleProvider:
+        tags:
+            -
+                name: 'ddr_crud_admin.title_provider'
+                priority: 256

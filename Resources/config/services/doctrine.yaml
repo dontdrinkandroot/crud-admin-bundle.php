@@ -1,0 +1,24 @@
+services:
+
+    Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\DoctrineTitleProvider:
+        tags:
+            -
+                name: 'ddr_crud_admin.title_provider'
+                priority: 255
+
+    Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\DoctrineItemProvider:
+        arguments:
+            - '@doctrine'
+        tags:
+            -
+                name: 'ddr_crud_admin.item_provider'
+                priority: 255
+
+    Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\DoctrineCollectionProvider:
+        arguments:
+            - '@doctrine'
+            - '@knp_paginator'
+        tags:
+            -
+                name: 'ddr_crud_admin.collection_provider'
+                priority: 255

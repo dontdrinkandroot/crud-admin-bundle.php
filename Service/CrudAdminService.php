@@ -6,8 +6,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\CollectionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\ItemProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\TitleProviderInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\DefaultUuidEntity;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Dontdrinkandroot\Utils\ClassNameUtils;
+use Knp\Component\Pager\Pagination\PaginationInterface;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -31,6 +36,15 @@ class CrudAdminService
 
     private RouterInterface $router;
 
+    /** @var TitleProviderInterface[] */
+    private array $titleProviders = [];
+
+    /** @var ItemProviderInterface[] */
+    private array $itemProviders = [];
+
+    /** @var CollectionProviderInterface[] */
+    private array $collectionProviders = [];
+
     public function __construct(
         ManagerRegistry $managerRegistry,
         Environment $templating,
@@ -50,7 +64,7 @@ class CrudAdminService
         $data = $crudAdminRequest->getData();
         $authSubject = $data ?? $this->getEntityClass($crudAdminRequest);
 
-        $crudOperation = $crudAdminRequest->getCrudOperation();
+        $crudOperation = $crudAdminRequest->getOperation();
 
         return $this->authorizationChecker->isGranted($crudOperation, $authSubject);
     }
@@ -58,24 +72,27 @@ class CrudAdminService
     /**
      * @param CrudAdminRequest $crudAdminRequest
      *
-     * @return Paginator|array
+     * @return PaginationInterface|array
      */
     public function listEntities(CrudAdminRequest $crudAdminRequest)
     {
-        $page = $crudAdminRequest->getPage();
-        $perPage = $crudAdminRequest->getPerPage();
+        $data = $crudAdminRequest->getData();
+        if (null !== $data) {
+            return $data;
+        }
 
-        $entityClass = $this->getEntityClass($crudAdminRequest);
-        $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
-        assert($entityManager instanceof EntityManagerInterface);
-        $queryBuilder = $entityManager->createQueryBuilder()
-            ->select('entity')
-            ->from($entityClass, 'entity');
+        foreach ($this->collectionProviders as $collectionProvider) {
+            if ($collectionProvider->supports($crudAdminRequest)) {
+                $data = $collectionProvider->provideCollection($crudAdminRequest);
+                if (null !== $data) {
+                    $crudAdminRequest->setData($data);
 
-        $queryBuilder->setFirstResult(($page - 1) * $perPage);
-        $queryBuilder->setMaxResults($perPage);
+                    return $data;
+                }
+            }
+        }
 
-        return new Paginator($queryBuilder);
+        throw new RuntimeException('Could not list entities');
     }
 
     public function getTemplate(CrudAdminRequest $crudAdminRequest): string
@@ -85,7 +102,7 @@ class CrudAdminService
             return $template;
         }
 
-        switch ($crudAdminRequest->getCrudOperation()) {
+        switch ($crudAdminRequest->getOperation()) {
             case CrudOperation::LIST:
                 return '@DdrCrudAdmin/list.html.twig';
             case CrudOperation::READ:
@@ -139,12 +156,12 @@ class CrudAdminService
 
     public function createResponse(CrudAdminRequest $crudAdminRequest): Response
     {
-        switch ($crudAdminRequest->getCrudOperation()) {
+        switch ($crudAdminRequest->getOperation()) {
             case CrudOperation::DELETE:
                 return $this->createDeleteReponse($crudAdminRequest);
         }
 
-        throw new RuntimeException('Dont know how to create response for ' . $crudAdminRequest->getCrudOperation());
+        throw new RuntimeException('Dont know how to create response for ' . $crudAdminRequest->getOperation());
     }
 
     private function createDeleteReponse(CrudAdminRequest $crudAdminRequest)
@@ -171,5 +188,41 @@ class CrudAdminService
         assert($entityManager instanceof EntityManagerInterface);
 
         return $entityManager;
+    }
+
+    public function getTitle(CrudAdminRequest $crudAdminRequest): string
+    {
+        $title = $crudAdminRequest->getTitle();
+        if (null !== $title) {
+            return $title;
+        }
+
+        foreach ($this->titleProviders as $titleProvider) {
+            if ($titleProvider->supports($crudAdminRequest)) {
+                $title = $titleProvider->provideTitle($crudAdminRequest);
+                if (null !== $title) {
+                    $crudAdminRequest->setTitle($title);
+
+                    return $title;
+                }
+            }
+        }
+
+        throw new RuntimeException('Could not resolve title');
+    }
+
+    public function addTitleProvider(TitleProviderInterface $titleProvider)
+    {
+        $this->titleProviders[] = $titleProvider;
+    }
+
+    public function addItemProvider(ItemProviderInterface $itemProvider)
+    {
+        $this->itemProviders[] = $itemProvider;
+    }
+
+    public function addCollectionProvider(CollectionProviderInterface $collectionProvider)
+    {
+        $this->collectionProviders[] = $collectionProvider;
     }
 }
