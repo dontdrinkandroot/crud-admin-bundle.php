@@ -6,6 +6,10 @@ use Symfony\Component\HttpFoundation\Request;
 
 class CrudAdminRequest
 {
+    const ATTRIBUTE_OPERATION = 'ddr_crud_admin.operation';
+    const ATTRIBUTE_ENTITY_CLASS = 'ddr_crud_admin.entity_class';
+    const ATTRIBUTE_DATA = 'ddr_crud_admin.data';
+
     private string $crudOperation;
 
     private Request $request;
@@ -28,7 +32,7 @@ class CrudAdminRequest
 
     public function getEntityClass(): ?string
     {
-        return $this->request->attributes->get('ddr_crud_admin.entity_class');
+        return $this->request->attributes->get(self::ATTRIBUTE_ENTITY_CLASS);
     }
 
     public function getId()
@@ -43,7 +47,7 @@ class CrudAdminRequest
 
     public function getData()
     {
-        return $this->request->attributes->get('ddr_crud_admin.data');
+        return $this->request->attributes->get(self::ATTRIBUTE_DATA);
     }
 
     public function getRedirectRouteAfterSuccess(): ?string
