@@ -1,7 +1,7 @@
 {
-    "name": "dontdrinkandroot/crud-admin-bundle",
+    "name": "dontdrinkandroot/bridge-bundle",
     "type": "symfony-bundle",
-    "description": "Generic CRUD Admin",
+    "description": "Dontdrinkandroot specific bridges",
     "license": "Apache-2.0",
     "authors": [
         {
