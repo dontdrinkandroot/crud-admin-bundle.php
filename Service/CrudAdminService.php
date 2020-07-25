@@ -87,12 +87,12 @@ class CrudAdminService
 
         switch ($crudAdminRequest->getCrudOperation()) {
             case CrudOperation::LIST:
-                return '@DdrSymfony/CrudAdmin/list.html.twig';
+                return '@DdrCrudAdmin/list.html.twig';
             case CrudOperation::READ:
-                return '@DdrSymfony/CrudAdmin/read.html.twig';
+                return '@DdrCrudAdmin/read.html.twig';
             case CrudOperation::UPDATE:
             case CrudOperation::CREATE:
-                return '@DdrSymfony/CrudAdmin/update.html.twig';
+                return '@DdrCrudAdmin/update.html.twig';
         }
 
         throw new RuntimeException('Could not resolve template');
