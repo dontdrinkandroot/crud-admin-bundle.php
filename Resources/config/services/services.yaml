@@ -1,0 +1,34 @@
+services:
+
+    Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService:
+        arguments:
+            - '@doctrine'
+            - '@twig'
+            - '@event_dispatcher'
+            - '@security.authorization_checker'
+            - '@router'
+
+    Dontdrinkandroot\CrudAdminBundle\Action\ListAction:
+        arguments:
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
+        tags: ['controller.service_arguments']
+
+    Dontdrinkandroot\CrudAdminBundle\Action\CreateAction:
+        arguments:
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
+        tags: ['controller.service_arguments']
+
+    Dontdrinkandroot\CrudAdminBundle\Action\ReadAction:
+        arguments:
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
+        tags: ['controller.service_arguments']
+
+    Dontdrinkandroot\CrudAdminBundle\Action\UpdateAction:
+        arguments:
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
+        tags: ['controller.service_arguments']
+
+    Dontdrinkandroot\CrudAdminBundle\Action\DeleteAction:
+        arguments:
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
+        tags: ['controller.service_arguments']

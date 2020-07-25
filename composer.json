@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": ">=7.4",
+        "dontdrinkandroot/common": "dev-master",
         "symfony/config": "^4.4",
         "symfony/dependency-injection": "^4.4",
         "symfony/http-kernel": "^4.4",
