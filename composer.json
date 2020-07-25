@@ -1,0 +1,38 @@
+{
+    "name": "dontdrinkandroot/crud-admin-bundle",
+    "type": "symfony-bundle",
+    "description": "Generic CRUD Admin",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "Philip Washington Sorst",
+            "email": "philip@sorst.net",
+            "homepage": "https://sorst.net"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "symfony/config": "^4.4",
+        "symfony/dependency-injection": "^4.4",
+        "symfony/http-kernel": "^4.4",
+        "symfony/yaml": "^4.4"
+    },
+    "require-dev": {
+        "doctrine/doctrine-bundle": "^2.0",
+        "doctrine/doctrine-fixtures-bundle": "^3.0",
+        "liip/test-fixtures-bundle": "^1.0",
+        "phpunit/phpunit": "^9.0",
+        "symfony/phpunit-bridge": "^4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dontdrinkandroot\\CrudAdminBundle\\": ""
+        },
+        "exclude-from-classmap": [
+            "/Tests/"
+        ]
+    },
+    "config": {
+        "sort-packages": true
+    }
+}
