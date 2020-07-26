@@ -25,16 +25,17 @@ class ListAction
         $entities = $this->crudAdminService->listEntities($crudAdminRequest);
         $template = $this->crudAdminService->getTemplate($crudAdminRequest);
         $title = $this->crudAdminService->getTitle($crudAdminRequest);
+        $routes = $this->crudAdminService->getRoutes($crudAdminRequest);
 
-        return $this->crudAdminService->render(
-            $template,
-            [
-                'title'            => $title,
-                'entities'         => $entities,
-                'page'             => $crudAdminRequest->getPage(),
-                'perPage'          => $crudAdminRequest->getPerPage(),
-                'fieldDefinitions' => $fieldDefinitions
-            ]
-        );
+        $context = [
+            'title'            => $title,
+            'entities'         => $entities,
+            'page'             => $crudAdminRequest->getPage(),
+            'perPage'          => $crudAdminRequest->getPerPage(),
+            'fieldDefinitions' => $fieldDefinitions,
+            'routes'           => $routes
+        ];
+
+        return $this->crudAdminService->render($template, $context);
     }
 }

@@ -30,6 +30,7 @@
                 {% endif %}
             {% endfor %}
             {% block ddr_crud_admin_list_entity_actions_header %}
+                <th style="width: 1%"></th>
             {% endblock ddr_crud_admin_list_entity_actions_header %}
         </tr>
         </thead>
@@ -40,6 +41,34 @@
                     <td>{{ entity|ddrCrudAdminFieldDefinitionValue(fieldDefinition) }}</td>
                 {% endfor %}
                 {% block ddr_crud_admin_list_entity_actions %}
+                    <td style="width: 1%" class="dropdown">
+                        <a class="dropdown-toggle ddr-no-caret"
+                           type="button"
+                           id="dropdownMenuButton"
+                           data-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false"
+                        >
+                            <span class="fas fa-fw fa-ellipsis-v"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                            {% if is_granted('READ', entity) %}
+                                <a class="dropdown-item" href="{{ path(routes['READ'], {'id':entity|ddrCrudAdminId}) }}">
+                                    Show
+                                </a>
+                            {% endif %}
+                            {% if is_granted('UPDATE', entity) %}
+                                <a class="dropdown-item" href="{{ path(routes['UPDATE'], {'id':entity|ddrCrudAdminId}) }}">
+                                    Edit
+                                </a>
+                            {% endif %}
+                            {% if is_granted('DELETE', entity) %}
+                                <a class="dropdown-item" href="{{ path(routes['DELETE'], {'id':entity|ddrCrudAdminId}) }}">
+                                    Delete
+                                </a>
+                            {% endif %}
+                        </div>
+                    </td>
                 {% endblock ddr_crud_admin_list_entity_actions %}
             </tr>
         {% endfor %}

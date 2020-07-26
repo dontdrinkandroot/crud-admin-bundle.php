@@ -10,6 +10,7 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\CollectionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\ItemProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteProvider\RouteProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\TitleProviderInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\DefaultUuidEntity;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
@@ -49,6 +50,9 @@ class CrudAdminService
 
     /** @var FieldDefinitionProviderInterface[] */
     private array $fieldDefinitionProviders = [];
+
+    /** @var RouteProviderInterface[] */
+    private array $routeProviders = [];
 
     public function __construct(
         ManagerRegistry $managerRegistry,
@@ -216,6 +220,27 @@ class CrudAdminService
         throw new RuntimeException('Could not resolve title');
     }
 
+    public function getRoutes(CrudAdminRequest $crudAdminRequest)
+    {
+        $routes = $crudAdminRequest->getRoutes();
+        if (null !== $routes) {
+            return $routes;
+        }
+
+        foreach ($this->routeProviders as $routeProvider) {
+            if ($routeProvider->supports($crudAdminRequest)) {
+                $routes = $routeProvider->provideRoutes($crudAdminRequest);
+                if (null !== $routes) {
+                    $crudAdminRequest->setRoutes($routes);
+
+                    return $routes;
+                }
+            }
+        }
+
+        throw new RuntimeException('Could not resolve routes');
+    }
+
     /**
      * @param CrudAdminRequest $crudAdminRequest
      *
@@ -260,5 +285,10 @@ class CrudAdminService
     public function addFieldDefinitionProvider(FieldDefinitionProviderInterface $fieldDefinitionProvider)
     {
         $this->fieldDefinitionProviders[] = $fieldDefinitionProvider;
+    }
+
+    public function addRouteProvider(RouteProviderInterface $routeProvider)
+    {
+        $this->routeProviders[] = $routeProvider;
     }
 }

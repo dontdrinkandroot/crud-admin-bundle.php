@@ -11,7 +11,8 @@ class CrudAdminRequest
     const ATTRIBUTE_ENTITY_CLASS = 'ddr_crud_admin.entity_class';
     const ATTRIBUTE_DATA = 'ddr_crud_admin.data';
     const ATTRIBUTE_TITLE = 'ddr_crud_admin.title';
-    const ATTRIBUTE_FIELD_DEFINITIONS = 'ddr_cud_admin.field_definitions';
+    const ATTRIBUTE_FIELD_DEFINITIONS = 'ddr_crud_admin.field_definitions';
+    const ATTRIBUTE_ROUTES = 'ddr_crud_admin.routes';
 
     private Request $request;
 
@@ -100,6 +101,16 @@ class CrudAdminRequest
     public function setFieldDefinitions(array $fieldDefinitions)
     {
         $this->request->attributes->set(self::ATTRIBUTE_FIELD_DEFINITIONS, $fieldDefinitions);
+    }
+
+    public function getRoutes(): ?array
+    {
+        return $this->request->attributes->get(self::ATTRIBUTE_ROUTES);
+    }
+
+    public function setRoutes(array $routes): void
+    {
+        $this->request->attributes->set(self::ATTRIBUTE_ROUTES, $routes);
     }
 
 }

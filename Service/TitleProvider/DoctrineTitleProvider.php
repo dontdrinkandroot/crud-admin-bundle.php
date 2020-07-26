@@ -33,13 +33,12 @@ class DoctrineTitleProvider implements TitleProviderInterface
      */
     public function provideTitle(CrudAdminRequest $request): string
     {
-        $parts = explode("\\", $request->getEntityClass());
-        $lastPart = $parts[count($parts) - 1];
+       $shortName = ClassNameUtils::getShortName($request->getEntityClass());
         switch ($request->getOperation()) {
             case CrudOperation::LIST:
-                return $this->inflector->pluralize($lastPart);
+                return $this->inflector->pluralize($shortName);
             default:
-                return $this->inflector->capitalize($lastPart);
+                return $this->inflector->capitalize($shortName);
         }
     }
 }

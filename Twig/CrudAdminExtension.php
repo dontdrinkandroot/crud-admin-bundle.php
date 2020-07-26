@@ -26,6 +26,10 @@ class CrudAdminExtension extends AbstractExtension
                 'ddrCrudAdminFieldDefinitionValue',
                 [$this, 'renderFieldDefinitionValue'],
                 ['is_safe' => ['html']]
+            ),
+            new TwigFilter(
+                'ddrCrudAdminId',
+                [$this, 'getId'],
             )
         ];
     }
@@ -34,6 +38,12 @@ class CrudAdminExtension extends AbstractExtension
     {
         $value = $this->propertyAccessor->getValue($entity, $fieldDefinition->getPropertyPath());
         $value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
         return $value;
+    }
+
+    public function getId(object $entity)
+    {
+        return $this->propertyAccessor->getValue($entity, 'id');
     }
 }

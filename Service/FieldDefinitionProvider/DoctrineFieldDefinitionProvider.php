@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Dontdrinkandroot\Utils\ClassNameUtils;
 
 class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterface
 {
@@ -36,8 +37,7 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
         assert($entityManager instanceof EntityManagerInterface);
         $classMetadata = $entityManager->getClassMetadata($entityClass);
 
-        $parts = explode("\\", $request->getEntityClass());
-        $className = $parts[count($parts) - 1];
+        $className = ClassNameUtils::getShortName($request->getEntityClass());
 
         $fieldDefinitions = [];
         foreach ($classMetadata->fieldMappings as $fieldMapping) {

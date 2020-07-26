@@ -39,6 +39,12 @@ services:
                 name: 'ddr_crud_admin.title_provider'
                 priority: 256
 
+    Dontdrinkandroot\CrudAdminBundle\Service\RouteProvider\DefaultRouteProvider:
+        tags:
+            -
+                name: 'ddr_crud_admin.route_provider'
+                priority: 256
+
     Dontdrinkandroot\CrudAdminBundle\Twig\CrudAdminExtension:
         arguments:
             - '@property_accessor'
