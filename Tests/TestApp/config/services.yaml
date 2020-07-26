@@ -1,0 +1,11 @@
+services:
+
+    _defaults:
+        autoconfigure: true
+        autowire: true
+
+    Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\:
+        resource: '../DataFixtures'
+
+    Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Security\:
+        resource: '../Security'

@@ -8,6 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UpdateAction
 {
@@ -25,7 +26,9 @@ class UpdateAction
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
-        $this->crudAdminService->checkAuthorization($crudAdminRequest);
+        if (!$this->crudAdminService->checkAuthorization($crudAdminRequest)) {
+            throw new AccessDeniedException();
+        }
         $template = $this->crudAdminService->getTemplate($crudAdminRequest);
         $title = $this->crudAdminService->getTitle($crudAdminRequest);
         $routes = $this->crudAdminService->getRoutes($crudAdminRequest);
@@ -35,7 +38,7 @@ class UpdateAction
             'entity' => $entity,
             'title'  => $title,
             'routes' => $routes,
-            'form' => $form->createView()
+            'form'   => $form->createView()
         ];
 
         return $this->crudAdminService->render($template, $context);

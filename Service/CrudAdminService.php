@@ -3,10 +3,10 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\CollectionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FormProvider\FormProviderInterface;
@@ -14,15 +14,12 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteProvider\RouteProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\TitleProviderInterface;
 use Dontdrinkandroot\DoctrineBundle\Entity\DefaultUuidEntity;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\Utils\ClassNameUtils;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -76,7 +73,7 @@ class CrudAdminService
         $this->router = $router;
     }
 
-    public function checkAuthorization(CrudAdminRequest $crudAdminRequest)
+    public function checkAuthorization(CrudAdminRequest $crudAdminRequest): bool
     {
         $data = $crudAdminRequest->getData();
         $authSubject = $data ?? $this->getEntityClass($crudAdminRequest);
@@ -139,16 +136,23 @@ class CrudAdminService
 
     public function getEntity(CrudAdminRequest $crudAdminRequest): ?object
     {
-        $entityClass = $this->getEntityClass($crudAdminRequest);
-        $entityManager = $this->getEntityManager($crudAdminRequest);
-        $id = $this->getId($crudAdminRequest);
-        if (Uuid::isValid($id) && is_a($entityClass, DefaultUuidEntity::class, true)) {
-            $persister = $entityManager->getUnitOfWork()->getEntityPersister($entityClass);
-
-            return $persister->load(['uuid' => $id]);
+        $entity = $crudAdminRequest->getData();
+        if (null !== $entity) {
+            return $entity;
         }
 
-        return $entityManager->find($entityClass, $id);
+        foreach ($this->itemProviders as $itemProvider) {
+            if ($itemProvider->supports($crudAdminRequest)) {
+                $entity = $itemProvider->provideItem($crudAdminRequest);
+                if (null !== $entity) {
+                    $crudAdminRequest->setData($entity);
+
+                    return $entity;
+                }
+            }
+        }
+
+        throw new RuntimeException('Could not resolve entity');
     }
 
     private function getEntityClass(CrudAdminRequest $crudAdminRequest): string
@@ -159,6 +163,13 @@ class CrudAdminService
         }
 
         return $entityClass;
+    }
+
+    public function createNewInstance(CrudAdminRequest $crudAdminRequest)
+    {
+        $entityClass = $crudAdminRequest->getEntityClass();
+
+        return new $entityClass();
     }
 
     private function getId(CrudAdminRequest $crudAdminRequest)

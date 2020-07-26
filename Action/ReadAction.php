@@ -8,6 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -28,7 +29,9 @@ class ReadAction
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
-        $this->crudAdminService->checkAuthorization($crudAdminRequest);
+        if (!$this->crudAdminService->checkAuthorization($crudAdminRequest)) {
+            throw new AccessDeniedException();
+        }
         $template = $this->crudAdminService->getTemplate($crudAdminRequest);
         $title = $this->crudAdminService->getTitle($crudAdminRequest);
         $routes = $this->crudAdminService->getRoutes($crudAdminRequest);

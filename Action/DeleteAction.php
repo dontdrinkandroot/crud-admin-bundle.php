@@ -8,6 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -28,7 +29,9 @@ class DeleteAction
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
-        $this->crudAdminService->checkAuthorization($crudAdminRequest);
+        if (!$this->crudAdminService->checkAuthorization($crudAdminRequest)) {
+            throw new AccessDeniedException();
+        }
 
         return $this->crudAdminService->createResponse($crudAdminRequest);
     }

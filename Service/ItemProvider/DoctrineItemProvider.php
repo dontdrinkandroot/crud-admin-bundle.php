@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider;
 
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 
@@ -22,7 +23,7 @@ class DoctrineItemProvider implements ItemProviderInterface
      */
     public function supports(CrudAdminRequest $request): bool
     {
-        // TODO: Implement supports() method.
+        return null !== $this->managerRegistry->getManagerForClass($request->getEntityClass());
     }
 
     /**
@@ -30,7 +31,11 @@ class DoctrineItemProvider implements ItemProviderInterface
      */
     public function provideItem(CrudAdminRequest $request): ?object
     {
-        // TODO: Implement provideItem() method.
+        $entityClass = $request->getEntityClass();
+        $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
+        assert($entityManager instanceof EntityManagerInterface);
+
+        return $entityManager->find($entityClass, $request->getId());
     }
 
 }
