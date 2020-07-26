@@ -13,7 +13,6 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
 {
     private ManagerRegistry $managerRegistry;
 
-
     public function __construct(ManagerRegistry $managerRegistry)
     {
         $this->managerRegistry = $managerRegistry;
@@ -42,11 +41,19 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
 
         $fieldDefinitions = [];
         foreach ($classMetadata->fieldMappings as $fieldMapping) {
+            $type = $fieldMapping['type'];
+            $fieldName = $fieldMapping['fieldName'];
+            $filterable = false;
+            if (in_array($type, ['string', 'integer'])) {
+                $filterable = true;
+            }
+
             $fieldDefinitions[] = new FieldDefinition(
-                $fieldMapping['fieldName'],
-                $className.'.'.$fieldMapping['fieldName'],
-                $fieldMapping['type'],
-                true
+                $fieldName,
+                $className . '.' . $fieldName,
+                $type,
+                true,
+                $filterable
             );
         }
 

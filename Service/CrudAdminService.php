@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\CollectionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\ItemProviderInterface;
@@ -215,6 +216,11 @@ class CrudAdminService
         throw new RuntimeException('Could not resolve title');
     }
 
+    /**
+     * @param CrudAdminRequest $crudAdminRequest
+     *
+     * @return FieldDefinition[]
+     */
     public function getFieldDefinitions(CrudAdminRequest $crudAdminRequest): array
     {
         $fieldDefinitions = $crudAdminRequest->getFieldDefinitions();

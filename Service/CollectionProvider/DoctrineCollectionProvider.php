@@ -42,6 +42,19 @@ class DoctrineCollectionProvider implements CollectionProviderInterface
             ->select('entity')
             ->from($entityClass, 'entity');
 
-        return $this->paginator->paginate($queryBuilder);
+        $sortFields = [];
+        $fieldDefinitions = $request->getFieldDefinitions();
+        foreach ($fieldDefinitions as $fieldDefinition) {
+            if ($fieldDefinition->isSortable()) {
+                $sortFields[] = 'entity.' . $fieldDefinition->getPropertyPath();
+            }
+        }
+
+        return $this->paginator->paginate(
+            $queryBuilder,
+            1,
+            10,
+            [PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields]
+        );
     }
 }

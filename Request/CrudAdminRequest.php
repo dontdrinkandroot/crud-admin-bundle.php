@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Request;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Symfony\Component\HttpFoundation\Request;
 
 class CrudAdminRequest
@@ -85,11 +86,17 @@ class CrudAdminRequest
         $this->request->attributes->set(self::ATTRIBUTE_TITLE, $title);
     }
 
-    public function getFieldDefinitions()
+    /**
+     * @return FieldDefinition[]|null
+     */
+    public function getFieldDefinitions(): ?array
     {
         return $this->request->attributes->get(self::ATTRIBUTE_FIELD_DEFINITIONS);
     }
 
+    /**
+     * @param FieldDefinition[] $fieldDefinitions
+     */
     public function setFieldDefinitions(array $fieldDefinitions)
     {
         $this->request->attributes->set(self::ATTRIBUTE_FIELD_DEFINITIONS, $fieldDefinitions);

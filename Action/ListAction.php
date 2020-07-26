@@ -21,10 +21,10 @@ class ListAction
     {
         $crudAdminRequest = new CrudAdminRequest(CrudOperation::LIST, $request);
         $this->crudAdminService->checkAuthorization($crudAdminRequest);
+        $fieldDefinitions = $this->crudAdminService->getFieldDefinitions($crudAdminRequest);
         $entities = $this->crudAdminService->listEntities($crudAdminRequest);
         $template = $this->crudAdminService->getTemplate($crudAdminRequest);
         $title = $this->crudAdminService->getTitle($crudAdminRequest);
-        $fieldDefinitions = $this->crudAdminService->getFieldDefinitions($crudAdminRequest);
 
         return $this->crudAdminService->render(
             $template,

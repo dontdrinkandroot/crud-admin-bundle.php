@@ -12,12 +12,20 @@ class FieldDefinition
 
     private bool $sortable;
 
-    public function __construct(string $propertyPath, string $label, string $type, bool $sortable = false)
-    {
+    private bool $filterable;
+
+    public function __construct(
+        string $propertyPath,
+        string $label,
+        string $type,
+        bool $sortable = false,
+        bool $filterable = false
+    ) {
         $this->propertyPath = $propertyPath;
         $this->label = $label;
         $this->type = $type;
         $this->sortable = $sortable;
+        $this->filterable = $filterable;
     }
 
     public function getPropertyPath(): string
@@ -38,5 +46,10 @@ class FieldDefinition
     public function isSortable(): bool
     {
         return $this->sortable;
+    }
+
+    public function isFilterable(): bool
+    {
+        return $this->filterable;
     }
 }

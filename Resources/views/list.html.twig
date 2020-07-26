@@ -10,6 +10,15 @@
 
     {{ knp_pagination_render(entities) }}
 
+    {% set filterFields = [] %}
+    {% for fieldDefinition in fieldDefinitions %}
+        {% if fieldDefinition.filterable %}
+            {% set filterFields = filterFields|merge({("entity." ~ fieldDefinition.propertyPath): fieldDefinition.label}) %}
+        {% endif %}
+    {% endfor %}
+
+    {{ knp_pagination_filter(entities, filterFields) }}
+
     <table class="table table-sm table-bordered">
         <thead>
         <tr class="text-nowrap">
@@ -28,7 +37,7 @@
         {% for entity in entities %}
             <tr>
                 {% for fieldDefinition in fieldDefinitions %}
-                    <td>{{ entity|ddrCrudAdminFieldDefinitionValue(fieldDefinition)  }}</td>
+                    <td>{{ entity|ddrCrudAdminFieldDefinitionValue(fieldDefinition) }}</td>
                 {% endfor %}
                 {% block ddr_crud_admin_list_entity_actions %}
                 {% endblock ddr_crud_admin_list_entity_actions %}
