@@ -3,8 +3,12 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Request;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class CrudAdminRequest
 {
     const ATTRIBUTE_OPERATION = 'ddr_crud_admin.operation';
@@ -13,6 +17,7 @@ class CrudAdminRequest
     const ATTRIBUTE_TITLE = 'ddr_crud_admin.title';
     const ATTRIBUTE_FIELD_DEFINITIONS = 'ddr_crud_admin.field_definitions';
     const ATTRIBUTE_ROUTES = 'ddr_crud_admin.routes';
+    const ATTRIBUTE_FORM = 'ddr_crud_admin.form';
 
     private Request $request;
 
@@ -111,6 +116,16 @@ class CrudAdminRequest
     public function setRoutes(array $routes): void
     {
         $this->request->attributes->set(self::ATTRIBUTE_ROUTES, $routes);
+    }
+
+    public function getForm(): ?FormInterface
+    {
+        return $this->request->attributes->get(self::ATTRIBUTE_FORM);
+    }
+
+    public function setForm(FormInterface $form): void
+    {
+        $this->request->attributes->set(self::ATTRIBUTE_FORM, $form);
     }
 
 }

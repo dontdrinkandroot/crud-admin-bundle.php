@@ -8,6 +8,9 @@ use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class ListAction
 {
     private CrudAdminService $crudAdminService;

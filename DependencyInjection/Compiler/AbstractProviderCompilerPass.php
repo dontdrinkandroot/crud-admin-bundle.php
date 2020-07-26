@@ -7,6 +7,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 abstract class AbstractProviderCompilerPass implements CompilerPassInterface
 {
     /**

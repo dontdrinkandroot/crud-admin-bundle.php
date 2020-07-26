@@ -9,6 +9,7 @@ use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\CollectionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\FieldDefinitionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FormProvider\FormProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteProvider\RouteProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\TitleProviderInterface;
@@ -19,6 +20,7 @@ use Knp\Component\Pager\Pagination\PaginationInterface;
 use Ramsey\Uuid\Uuid;
 use RuntimeException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -27,6 +29,9 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class CrudAdminService
 {
     private EventDispatcherInterface $eventDispatcher;
@@ -53,6 +58,9 @@ class CrudAdminService
 
     /** @var RouteProviderInterface[] */
     private array $routeProviders = [];
+
+    /** @var FormProviderInterface[] */
+    private array $formProviders = [];
 
     public function __construct(
         ManagerRegistry $managerRegistry,
@@ -220,6 +228,27 @@ class CrudAdminService
         throw new RuntimeException('Could not resolve title');
     }
 
+    public function getForm(CrudAdminRequest $crudAdminRequest): FormInterface
+    {
+        $form = $crudAdminRequest->getForm();
+        if (null !== $form) {
+            return $form;
+        }
+
+        foreach ($this->formProviders as $formProvider) {
+            if ($formProvider->supports($crudAdminRequest)) {
+                $form = $formProvider->provideForm($crudAdminRequest);
+                if (null !== $form) {
+                    $crudAdminRequest->setForm($form);
+
+                    return $form;
+                }
+            }
+        }
+
+        throw new RuntimeException('Could not resolve form');
+    }
+
     public function getRoutes(CrudAdminRequest $crudAdminRequest)
     {
         $routes = $crudAdminRequest->getRoutes();
@@ -291,4 +320,10 @@ class CrudAdminService
     {
         $this->routeProviders[] = $routeProvider;
     }
+
+    public function addFormProvider(FormProviderInterface $formProvider)
+    {
+        $this->formProviders[] = $formProvider;
+    }
+
 }

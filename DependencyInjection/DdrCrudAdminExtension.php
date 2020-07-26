@@ -2,6 +2,11 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
+use Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\CollectionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\FieldDefinitionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FormProvider\FormProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\ItemProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteProvider\RouteProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\TitleProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -20,7 +25,23 @@ class DdrCrudAdminExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $container->registerForAutoconfiguration(TitleProviderInterface::class)
+        $container
+            ->registerForAutoconfiguration(CollectionProviderInterface::class)
+            ->addTag('ddr_crud_admin.collection_provider');
+        $container
+            ->registerForAutoconfiguration(FieldDefinitionProviderInterface::class)
+            ->addTag('ddr_crud_admin.field_definition_provider');
+        $container
+            ->registerForAutoconfiguration(FormProviderInterface::class)
+            ->addTag('ddr_crud_admin.form_provider');
+        $container
+            ->registerForAutoconfiguration(ItemProviderInterface::class)
+            ->addTag('ddr_crud_admin.item_provider');
+        $container
+            ->registerForAutoconfiguration(RouteProviderInterface::class)
+            ->addTag('ddr_crud_admin.route_provider');
+        $container
+            ->registerForAutoconfiguration(TitleProviderInterface::class)
             ->addTag('ddr_crud_admin.title_provider');
 
         $configuration = new Configuration();

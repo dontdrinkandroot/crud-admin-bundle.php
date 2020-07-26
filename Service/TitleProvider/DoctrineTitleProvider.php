@@ -11,6 +11,9 @@ use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use ProxyManager\Inflector\ClassNameInflector;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class DoctrineTitleProvider implements TitleProviderInterface
 {
     private Inflector $inflector;

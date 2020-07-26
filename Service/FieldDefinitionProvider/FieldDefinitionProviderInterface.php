@@ -6,6 +6,9 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 interface FieldDefinitionProviderInterface extends ProviderInterface
 {
     /**

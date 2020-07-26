@@ -7,6 +7,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class CrudAdminExtension extends AbstractExtension
 {
     private PropertyAccessor $propertyAccessor;

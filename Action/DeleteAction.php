@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class DeleteAction
 {
     private CrudAdminService $crudAdminService;

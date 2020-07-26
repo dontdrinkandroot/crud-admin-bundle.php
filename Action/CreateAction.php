@@ -9,6 +9,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class CreateAction
 {
     private CrudAdminService $crudAdminService;

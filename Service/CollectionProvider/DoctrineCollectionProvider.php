@@ -9,6 +9,9 @@ use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\Paginator;
 use Knp\Component\Pager\PaginatorInterface;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class DoctrineCollectionProvider implements CollectionProviderInterface
 {
     private ManagerRegistry $managerRegistry;

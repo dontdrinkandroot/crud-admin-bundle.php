@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle;
 
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\CollectionProviderCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\FieldDefinitionProviderCompilerPass;
+use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\FormProviderCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\ItemProviderCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\RouteProviderCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\TitleProviderCompilerPass;
@@ -25,5 +26,6 @@ class DdrCrudAdminBundle extends Bundle
         $container->addCompilerPass(new FieldDefinitionProviderCompilerPass());
         $container->addCompilerPass(new TitleProviderCompilerPass());
         $container->addCompilerPass(new RouteProviderCompilerPass());
+        $container->addCompilerPass(new FormProviderCompilerPass());
     }
 }

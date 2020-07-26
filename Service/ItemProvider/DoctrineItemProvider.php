@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class DoctrineItemProvider implements ItemProviderInterface
 {
     private ManagerRegistry $managerRegistry;

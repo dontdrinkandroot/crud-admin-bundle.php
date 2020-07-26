@@ -2,6 +2,9 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class FieldDefinitionProviderCompilerPass extends AbstractProviderCompilerPass
 {
     /**

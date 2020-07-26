@@ -6,6 +6,9 @@ use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class DefaultRouteProvider implements RouteProviderInterface
 {
     /**

@@ -3,7 +3,38 @@
 {% block ddr_crud_admin_title %}{{ title }}{% endblock ddr_crud_admin_title %}
 
 {% block ddr_crud_admin_header %}
-    <h1 class="ddr-page-header">{{ title }}</h1>
+    <div class="ddr-page-header ddr-action-container">
+        <h1 class="ddr-content">{{ title }}</h1>
+        <div class="ddr-actions">
+            {% block ddr_crud_admin_read_actions %}
+                {% if is_granted('UPDATE', entity) or is_granted('READ', entity) %}
+                    <div class="dropdown">
+                        <button class="dropdown-toggle ddr-no-caret btn btn-link btn-lg ddr-btn-icon"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+                            <span class="fas fa-fw fa-ellipsis-v"></span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            {% if is_granted('UPDATE', entity) %}
+                                <a class="dropdown-item" href="{{ path(routes['UPDATE'], {'id':entity|ddrCrudAdminId}) }}">
+                                    Edit
+                                </a>
+                            {% endif %}
+                            {% if is_granted('DELETE', entity) %}
+                                <a class="dropdown-item" href="{{ path(routes['DELETE'], {'id':entity|ddrCrudAdminId}) }}">
+                                    Delete
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endif %}
+            {% endblock ddr_crud_admin_read_actions %}
+        </div>
+    </div>
 {% endblock ddr_crud_admin_header %}
 
 {% block ddr_crud_admin_content %}

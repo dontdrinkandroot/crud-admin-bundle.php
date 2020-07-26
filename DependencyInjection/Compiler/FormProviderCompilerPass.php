@@ -10,14 +10,14 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class RouteProviderCompilerPass extends AbstractProviderCompilerPass
+class FormProviderCompilerPass extends AbstractProviderCompilerPass
 {
     /**
      * {@inheritdoc}
      */
     protected function getTagName(): string
     {
-        return 'ddr_crud_admin.route_provider';
+        return 'ddr_crud_admin.form_provider';
     }
 
     /**
@@ -25,6 +25,6 @@ class RouteProviderCompilerPass extends AbstractProviderCompilerPass
      */
     protected function getMethodCall(): string
     {
-        return 'addRouteProvider';
+        return 'addFormProvider';
     }
 }

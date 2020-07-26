@@ -10,6 +10,9 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterface
 {
     private ManagerRegistry $managerRegistry;

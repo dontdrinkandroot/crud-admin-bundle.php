@@ -1,1 +1,13 @@
 {% extends '@DdrCrudAdmin/base.html.twig' %}
+
+{% block ddr_crud_admin_title %}{{ title }}{% endblock ddr_crud_admin_title %}
+
+{% block ddr_crud_admin_header %}
+    <div class="ddr-page-header">
+        <h1>{{ title }}</h1>
+    </div>
+{% endblock ddr_crud_admin_header %}
+
+{% block ddr_crud_admin_content %}
+    {{ form(form) }}
+{% endblock ddr_crud_admin_content %}

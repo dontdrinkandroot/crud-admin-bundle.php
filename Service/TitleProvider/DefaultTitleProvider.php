@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 
+/**
+ * @author Philip Washington Sorst <philip@sorst.net>
+ */
 class DefaultTitleProvider implements TitleProviderInterface
 {
     /**
