@@ -11,30 +11,24 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class CrudAdminRequest
 {
-    const ATTRIBUTE_OPERATION = 'ddr_crud_admin.operation';
-    const ATTRIBUTE_ENTITY_CLASS = 'ddr_crud_admin.entity_class';
-    const ATTRIBUTE_DATA = 'ddr_crud_admin.data';
-    const ATTRIBUTE_TITLE = 'ddr_crud_admin.title';
-    const ATTRIBUTE_FIELD_DEFINITIONS = 'ddr_crud_admin.field_definitions';
-    const ATTRIBUTE_ROUTES = 'ddr_crud_admin.routes';
-    const ATTRIBUTE_FORM = 'ddr_crud_admin.form';
-
     private Request $request;
 
-    public function __construct(string $crudOperation, Request $request)
+    public function __construct(Request $request, string $crudOperation = null)
     {
         $this->request = $request;
-        $this->setOperation($crudOperation);
+        if (null !== $crudOperation) {
+            $this->setOperation($crudOperation);
+        }
     }
 
     public function getOperation(): string
     {
-        return $this->request->attributes->get(self::ATTRIBUTE_OPERATION);
+        return $this->request->attributes->get(RequestAttribute::OPERATION);
     }
 
     public function setOperation(string $crudOperation)
     {
-        $this->request->attributes->set(self::ATTRIBUTE_OPERATION, $crudOperation);
+        $this->request->attributes->set(RequestAttribute::OPERATION, $crudOperation);
     }
 
     public function getRequest(): Request
@@ -44,7 +38,7 @@ class CrudAdminRequest
 
     public function getEntityClass(): ?string
     {
-        return $this->request->attributes->get(self::ATTRIBUTE_ENTITY_CLASS);
+        return $this->request->attributes->get(RequestAttribute::ENTITY_CLASS);
     }
 
     public function getId()
@@ -59,12 +53,12 @@ class CrudAdminRequest
 
     public function getData()
     {
-        return $this->request->attributes->get(self::ATTRIBUTE_DATA);
+        return $this->request->attributes->get(RequestAttribute::DATA);
     }
 
     public function setData($data)
     {
-        $this->request->attributes->set(self::ATTRIBUTE_DATA, $data);
+        $this->request->attributes->set(RequestAttribute::DATA, $data);
     }
 
     public function getRedirectRouteAfterSuccess(): ?string
@@ -84,12 +78,12 @@ class CrudAdminRequest
 
     public function getTitle(): ?string
     {
-        return $this->request->attributes->get(self::ATTRIBUTE_TITLE);
+        return $this->request->attributes->get(RequestAttribute::TITLE);
     }
 
     public function setTitle(string $title): void
     {
-        $this->request->attributes->set(self::ATTRIBUTE_TITLE, $title);
+        $this->request->attributes->set(RequestAttribute::TITLE, $title);
     }
 
     /**
@@ -97,7 +91,7 @@ class CrudAdminRequest
      */
     public function getFieldDefinitions(): ?array
     {
-        return $this->request->attributes->get(self::ATTRIBUTE_FIELD_DEFINITIONS);
+        return $this->request->attributes->get(RequestAttribute::FIELD_DEFINITIONS);
     }
 
     /**
@@ -105,27 +99,27 @@ class CrudAdminRequest
      */
     public function setFieldDefinitions(array $fieldDefinitions)
     {
-        $this->request->attributes->set(self::ATTRIBUTE_FIELD_DEFINITIONS, $fieldDefinitions);
+        $this->request->attributes->set(RequestAttribute::FIELD_DEFINITIONS, $fieldDefinitions);
     }
 
     public function getRoutes(): ?array
     {
-        return $this->request->attributes->get(self::ATTRIBUTE_ROUTES);
+        return $this->request->attributes->get(RequestAttribute::ROUTES);
     }
 
     public function setRoutes(array $routes): void
     {
-        $this->request->attributes->set(self::ATTRIBUTE_ROUTES, $routes);
+        $this->request->attributes->set(RequestAttribute::ROUTES, $routes);
     }
 
     public function getForm(): ?FormInterface
     {
-        return $this->request->attributes->get(self::ATTRIBUTE_FORM);
+        return $this->request->attributes->get(RequestAttribute::FORM);
     }
 
     public function setForm(FormInterface $form): void
     {
-        $this->request->attributes->set(self::ATTRIBUTE_FORM, $form);
+        $this->request->attributes->set(RequestAttribute::FORM, $form);
     }
 
 }

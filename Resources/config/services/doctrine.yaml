@@ -1,41 +1,37 @@
 services:
 
-    Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\DoctrineTitleProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\Title\DoctrineTitleProvider:
         tags:
-            -
-                name: 'ddr_crud_admin.title_provider'
-                priority: 255
+            -   name: 'ddr_crud_admin.title_provider'
+                priority: 200
 
-    Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\DoctrineItemProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\Item\DoctrineItemProvider:
         arguments:
             - '@doctrine'
         tags:
-            -
-                name: 'ddr_crud_admin.item_provider'
-                priority: 255
+            -   name: 'ddr_crud_admin.item_provider'
+                priority: 200
 
-    Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\DoctrineCollectionProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\Collection\DoctrineCollectionProvider:
         arguments:
             - '@doctrine'
             - '@knp_paginator'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
         tags:
-            -
-                name: 'ddr_crud_admin.collection_provider'
-                priority: 255
+            -   name: 'ddr_crud_admin.collection_provider'
+                priority: 200
 
-    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\DoctrineFieldDefinitionProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\DoctrineFieldDefinitionProvider:
         arguments:
             - '@doctrine'
         tags:
-            -
-                name: 'ddr_crud_admin.field_definition_provider'
-                priority: 255
+            -   name: 'ddr_crud_admin.field_definition_provider'
+                priority: 200
 
-    Dontdrinkandroot\CrudAdminBundle\Service\FormProvider\DoctrineFormProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\Form\DoctrineFormProvider:
         arguments:
             - '@doctrine'
             - '@form.factory'
         tags:
-            -
-                name: 'ddr_crud_admin.form_provider'
-                priority: 255
+            -   name: 'ddr_crud_admin.form_provider'
+                priority: 200

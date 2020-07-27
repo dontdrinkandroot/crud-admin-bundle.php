@@ -24,7 +24,7 @@ class DeleteAction
 
     public function __invoke(Request $request): Response
     {
-        $crudAdminRequest = new CrudAdminRequest(CrudOperation::DELETE, $request);
+        $crudAdminRequest = new CrudAdminRequest($request, CrudOperation::DELETE);
         $entity = $this->crudAdminService->getEntity($crudAdminRequest);
         if (null === $entity) {
             throw new NotFoundHttpException();

@@ -2,12 +2,13 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\CollectionProvider\CollectionProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitionProvider\FieldDefinitionProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\FormProvider\FormProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ItemProvider\ItemProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RouteProvider\RouteProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\TitleProvider\TitleProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -38,11 +39,14 @@ class DdrCrudAdminExtension extends Extension
             ->registerForAutoconfiguration(ItemProviderInterface::class)
             ->addTag('ddr_crud_admin.item_provider');
         $container
-            ->registerForAutoconfiguration(RouteProviderInterface::class)
+            ->registerForAutoconfiguration(RoutesProviderInterface::class)
             ->addTag('ddr_crud_admin.route_provider');
         $container
             ->registerForAutoconfiguration(TitleProviderInterface::class)
             ->addTag('ddr_crud_admin.title_provider');
+        $container
+            ->registerForAutoconfiguration(TemplateProviderInterface::class)
+            ->addTag('ddr_crud_admin.template_provider');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

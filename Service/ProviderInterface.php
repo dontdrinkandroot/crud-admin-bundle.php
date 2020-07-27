@@ -2,12 +2,12 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service;
 
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
 interface ProviderInterface
 {
-    public function supports(CrudAdminRequest $request): bool;
+    public function supports(Request $request): bool;
 }
