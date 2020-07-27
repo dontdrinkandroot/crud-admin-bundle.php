@@ -5,11 +5,11 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
+use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,10 +23,16 @@ class DoctrineFormProvider implements FormProviderInterface
 
     private FormFactoryInterface $formFactory;
 
-    public function __construct(ManagerRegistry $managerRegistry, FormFactoryInterface $formFactory)
-    {
+    private ItemResolver $itemResolver;
+
+    public function __construct(
+        ManagerRegistry $managerRegistry,
+        FormFactoryInterface $formFactory,
+        ItemResolver $itemResolver
+    ) {
         $this->managerRegistry = $managerRegistry;
         $this->formFactory = $formFactory;
+        $this->itemResolver = $itemResolver;
     }
 
     /**
@@ -34,9 +40,7 @@ class DoctrineFormProvider implements FormProviderInterface
      */
     public function supports(Request $request): bool
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-
-        return null !== $this->managerRegistry->getManagerForClass($crudAdminRequest->getEntityClass());
+        return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
     }
 
     /**
@@ -44,12 +48,11 @@ class DoctrineFormProvider implements FormProviderInterface
      */
     public function provideForm(Request $request): ?FormInterface
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        $entityClass = $crudAdminRequest->getEntityClass();
+        $entityClass = RequestAttributes::getEntityClass($request);
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);
         $classMetadata = $entityManager->getClassMetadata($entityClass);
-        $entity = $crudAdminRequest->getData();
+        $entity = $this->itemResolver->resolve($request);
         $formBuilder = $this->formFactory->createBuilder(FormType::class, $entity);
         $shortName = ClassNameUtils::getShortName($entityClass);
 

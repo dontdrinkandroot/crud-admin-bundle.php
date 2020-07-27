@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,7 +25,6 @@ class DefaultTitleProvider implements TitleProviderInterface
      */
     public function provideTitle(Request $request): string
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        return ClassNameUtils::getShortName($crudAdminRequest->getEntityClass());
+        return ClassNameUtils::getShortName(RequestAttributes::getEntityClass($request));
     }
 }

@@ -2,13 +2,11 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
-use Doctrine\Inflector\Inflector;
-use Doctrine\Inflector\InflectorFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,8 +27,7 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
      */
     public function supports(Request $request): bool
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        return null !== $this->managerRegistry->getManagerForClass($crudAdminRequest->getEntityClass());
+        return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
     }
 
     /**
@@ -38,13 +35,12 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
      */
     public function provideFieldDefinitions(Request $request): ?array
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        $entityClass = $crudAdminRequest->getEntityClass();
+        $entityClass = RequestAttributes::getEntityClass($request);
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);
         $classMetadata = $entityManager->getClassMetadata($entityClass);
 
-        $className = ClassNameUtils::getShortName($crudAdminRequest->getEntityClass());
+        $className = ClassNameUtils::getShortName($entityClass);
 
         $fieldDefinitions = [];
         foreach ($classMetadata->fieldMappings as $fieldMapping) {

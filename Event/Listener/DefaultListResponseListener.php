@@ -54,14 +54,10 @@ class DefaultListResponseListener
             return;
         }
 
-        $crudAdminRequest = new CrudAdminRequest($request);
-
         $template = $this->templateResolver->resolve($request);
         $context = [
             'title'            => $this->titleResolver->resolve($request),
             'entities'         => $this->collectionResolver->resolve($request),
-            'page'             => $crudAdminRequest->getPage(),
-            'perPage'          => $crudAdminRequest->getPerPage(),
             'fieldDefinitions' => $this->fieldDefinitionsResolver->resolve($request),
             'routes'           => $this->routesResolver->resolve($request)
         ];

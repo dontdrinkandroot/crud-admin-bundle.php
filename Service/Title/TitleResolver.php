@@ -3,9 +3,9 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -25,25 +25,26 @@ class TitleResolver implements ProviderServiceInterface
         $this->providers[] = $provider;
     }
 
-    public function resolve(Request $request): string
+    public function resolve(Request $request): ?string
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        $title = $crudAdminRequest->getTitle();
-        if (null !== $title) {
-            return $title;
+        if (!$request->attributes->has(RequestAttributes::TITLE)) {
+            $request->attributes->set(RequestAttributes::TITLE, $this->resolveFromProviders($request));
         }
 
+        return $request->attributes->get(RequestAttributes::TITLE);
+    }
+
+    public function resolveFromProviders(Request $request): ?string
+    {
         foreach ($this->providers as $titleProvider) {
             if ($titleProvider->supports($request)) {
                 $title = $titleProvider->provideTitle($request);
                 if (null !== $title) {
-                    $crudAdminRequest->setTitle($title);
-
                     return $title;
                 }
             }
         }
 
-        throw new RuntimeException('Could not resolve title');
+        return null;
     }
 }

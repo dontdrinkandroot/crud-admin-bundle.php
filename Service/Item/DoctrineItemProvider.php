@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -25,8 +25,7 @@ class DoctrineItemProvider implements ItemProviderInterface
      */
     public function supports(Request $request): bool
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        return null !== $this->managerRegistry->getManagerForClass($crudAdminRequest->getEntityClass());
+        return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
     }
 
     /**
@@ -34,12 +33,10 @@ class DoctrineItemProvider implements ItemProviderInterface
      */
     public function provideItem(Request $request): ?object
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        $entityClass = $crudAdminRequest->getEntityClass();
+        $entityClass = RequestAttributes::getEntityClass($request);
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);
 
-        return $entityManager->find($entityClass, $crudAdminRequest->getId());
+        return $entityManager->find($entityClass, RequestAttributes::getId($request));
     }
-
 }

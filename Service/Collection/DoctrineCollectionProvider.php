@@ -5,10 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
 use Knp\Component\Pager\Pagination\PaginationInterface;
-use Knp\Component\Pager\Paginator;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,9 +37,7 @@ class DoctrineCollectionProvider implements CollectionProviderInterface
      */
     public function supports(Request $request): bool
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-
-        return null !== $this->managerRegistry->getManagerForClass($crudAdminRequest->getEntityClass());
+        return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
     }
 
     /**
@@ -48,8 +45,7 @@ class DoctrineCollectionProvider implements CollectionProviderInterface
      */
     public function provideCollection(Request $request): PaginationInterface
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        $entityClass = $crudAdminRequest->getEntityClass();
+        $entityClass = RequestAttributes::getEntityClass($request);
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);
 

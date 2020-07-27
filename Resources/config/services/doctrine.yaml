@@ -32,6 +32,7 @@ services:
         arguments:
             - '@doctrine'
             - '@form.factory'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
         tags:
             -   name: 'ddr_crud_admin.form_provider'
                 priority: 200

@@ -17,7 +17,12 @@ class RequestAttributes
     public const OPERATION = 'ddr_crud_admin.operation';
     public const FORM = 'ddr_crud_admin.form';
     public const TEMPLATE = 'ddr_crud_admin.template';
-    const PERSIST_SUCCESS = 'ddr_crud_admin.persist_success';
+    public const PERSIST_SUCCESS = 'ddr_crud_admin.persist_success';
+
+    public static function getId(Request $request)
+    {
+        return $request->attributes->get('id');
+    }
 
     public static function getEntityClass(Request $request): ?string
     {

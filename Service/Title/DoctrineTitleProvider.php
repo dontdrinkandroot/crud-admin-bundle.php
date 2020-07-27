@@ -4,11 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Doctrine\Inflector\Inflector;
 use Doctrine\Inflector\InflectorFactory;
-use Doctrine\Inflector\LanguageInflectorFactory;
-use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use ProxyManager\Inflector\ClassNameInflector;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,9 +36,8 @@ class DoctrineTitleProvider implements TitleProviderInterface
      */
     public function provideTitle(Request $request): string
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-       $shortName = ClassNameUtils::getShortName($crudAdminRequest->getEntityClass());
-        switch ($crudAdminRequest->getOperation()) {
+        $shortName = ClassNameUtils::getShortName(RequestAttributes::getEntityClass($request));
+        switch (RequestAttributes::getOperation($request)) {
             case CrudOperation::LIST:
                 return $this->inflector->pluralize($shortName);
             default:

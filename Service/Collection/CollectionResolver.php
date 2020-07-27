@@ -3,10 +3,10 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
-use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -28,23 +28,24 @@ class CollectionResolver implements ProviderServiceInterface
 
     public function resolve(Request $request): PaginationInterface
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        $data = $crudAdminRequest->getData();
-        if (null !== $data) {
-            return $data;
+        if (!$request->attributes->has(RequestAttributes::DATA)) {
+            $request->attributes->set(RequestAttributes::DATA, $this->resolveFromProviders($request));
         }
 
-        foreach ($this->providers as $collectionProvider) {
-            if ($collectionProvider->supports($crudAdminRequest->getRequest())) {
-                $data = $collectionProvider->provideCollection($crudAdminRequest->getRequest());
-                if (null !== $data) {
-                    $crudAdminRequest->setData($data);
+        return $request->attributes->get(RequestAttributes::TITLE);
+    }
 
+    public function resolveFromProviders(Request $request): ?PaginationInterface
+    {
+        foreach ($this->providers as $collectionProvider) {
+            if ($collectionProvider->supports($request)) {
+                $data = $collectionProvider->provideCollection($request);
+                if (null !== $data) {
                     return $data;
                 }
             }
         }
 
-        throw new RuntimeException('Could not list entities');
+        return null;
     }
 }

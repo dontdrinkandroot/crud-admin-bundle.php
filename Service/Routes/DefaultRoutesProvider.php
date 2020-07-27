@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Routes;
 
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,8 +26,7 @@ class DefaultRoutesProvider implements RoutesProviderInterface
      */
     public function provideRoutes(Request $request): ?array
     {
-        $crudAdminRequest = new CrudAdminRequest($request);
-        $tableizedName = ClassNameUtils::getTableizedShortName($crudAdminRequest->getEntityClass());
+        $tableizedName = ClassNameUtils::getTableizedShortName(RequestAttributes::getEntityClass($request));
 
         return [
             CrudOperation::LIST   => 'ddr_crud_admin.' . $tableizedName . '.list',
