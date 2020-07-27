@@ -6,7 +6,7 @@
     <div class="ddr-page-header ddr-action-container">
         <h1 class="ddr-content">{{ title }}</h1>
         <div class="ddr-actions">
-            {% if is_granted('CREATE', app.request.get('ddr_crud_admin.entity_class')) %}
+            {% if routes.CREATE is defined and is_granted('CREATE', app.request.get('ddr_crud_admin.entity_class')) %}
                 <a class="btn btn-primary btn-lg ddr-btn-icon"href="{{ path(routes['CREATE']) }}">
                     <span class="fas fa-fw fa-plus"></span>
                 </a>
@@ -61,17 +61,17 @@
                             <span class="fas fa-fw fa-ellipsis-v"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            {% if is_granted('READ', entity) %}
+                            {% if routes.READ is defined and is_granted('READ', entity) %}
                                 <a class="dropdown-item" href="{{ path(routes['READ'], {'id':entity|ddrCrudAdminId}) }}">
                                     Show
                                 </a>
                             {% endif %}
-                            {% if is_granted('UPDATE', entity) %}
+                            {% if routes.UPDATE is defined and is_granted('UPDATE', entity) %}
                                 <a class="dropdown-item" href="{{ path(routes['UPDATE'], {'id':entity|ddrCrudAdminId}) }}">
                                     Edit
                                 </a>
                             {% endif %}
-                            {% if is_granted('DELETE', entity) %}
+                            {% if routes.DELETE is defined and is_granted('DELETE', entity) %}
                                 <a class="dropdown-item" href="{{ path(routes['DELETE'], {'id':entity|ddrCrudAdminId}) }}">
                                     Delete
                                 </a>

@@ -67,9 +67,21 @@ class DefaultCreateUpdateResponseListener
         $routes = $this->routesResolver->resolve($request);
         $entity = $this->itemResolver->resolve($request);
         if (true === RequestAttributes::getPersistSuccess($request)) {
-            $url = $this->router->generate($routes[CrudOperation::READ], ['id' => $this->idResolver->resolve($entity)]);
-            $response->setStatusCode(302);
-            $response->headers->set('Location', $url);
+
+            $redirectUrl = null;
+            if (array_key_exists(CrudOperation::READ, $routes)) {
+                $redirectUrl = $this->router->generate(
+                    $routes[CrudOperation::READ],
+                    ['id' => $this->idResolver->resolve($entity)]
+                );
+            } elseif (array_key_exists(CrudOperation::LIST, $routes)) {
+                $redirectUrl = $this->router->generate($routes[CrudOperation::LIST]);
+            }
+
+            if (null !== $redirectUrl) {
+                $response->setStatusCode(302);
+                $response->headers->set('Location', $redirectUrl);
+            }
 
             return;
         }

@@ -7,12 +7,20 @@ use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
 class DefaultRoutesProvider implements RoutesProviderInterface
 {
+    private RouterInterface $router;
+
+    public function __construct(RouterInterface $router)
+    {
+        $this->router = $router;
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -28,12 +36,14 @@ class DefaultRoutesProvider implements RoutesProviderInterface
     {
         $tableizedName = ClassNameUtils::getTableizedShortName(RequestAttributes::getEntityClass($request));
 
-        return [
-            CrudOperation::LIST   => 'ddr_crud_admin.' . $tableizedName . '.list',
-            CrudOperation::CREATE => 'ddr_crud_admin.' . $tableizedName . '.create',
-            CrudOperation::READ   => 'ddr_crud_admin.' . $tableizedName . '.read',
-            CrudOperation::UPDATE => 'ddr_crud_admin.' . $tableizedName . '.update',
-            CrudOperation::DELETE => 'ddr_crud_admin.' . $tableizedName . '.delete',
-        ];
+        $routes = [];
+        foreach (CrudOperation::all() as $crudOperation) {
+            $route = 'ddr_crud_admin.' . $tableizedName . '.' . strtolower($crudOperation);
+            if (null !== $this->router->getRouteCollection()->get($route)) {
+                $routes[$crudOperation] = $route;
+            }
+        }
+
+       return $routes;
     }
 }

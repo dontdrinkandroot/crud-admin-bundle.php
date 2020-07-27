@@ -113,6 +113,8 @@ services:
                 priority: 250
 
     Dontdrinkandroot\CrudAdminBundle\Service\Routes\DefaultRoutesProvider:
+        arguments:
+            - '@router'
         tags:
             -   name: 'ddr_crud_admin.routes_provider'
                 priority: 250

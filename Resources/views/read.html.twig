@@ -7,7 +7,7 @@
         <h1 class="ddr-content">{{ title }}</h1>
         <div class="ddr-actions">
             {% block ddr_crud_admin_read_actions %}
-                {% if is_granted('UPDATE', entity) or is_granted('READ', entity) %}
+                {% if (routes.UPDATE is defined and is_granted('UPDATE', entity)) or (routes.READ is defined and is_granted('READ', entity)) %}
                     <div class="dropdown">
                         <button class="dropdown-toggle ddr-no-caret btn btn-link btn-lg ddr-btn-icon"
                                 type="button"
@@ -19,12 +19,12 @@
                             <span class="fas fa-fw fa-ellipsis-v"></span>
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            {% if is_granted('UPDATE', entity) %}
+                            {% if routes.UPDATE is defined and is_granted('UPDATE', entity) %}
                                 <a class="dropdown-item" href="{{ path(routes['UPDATE'], {'id':entity|ddrCrudAdminId}) }}">
                                     Edit
                                 </a>
                             {% endif %}
-                            {% if is_granted('DELETE', entity) %}
+                            {% if routes.DELETE is defined and is_granted('DELETE', entity) %}
                                 <a class="dropdown-item" href="{{ path(routes['DELETE'], {'id':entity|ddrCrudAdminId}) }}">
                                     Delete
                                 </a>
