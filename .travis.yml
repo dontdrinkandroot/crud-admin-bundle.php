@@ -3,9 +3,13 @@ language: php
 matrix:
     include:
         -   php: "7.4"
-            env: dependencies=lowest
+            env:
+                - dependencies=lowest
+                - SYMFONY_DEPRECATIONS_HELPER=weak
         -   php: "7.4"
-            env: dependencies=highest
+            env:
+                - dependencies=highest
+                - SYMFONY_DEPRECATIONS_HELPER=max[direct]=0
 
 addons:
     sonarcloud:
