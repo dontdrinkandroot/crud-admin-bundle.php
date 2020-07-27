@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,7 +37,7 @@ class ItemResolver implements ProviderServiceInterface
     private function resolveFromProviders(Request $request): ?object
     {
         foreach ($this->providers as $itemProvider) {
-            if ($itemProvider->supports($request)){
+            if ($itemProvider->supportsRequest($request)){
                 $entity = $itemProvider->provideItem($request);
                 if (null !== $entity) {
                     return $entity;

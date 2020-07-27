@@ -16,6 +16,8 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister: ~
 
+    Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver: ~
+
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultListResponseListener:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
@@ -49,6 +51,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver'
             - '@twig'
             - '@router'
         tags:
@@ -122,5 +125,6 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Twig\CrudAdminExtension:
         arguments:
             - '@property_accessor'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver'
         tags:
             - { name: twig.extension }

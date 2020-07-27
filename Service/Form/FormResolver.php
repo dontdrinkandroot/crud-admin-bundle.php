@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,7 @@ class FormResolver implements ProviderServiceInterface
     public function resolveFromProviders(Request $request)
     {
         foreach ($this->providers as $provider) {
-            if ($provider->supports($request)) {
+            if ($provider->supportsRequest($request)) {
                 $result = $provider->provideForm($request);
                 if (null !== $result) {
                     return $result;

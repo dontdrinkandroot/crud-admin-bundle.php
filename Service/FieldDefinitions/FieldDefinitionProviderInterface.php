@@ -3,13 +3,13 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface FieldDefinitionProviderInterface extends ProviderInterface
+interface FieldDefinitionProviderInterface extends RequestProviderInterface
 {
     /**
      * @param Request $request

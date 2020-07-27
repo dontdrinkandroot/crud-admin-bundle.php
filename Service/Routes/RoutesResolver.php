@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Routes;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,7 @@ class RoutesResolver implements ProviderServiceInterface
     private function resolveFromProviders(Request $request): ?array
     {
         foreach ($this->providers as $routeProvider) {
-            if ($routeProvider->supports($request)) {
+            if ($routeProvider->supportsRequest($request)) {
                 $routes = $routeProvider->provideRoutes($request);
                 if (null !== $routes) {
                     return $routes;

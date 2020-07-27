@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,7 +38,7 @@ class CollectionResolver implements ProviderServiceInterface
     public function resolveFromProviders(Request $request): ?PaginationInterface
     {
         foreach ($this->providers as $collectionProvider) {
-            if ($collectionProvider->supports($request)) {
+            if ($collectionProvider->supportsRequest($request)) {
                 $data = $collectionProvider->provideCollection($request);
                 if (null !== $data) {
                     return $data;

@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Twig;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -14,9 +15,12 @@ class CrudAdminExtension extends AbstractExtension
 {
     private PropertyAccessor $propertyAccessor;
 
-    public function __construct(PropertyAccessor $propertyAccessor)
+    private IdResolver $idResolver;
+
+    public function __construct(PropertyAccessor $propertyAccessor, IdResolver $idResolver)
     {
         $this->propertyAccessor = $propertyAccessor;
+        $this->idResolver = $idResolver;
     }
 
     /**
@@ -47,6 +51,9 @@ class CrudAdminExtension extends AbstractExtension
 
     public function getId(object $entity)
     {
-        return $this->propertyAccessor->getValue($entity, 'id');
+        $id = $this->idResolver->resolve($entity);
+        assert(null !== $id);
+
+        return $id;
     }
 }

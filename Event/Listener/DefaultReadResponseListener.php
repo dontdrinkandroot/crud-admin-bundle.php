@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
@@ -55,6 +54,7 @@ class DefaultReadResponseListener
 
         $entity = $this->itemResolver->resolve($request);
         $template = $this->templateResolver->resolve($request);
+        assert(null !== $template);
         $title = $this->titleResolver->resolve($request);
         $routes = $this->routesResolver->resolve($request);
         $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($request);

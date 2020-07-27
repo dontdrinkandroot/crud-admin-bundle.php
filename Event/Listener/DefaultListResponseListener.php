@@ -4,10 +4,8 @@ namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
@@ -55,6 +53,7 @@ class DefaultListResponseListener
         }
 
         $template = $this->templateResolver->resolve($request);
+        assert(null !== $template);
         $context = [
             'title'            => $this->titleResolver->resolve($request),
             'entities'         => $this->collectionResolver->resolve($request),

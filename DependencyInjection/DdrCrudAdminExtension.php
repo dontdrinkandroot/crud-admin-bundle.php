@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
@@ -51,6 +52,9 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(ItemPersisterProviderInterface::class)
             ->addTag('ddr_crud_admin.item_persister_provider');
+        $container
+            ->registerForAutoconfiguration(IdProviderInterface::class)
+            ->addTag('ddr_crud_admin.id_provider');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

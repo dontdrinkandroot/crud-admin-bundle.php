@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\Utils\ClassNameUtils;
@@ -38,7 +37,7 @@ class DoctrineFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(Request $request): bool
+    public function supportsRequest(Request $request): bool
     {
         return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
     }

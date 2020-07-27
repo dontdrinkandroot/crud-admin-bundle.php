@@ -2,9 +2,9 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -37,7 +37,7 @@ class TitleResolver implements ProviderServiceInterface
     public function resolveFromProviders(Request $request): ?string
     {
         foreach ($this->providers as $titleProvider) {
-            if ($titleProvider->supports($request)) {
+            if ($titleProvider->supportsRequest($request)) {
                 $title = $titleProvider->provideTitle($request);
                 if (null !== $title) {
                     return $title;

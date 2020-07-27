@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -36,7 +37,7 @@ class TemplateResolver implements ProviderServiceInterface
     public function resolveFromProviders(Request $request)
     {
         foreach ($this->providers as $provider) {
-            if ($provider->supports($request)) {
+            if ($provider->supportsRequest($request)) {
                 $result = $provider->provideTemplate($request);
                 if (null !== $result) {
                     return $result;

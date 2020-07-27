@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -47,7 +48,7 @@ class FieldDefinitionsResolver implements ProviderServiceInterface
     private function resolveFromProviders(Request $request)
     {
         foreach ($this->providers as $fieldDefinitionProvider) {
-            if ($fieldDefinitionProvider->supports($request)) {
+            if ($fieldDefinitionProvider->supportsRequest($request)) {
                 $fieldDefinitions = $fieldDefinitionProvider->provideFieldDefinitions($request);
                 if (null !== $fieldDefinitions) {
                     return $fieldDefinitions;

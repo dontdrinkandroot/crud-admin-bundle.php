@@ -34,7 +34,7 @@ class DoctrineCollectionProvider implements CollectionProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(Request $request): bool
+    public function supportsRequest(Request $request): bool
     {
         return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
     }

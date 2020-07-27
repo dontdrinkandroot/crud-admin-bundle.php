@@ -43,3 +43,11 @@ services:
         tags:
             -   name: 'ddr_crud_admin.item_persister_provider'
                 priority: 200
+
+    Dontdrinkandroot\CrudAdminBundle\Service\Id\DoctrineIdProvider:
+        arguments:
+            - '@doctrine'
+            - '@property_accessor'
+        tags:
+            -   name: 'ddr_crud_admin.id_provider'
+                priority: 200

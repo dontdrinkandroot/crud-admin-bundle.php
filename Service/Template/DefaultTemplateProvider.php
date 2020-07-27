@@ -14,7 +14,7 @@ class DefaultTemplateProvider implements TemplateProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(Request $request): bool
+    public function supportsRequest(Request $request): bool
     {
         return true;
     }

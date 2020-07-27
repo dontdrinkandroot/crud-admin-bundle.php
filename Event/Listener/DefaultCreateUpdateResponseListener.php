@@ -6,6 +6,7 @@ use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
@@ -32,12 +33,15 @@ class DefaultCreateUpdateResponseListener
 
     private Router $router;
 
+    private IdResolver $idResolver;
+
     public function __construct(
         ItemResolver $itemResolver,
         TemplateResolver $templateResolver,
         TitleResolver $titleResolver,
         RoutesResolver $routesResolver,
         FormResolver $formResolver,
+        IdResolver $idResolver,
         Environment $twig,
         Router $router
     ) {
@@ -48,6 +52,7 @@ class DefaultCreateUpdateResponseListener
         $this->twig = $twig;
         $this->itemResolver = $itemResolver;
         $this->router = $router;
+        $this->idResolver = $idResolver;
     }
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
@@ -62,7 +67,7 @@ class DefaultCreateUpdateResponseListener
         $routes = $this->routesResolver->resolve($request);
         $entity = $this->itemResolver->resolve($request);
         if (true === RequestAttributes::getPersistSuccess($request)) {
-            $url = $this->router->generate($routes[CrudOperation::LIST]);
+            $url = $this->router->generate($routes[CrudOperation::READ], ['id' => $this->idResolver->resolve($entity)]);
             $response->setStatusCode(302);
             $response->headers->set('Location', $url);
 
@@ -70,6 +75,7 @@ class DefaultCreateUpdateResponseListener
         }
 
         $template = $this->templateResolver->resolve($request);
+        assert(null !== $template);
         $title = $this->titleResolver->resolve($request);
         $form = $this->formResolver->resolve($request);
         assert(null !== $form);

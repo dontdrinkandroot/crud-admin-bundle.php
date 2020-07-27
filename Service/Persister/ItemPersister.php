@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -27,7 +28,7 @@ class ItemPersister implements ProviderServiceInterface
     public function persistItem(Request $request): bool
     {
         foreach ($this->providers as $provider) {
-            if ($provider->supports($request)) {
+            if ($provider->supportsRequest($request)) {
                 $result = $provider->persist($request);
                 if (true === $result) {
                     RequestAttributes::setPersistSuccess($request, $result);
