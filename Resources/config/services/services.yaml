@@ -1,13 +1,5 @@
 services:
 
-    Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService:
-        arguments:
-            - '@doctrine'
-            - '@twig'
-            - '@event_dispatcher'
-            - '@security.authorization_checker'
-            - '@router'
-
     Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver: ~
 
     Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver: ~
@@ -23,12 +15,6 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver: ~
 
     Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister: ~
-
-    Dontdrinkandroot\CrudAdminBundle\Action\ListAction:
-        arguments:
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
-            - '@event_dispatcher'
-        tags: ['controller.service_arguments']
 
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultListResponseListener:
         arguments:
@@ -79,6 +65,12 @@ services:
             -   name: 'kernel.event_listener'
                 event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent
                 method: 'onCreateResponseEvent'
+
+    Dontdrinkandroot\CrudAdminBundle\Action\ListAction:
+        arguments:
+            - '@security.authorization_checker'
+            - '@event_dispatcher'
+        tags: ['controller.service_arguments']
 
     Dontdrinkandroot\CrudAdminBundle\Action\CreateAction:
         arguments:
