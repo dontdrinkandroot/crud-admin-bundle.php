@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -63,9 +62,14 @@ class DoctrineCollectionProvider implements CollectionProviderInterface
 
         return $this->paginator->paginate(
             $queryBuilder,
-            1,
-            10,
-            [PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields]
+            $request->get('page', 1),
+            $request->get('perPage', 10),
+            [
+                PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
+                PaginatorInterface::DEFAULT_SORT_FIELD_NAME => RequestAttributes::getDefaultSortFieldName($request),
+                PaginatorInterface::DEFAULT_SORT_DIRECTION => RequestAttributes::getDefaultSortDirection($request)
+
+            ]
         );
     }
 }

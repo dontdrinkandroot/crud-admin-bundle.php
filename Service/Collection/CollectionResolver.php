@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
 
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
@@ -32,7 +31,7 @@ class CollectionResolver implements ProviderServiceInterface
             $request->attributes->set(RequestAttributes::DATA, $this->resolveFromProviders($request));
         }
 
-        return $request->attributes->get(RequestAttributes::TITLE);
+        return $request->attributes->get(RequestAttributes::DATA);
     }
 
     public function resolveFromProviders(Request $request): ?PaginationInterface

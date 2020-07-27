@@ -50,7 +50,7 @@ class DefaultListResponseListener
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
         $request = $event->getRequest();
-        if (CrudOperation::LIST !== $request->get(RequestAttributes::OPERATION)) {
+        if (CrudOperation::LIST !== RequestAttributes::getOperation($request)) {
             return;
         }
 

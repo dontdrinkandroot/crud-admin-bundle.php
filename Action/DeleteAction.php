@@ -44,7 +44,7 @@ class DeleteAction
 
     public function __invoke(Request $request): Response
     {
-        $request->attributes->set(RequestAttributes::OPERATION, CrudOperation::DELETE);
+        RequestAttributes::setOperation($request, CrudOperation::DELETE);
         $entity = $this->itemResolver->resolve($request);
         if (null === $entity) {
             throw new NotFoundHttpException();

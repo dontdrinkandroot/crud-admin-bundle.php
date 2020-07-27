@@ -38,7 +38,7 @@ class ReadAction
 
     public function __invoke(Request $request): Response
     {
-        $request->attributes->set(RequestAttributes::OPERATION, CrudOperation::READ);
+        RequestAttributes::setOperation($request, CrudOperation::READ);
         $entity = $this->itemResolver->resolve($request);
         if (null === $entity) {
             throw new NotFoundHttpException();

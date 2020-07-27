@@ -45,7 +45,7 @@ class UpdateAction
 
     public function __invoke(Request $request): Response
     {
-        $request->attributes->set(RequestAttributes::OPERATION, CrudOperation::UPDATE);
+        RequestAttributes::setOperation($request, CrudOperation::UPDATE);
         $entity = $this->itemResolver->resolve($request);
         if (null === $entity) {
             throw new NotFoundHttpException();

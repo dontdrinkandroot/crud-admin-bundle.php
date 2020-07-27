@@ -5,7 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Action;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +30,7 @@ class ListAction
 
     public function __invoke(Request $request): Response
     {
+        RequestAttributes::setOperation($request, CrudOperation::LIST);
         if (!$this->authorizationChecker->isGranted(CrudOperation::LIST, RequestAttributes::getEntityClass($request))) {
             throw new AccessDeniedException();
         }
