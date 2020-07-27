@@ -3,20 +3,25 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class TitleResolver
+class TitleResolver implements ProviderServiceInterface
 {
     /** @var TitleProviderInterface[] */
     private array $providers = [];
 
-    public function addProvider(TitleProviderInterface $provider)
+    /**
+     * {@inheritdoc}
+     */
+    public function addProvider(ProviderInterface $provider): void
     {
+        assert($provider instanceof ProviderInterface);
         $this->providers[] = $provider;
     }
 

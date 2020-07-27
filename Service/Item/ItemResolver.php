@@ -3,20 +3,24 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class ItemResolver
+class ItemResolver implements ProviderServiceInterface
 {
     /** @var ItemProviderInterface[] */
     private array $providers = [];
 
-    public function addProvider(ItemProviderInterface $provider)
+    /**
+     * {@inheritdoc}
+     */
+    public function addProvider(ProviderInterface $provider): void
     {
+        assert($provider instanceof ItemProviderInterface);
         $this->providers[] = $provider;
     }
 

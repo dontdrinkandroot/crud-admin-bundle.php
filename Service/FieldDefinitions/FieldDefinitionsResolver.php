@@ -3,22 +3,25 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class FieldDefinitionsResolver
+class FieldDefinitionsResolver implements ProviderServiceInterface
 {
     /** @var FieldDefinitionProviderInterface[] */
     private array $providers = [];
 
-    public function addProvider(FieldDefinitionProviderInterface $provider)
+    /**
+     * {@inheritdoc}
+     */
+    public function addProvider(ProviderInterface $provider): void
     {
+        assert($provider instanceof FieldDefinitionProviderInterface);
         $this->providers[] = $provider;
     }
 

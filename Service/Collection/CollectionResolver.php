@@ -3,8 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
-use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
