@@ -5,7 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -21,7 +20,7 @@ class TemplateResolver implements ProviderServiceInterface
      */
     public function addProvider(ProviderInterface $provider): void
     {
-        assert($provider instanceof TitleProviderInterface);
+        assert($provider instanceof TemplateProviderInterface);
         $this->providers[] = $provider;
     }
 

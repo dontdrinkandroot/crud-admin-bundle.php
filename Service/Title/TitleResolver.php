@@ -21,7 +21,7 @@ class TitleResolver implements ProviderServiceInterface
      */
     public function addProvider(ProviderInterface $provider): void
     {
-        assert($provider instanceof ProviderInterface);
+        assert($provider instanceof TitleProviderInterface);
         $this->providers[] = $provider;
     }
 
