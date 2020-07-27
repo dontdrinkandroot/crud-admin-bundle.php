@@ -27,7 +27,8 @@ class FormResolver implements ProviderServiceInterface
         $this->providers[] = $provider;
     }
 
-    public function resolve(Request $request): ?FormInterface {
+    public function resolve(Request $request): ?FormInterface
+    {
         if (!$request->attributes->has(RequestAttributes::FORM)) {
             $request->attributes->set(RequestAttributes::FORM, $this->resolveFromProviders($request));
         }

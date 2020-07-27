@@ -20,6 +20,7 @@ class RequestAttributes
     public const PERSIST_SUCCESS = 'ddr_crud_admin.persist_success';
     public const DEFAULT_SORT_FIELD_NAME = 'ddr_crud_admin.default_sort_field_name';
     public const DEFAULT_SORT_DIRECTION = 'ddr_crud_admin.default_sort_direction';
+    public const FORM_TYPE = 'ddr_crud_admin.form_type';
 
     public static function getId(Request $request)
     {
@@ -69,5 +70,10 @@ class RequestAttributes
     public static function getDefaultSortDirection(Request $request)
     {
         return $request->attributes->get(self::DEFAULT_SORT_DIRECTION);
+    }
+
+    public static function getFormType(Request $request): ?string
+    {
+        return $request->attributes->get(self::FORM_TYPE);
     }
 }
