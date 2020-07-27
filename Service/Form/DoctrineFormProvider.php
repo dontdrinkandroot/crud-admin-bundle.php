@@ -35,6 +35,7 @@ class DoctrineFormProvider implements FormProviderInterface
     public function supports(Request $request): bool
     {
         $crudAdminRequest = new CrudAdminRequest($request);
+
         return null !== $this->managerRegistry->getManagerForClass($crudAdminRequest->getEntityClass());
     }
 
@@ -51,15 +52,19 @@ class DoctrineFormProvider implements FormProviderInterface
         $entity = $crudAdminRequest->getData();
         $formBuilder = $this->formFactory->createBuilder(FormType::class, $entity);
         $shortName = ClassNameUtils::getShortName($entityClass);
+
         foreach ($classMetadata->fieldMappings as $fieldMapping) {
-            $formBuilder->add(
-                $fieldMapping['fieldName'],
-                null,
-                [
-                    'label' => $shortName . '.' . $fieldMapping['fieldName']
+            $fieldName = $fieldMapping['fieldName'];
+            if (!array_key_exists('id', $fieldMapping) || false === $fieldMapping['id']) {
+                $formBuilder->add(
+                    $fieldName,
+                    null,
+                    [
+                        'label' => $shortName . '.' . $fieldName
 //                    , 'translation_domain' => $this->getTranslationDomain($attributes)
-                ]
-            );
+                    ]
+                );
+            }
         }
         $formBuilder->add('submit', SubmitType::class, ['label' => 'Save']);
 

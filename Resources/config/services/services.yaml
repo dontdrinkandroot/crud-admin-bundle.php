@@ -22,6 +22,8 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver: ~
 
+    Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister: ~
+
     Dontdrinkandroot\CrudAdminBundle\Action\ListAction:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
@@ -54,7 +56,7 @@ services:
                 event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent
                 method: 'onCreateResponseEvent'
 
-    Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultUpdateResponseListener:
+    Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultCreateUpdateResponseListener:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver'
@@ -62,6 +64,17 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
             - '@twig'
+            - '@router'
+        tags:
+            -   name: 'kernel.event_listener'
+                event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent
+                method: 'onCreateResponseEvent'
+
+    Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultDeleteResponseListener:
+        arguments:
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
+            - '@router'
         tags:
             -   name: 'kernel.event_listener'
                 event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent
@@ -69,7 +82,10 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Action\CreateAction:
         arguments:
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister'
+            - '@security.authorization_checker'
+            - '@event_dispatcher'
         tags: ['controller.service_arguments']
 
     Dontdrinkandroot\CrudAdminBundle\Action\ReadAction:
@@ -83,13 +99,17 @@ services:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister'
             - '@security.authorization_checker'
             - '@event_dispatcher'
         tags: ['controller.service_arguments']
 
     Dontdrinkandroot\CrudAdminBundle\Action\DeleteAction:
         arguments:
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister'
+            - '@security.authorization_checker'
+            - '@event_dispatcher'
         tags: ['controller.service_arguments']
 
     Dontdrinkandroot\CrudAdminBundle\Service\Title\DefaultTitleProvider:
@@ -99,7 +119,7 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Service\Routes\DefaultRoutesProvider:
         tags:
-            -   name: 'ddr_crud_admin.route_provider'
+            -   name: 'ddr_crud_admin.routes_provider'
                 priority: 250
 
     Dontdrinkandroot\CrudAdminBundle\Service\Template\DefaultTemplateProvider:

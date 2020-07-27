@@ -3,7 +3,16 @@
 {% block ddr_crud_admin_title %}{{ title }}{% endblock ddr_crud_admin_title %}
 
 {% block ddr_crud_admin_header %}
-    <h1 class="ddr-page-header">{{ title }}</h1>
+    <div class="ddr-page-header ddr-action-container">
+        <h1 class="ddr-content">{{ title }}</h1>
+        <div class="ddr-actions">
+            {% if is_granted('CREATE', app.request.get('ddr_crud_admin.entity_class')) %}
+                <a class="btn btn-primary btn-lg ddr-btn-icon"href="{{ path(routes['CREATE']) }}">
+                    <span class="fas fa-fw fa-plus"></span>
+                </a>
+            {% endif %}
+        </div>
+    </div>
 {% endblock ddr_crud_admin_header %}
 
 {% block ddr_crud_admin_content %}

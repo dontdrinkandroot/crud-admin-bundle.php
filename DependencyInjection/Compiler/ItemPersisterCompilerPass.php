@@ -2,19 +2,19 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class RoutesResolverCompilerPass extends AbstractProviderServiceCompilerPass
+class ItemPersisterCompilerPass extends AbstractProviderServiceCompilerPass
 {
     /**
      * {@inheritdoc}
      */
     protected function getProviderServiceClass(): string
     {
-        return RoutesResolver::class;
+        return ItemPersister::class;
     }
 
     /**
@@ -22,6 +22,6 @@ class RoutesResolverCompilerPass extends AbstractProviderServiceCompilerPass
      */
     protected function getTagName(): string
     {
-        return 'ddr_crud_admin.routes_provider';
+        return 'ddr_crud_admin.item_persister_provider';
     }
 }

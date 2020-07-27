@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Routes;
 
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttribute;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
@@ -27,11 +27,11 @@ class RoutesResolver implements ProviderServiceInterface
 
     public function resolve(Request $request): ?array
     {
-        if (!$request->attributes->has(RequestAttribute::ROUTES)) {
-            $request->attributes->set(RequestAttribute::ROUTES, $this->resolveFromProviders($request));
+        if (!$request->attributes->has(RequestAttributes::ROUTES)) {
+            $request->attributes->set(RequestAttributes::ROUTES, $this->resolveFromProviders($request));
         }
 
-        return $request->attributes->get(RequestAttribute::ROUTES);
+        return $request->attributes->get(RequestAttributes::ROUTES);
     }
 
     private function resolveFromProviders(Request $request): ?array

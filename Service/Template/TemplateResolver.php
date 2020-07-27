@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttribute;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
@@ -27,11 +27,11 @@ class TemplateResolver implements ProviderServiceInterface
 
     public function resolve(Request $request): ?string
     {
-        if (!$request->attributes->has(RequestAttribute::TEMPLATE)) {
-            $request->attributes->set(RequestAttribute::TEMPLATE, $this->resolveFromProviders($request));
+        if (!$request->attributes->has(RequestAttributes::TEMPLATE)) {
+            $request->attributes->set(RequestAttributes::TEMPLATE, $this->resolveFromProviders($request));
         }
 
-        return $request->attributes->get(RequestAttribute::TEMPLATE);
+        return $request->attributes->get(RequestAttributes::TEMPLATE);
     }
 
     public function resolveFromProviders(Request $request)

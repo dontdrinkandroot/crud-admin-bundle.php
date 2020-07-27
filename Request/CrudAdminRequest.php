@@ -23,12 +23,12 @@ class CrudAdminRequest
 
     public function getOperation(): string
     {
-        return $this->request->attributes->get(RequestAttribute::OPERATION);
+        return $this->request->attributes->get(RequestAttributes::OPERATION);
     }
 
     public function setOperation(string $crudOperation)
     {
-        $this->request->attributes->set(RequestAttribute::OPERATION, $crudOperation);
+        $this->request->attributes->set(RequestAttributes::OPERATION, $crudOperation);
     }
 
     public function getRequest(): Request
@@ -38,7 +38,7 @@ class CrudAdminRequest
 
     public function getEntityClass(): ?string
     {
-        return $this->request->attributes->get(RequestAttribute::ENTITY_CLASS);
+        return $this->request->attributes->get(RequestAttributes::ENTITY_CLASS);
     }
 
     public function getId()
@@ -53,12 +53,12 @@ class CrudAdminRequest
 
     public function getData()
     {
-        return $this->request->attributes->get(RequestAttribute::DATA);
+        return $this->request->attributes->get(RequestAttributes::DATA);
     }
 
     public function setData($data)
     {
-        $this->request->attributes->set(RequestAttribute::DATA, $data);
+        $this->request->attributes->set(RequestAttributes::DATA, $data);
     }
 
     public function getRedirectRouteAfterSuccess(): ?string
@@ -78,12 +78,12 @@ class CrudAdminRequest
 
     public function getTitle(): ?string
     {
-        return $this->request->attributes->get(RequestAttribute::TITLE);
+        return $this->request->attributes->get(RequestAttributes::TITLE);
     }
 
     public function setTitle(string $title): void
     {
-        $this->request->attributes->set(RequestAttribute::TITLE, $title);
+        $this->request->attributes->set(RequestAttributes::TITLE, $title);
     }
 
     /**
@@ -91,7 +91,7 @@ class CrudAdminRequest
      */
     public function getFieldDefinitions(): ?array
     {
-        return $this->request->attributes->get(RequestAttribute::FIELD_DEFINITIONS);
+        return $this->request->attributes->get(RequestAttributes::FIELD_DEFINITIONS);
     }
 
     /**
@@ -99,27 +99,27 @@ class CrudAdminRequest
      */
     public function setFieldDefinitions(array $fieldDefinitions)
     {
-        $this->request->attributes->set(RequestAttribute::FIELD_DEFINITIONS, $fieldDefinitions);
+        $this->request->attributes->set(RequestAttributes::FIELD_DEFINITIONS, $fieldDefinitions);
     }
 
     public function getRoutes(): ?array
     {
-        return $this->request->attributes->get(RequestAttribute::ROUTES);
+        return $this->request->attributes->get(RequestAttributes::ROUTES);
     }
 
     public function setRoutes(array $routes): void
     {
-        $this->request->attributes->set(RequestAttribute::ROUTES, $routes);
+        $this->request->attributes->set(RequestAttributes::ROUTES, $routes);
     }
 
     public function getForm(): ?FormInterface
     {
-        return $this->request->attributes->get(RequestAttribute::FORM);
+        return $this->request->attributes->get(RequestAttributes::FORM);
     }
 
     public function setForm(FormInterface $form): void
     {
-        $this->request->attributes->set(RequestAttribute::FORM, $form);
+        $this->request->attributes->set(RequestAttributes::FORM, $form);
     }
 
 }

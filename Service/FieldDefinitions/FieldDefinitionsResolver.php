@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttribute;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,11 +29,11 @@ class FieldDefinitionsResolver
      */
     public function resolve(Request $request): ?array
     {
-        if (!$request->attributes->has(RequestAttribute::FIELD_DEFINITIONS)) {
-            $request->attributes->set(RequestAttribute::FIELD_DEFINITIONS, $this->resolveFromProviders($request));
+        if (!$request->attributes->has(RequestAttributes::FIELD_DEFINITIONS)) {
+            $request->attributes->set(RequestAttributes::FIELD_DEFINITIONS, $this->resolveFromProviders($request));
         }
 
-        return $request->attributes->get(RequestAttribute::FIELD_DEFINITIONS);
+        return $request->attributes->get(RequestAttributes::FIELD_DEFINITIONS);
     }
 
     /**

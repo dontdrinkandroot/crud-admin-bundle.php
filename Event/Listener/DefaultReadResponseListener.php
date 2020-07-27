@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttribute;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
@@ -49,7 +49,7 @@ class DefaultReadResponseListener
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
         $request = $event->getRequest();
-        if (CrudOperation::READ !== $request->get(RequestAttribute::OPERATION)) {
+        if (CrudOperation::READ !== $request->get(RequestAttributes::OPERATION)) {
             return;
         }
 

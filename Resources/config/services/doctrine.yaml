@@ -25,7 +25,7 @@ services:
         arguments:
             - '@doctrine'
         tags:
-            -   name: 'ddr_crud_admin.field_definition_provider'
+            -   name: 'ddr_crud_admin.field_definitions_provider'
                 priority: 200
 
     Dontdrinkandroot\CrudAdminBundle\Service\Form\DoctrineFormProvider:
@@ -34,4 +34,11 @@ services:
             - '@form.factory'
         tags:
             -   name: 'ddr_crud_admin.form_provider'
+                priority: 200
+
+    Dontdrinkandroot\CrudAdminBundle\Service\Persister\DoctrineItemPersisterProvider:
+        arguments:
+            - '@doctrine'
+        tags:
+            -   name: 'ddr_crud_admin.item_persister_provider'
                 priority: 200

@@ -3,10 +3,18 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Action;
 
 use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
+use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
@@ -14,32 +22,47 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
  */
 class CreateAction
 {
-    private CrudAdminService $crudAdminService;
+    private FormResolver $formResolver;
 
-    public function __construct(CrudAdminService $crudAdminService)
-    {
-        $this->crudAdminService = $crudAdminService;
+    private AuthorizationCheckerInterface $authorizationChecker;
+
+    private EventDispatcherInterface $eventDispatcher;
+
+    private ItemPersister $itemPersister;
+
+    public function __construct(
+        FormResolver $formResolver,
+        ItemPersister $itemPersister,
+        AuthorizationCheckerInterface $authorizationChecker,
+        EventDispatcherInterface $eventDispatcher
+    ) {
+        $this->formResolver = $formResolver;
+        $this->authorizationChecker = $authorizationChecker;
+        $this->eventDispatcher = $eventDispatcher;
+        $this->itemPersister = $itemPersister;
     }
 
     public function __invoke(Request $request): Response
     {
-        $crudAdminRequest = new CrudAdminRequest($request, CrudOperation::CREATE);
-        if (!$this->crudAdminService->checkAuthorization($crudAdminRequest)) {
+        $request->attributes->set(RequestAttributes::OPERATION, CrudOperation::CREATE);
+        $entityClass = RequestAttributes::getEntityClass($request);
+        if (!$this->authorizationChecker->isGranted(CrudOperation::CREATE, $entityClass)) {
             throw new AccessDeniedException();
         }
-        $entity = $this->crudAdminService->createNewInstance($crudAdminRequest);
-        $template = $this->crudAdminService->getTemplate($crudAdminRequest);
-        $title = $this->crudAdminService->getTitle($crudAdminRequest);
-        $routes = $this->crudAdminService->getRoutes($crudAdminRequest);
-        $form = $this->crudAdminService->getForm($crudAdminRequest);
+        RequestAttributes::setData($request, new $entityClass());
 
-        $context = [
-            'entity' => $entity,
-            'title'  => $title,
-            'routes' => $routes,
-            'form'   => $form->createView()
-        ];
+        $form = $this->formResolver->resolve($request);
+        assert(null !== $form);
 
-        return $this->crudAdminService->render($template, $context);
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->itemPersister->persist($request);
+        }
+
+        $response = new Response();
+        $createResponseEvent = new CreateResponseEvent($request, $response);
+        $this->eventDispatcher->dispatch($createResponseEvent);
+
+        return $createResponseEvent->getResponse();
     }
 }

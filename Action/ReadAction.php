@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Action;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttribute;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -38,7 +38,7 @@ class ReadAction
 
     public function __invoke(Request $request): Response
     {
-        $request->attributes->set(RequestAttribute::OPERATION, CrudOperation::READ);
+        $request->attributes->set(RequestAttributes::OPERATION, CrudOperation::READ);
         $entity = $this->itemResolver->resolve($request);
         if (null === $entity) {
             throw new NotFoundHttpException();

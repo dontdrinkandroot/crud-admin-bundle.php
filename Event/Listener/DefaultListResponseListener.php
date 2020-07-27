@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttribute;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
@@ -50,7 +50,7 @@ class DefaultListResponseListener
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
         $request = $event->getRequest();
-        if (CrudOperation::LIST !== $request->get(RequestAttribute::OPERATION)) {
+        if (CrudOperation::LIST !== $request->get(RequestAttributes::OPERATION)) {
             return;
         }
 

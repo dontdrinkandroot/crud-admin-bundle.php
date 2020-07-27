@@ -12,32 +12,21 @@ use Symfony\Component\DependencyInjection\Reference;
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class FieldDefinitionsResolverCompilerPass implements CompilerPassInterface
+class FieldDefinitionsResolverCompilerPass extends AbstractProviderServiceCompilerPass
 {
     /**
      * {@inheritdoc}
      */
-    public function process(ContainerBuilder $container)
+    protected function getProviderServiceClass(): string
     {
-        if (!$container->has(FieldDefinitionsResolver::class)) {
-            return;
-        }
+        return FieldDefinitionsResolver::class;
+    }
 
-        $definition = $container->findDefinition(FieldDefinitionsResolver::class);
-
-        $taggedServices = $container->findTaggedServiceIds('ddr_crud_admin.field_definition_provider');
-        $prioritizedIds = [];
-        foreach ($taggedServices as $id => $tags) {
-            $priority = 0;
-            if (array_key_exists('priority', $tags[0])) {
-                $priority = $tags[0]['priority'];
-            }
-            $prioritizedIds[$id] = $priority;
-        }
-
-        asort($prioritizedIds);
-        foreach ($prioritizedIds as $id => $priority) {
-            $definition->addMethodCall('addProvider', [new Reference($id)]);
-        }
+    /**
+     * {@inheritdoc}
+     */
+    protected function getTagName(): string
+    {
+        return 'ddr_crud_admin.field_definitions_provider';
     }
 }

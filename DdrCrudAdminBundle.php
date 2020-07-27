@@ -6,6 +6,7 @@ use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\CollectionReso
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\FieldDefinitionsResolverCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\FormProviderCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\FormResolverCompilerPass;
+use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\ItemPersisterCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\ItemResolverCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\RoutesResolverCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\Compiler\TemplateResolverCompilerPass;
@@ -29,5 +30,6 @@ class DdrCrudAdminBundle extends Bundle
         $container->addCompilerPass(new FormResolverCompilerPass());
         $container->addCompilerPass(new TitleResolverCompilerPass());
         $container->addCompilerPass(new TemplateResolverCompilerPass());
+        $container->addCompilerPass(new ItemPersisterCompilerPass());
     }
 }

@@ -6,6 +6,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionProviderInterf
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
@@ -31,7 +32,7 @@ class DdrCrudAdminExtension extends Extension
             ->addTag('ddr_crud_admin.collection_provider');
         $container
             ->registerForAutoconfiguration(FieldDefinitionProviderInterface::class)
-            ->addTag('ddr_crud_admin.field_definition_provider');
+            ->addTag('ddr_crud_admin.field_definitions_provider');
         $container
             ->registerForAutoconfiguration(FormProviderInterface::class)
             ->addTag('ddr_crud_admin.form_provider');
@@ -40,13 +41,16 @@ class DdrCrudAdminExtension extends Extension
             ->addTag('ddr_crud_admin.item_provider');
         $container
             ->registerForAutoconfiguration(RoutesProviderInterface::class)
-            ->addTag('ddr_crud_admin.route_provider');
+            ->addTag('ddr_crud_admin.routes_provider');
         $container
             ->registerForAutoconfiguration(TitleProviderInterface::class)
             ->addTag('ddr_crud_admin.title_provider');
         $container
             ->registerForAutoconfiguration(TemplateProviderInterface::class)
             ->addTag('ddr_crud_admin.template_provider');
+        $container
+            ->registerForAutoconfiguration(ItemPersisterProviderInterface::class)
+            ->addTag('ddr_crud_admin.item_persister_provider');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

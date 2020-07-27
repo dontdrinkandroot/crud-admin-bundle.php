@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttribute;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,11 +22,11 @@ class ItemResolver
 
     public function resolve(Request $request): ?object
     {
-        if (!$request->attributes->has(RequestAttribute::DATA)) {
-            $request->attributes->set(RequestAttribute::DATA, $this->resolveFromProviders($request));
+        if (!$request->attributes->has(RequestAttributes::DATA)) {
+            $request->attributes->set(RequestAttributes::DATA, $this->resolveFromProviders($request));
         }
 
-        return $request->attributes->get(RequestAttribute::DATA);
+        return $request->attributes->get(RequestAttributes::DATA);
     }
 
     private function resolveFromProviders(Request $request): ?object

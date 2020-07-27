@@ -3,7 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Crud\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttribute;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -24,7 +24,7 @@ class DefaultTemplateProvider implements TemplateProviderInterface
      */
     public function provide(Request $request): ?string
     {
-        switch ($request->attributes->get(RequestAttribute::OPERATION)) {
+        switch ($request->attributes->get(RequestAttributes::OPERATION)) {
             case CrudOperation::LIST:
                 return '@DdrCrudAdmin/list.html.twig';
             case CrudOperation::READ:
