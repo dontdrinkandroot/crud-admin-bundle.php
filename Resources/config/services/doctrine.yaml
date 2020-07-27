@@ -1,10 +1,5 @@
 services:
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Title\DoctrineTitleProvider:
-        tags:
-            -   name: 'ddr_crud_admin.title_provider'
-                priority: 200
-
     Dontdrinkandroot\CrudAdminBundle\Service\Item\DoctrineItemProvider:
         arguments:
             - '@doctrine'

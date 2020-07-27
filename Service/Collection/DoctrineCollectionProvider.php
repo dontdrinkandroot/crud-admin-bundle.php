@@ -68,7 +68,6 @@ class DoctrineCollectionProvider implements CollectionProviderInterface
                 PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => RequestAttributes::getDefaultSortFieldName($request),
                 PaginatorInterface::DEFAULT_SORT_DIRECTION => RequestAttributes::getDefaultSortDirection($request)
-
             ]
         );
     }
