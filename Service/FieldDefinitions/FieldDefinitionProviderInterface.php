@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 

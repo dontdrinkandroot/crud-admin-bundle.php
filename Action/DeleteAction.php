@@ -53,7 +53,7 @@ class DeleteAction
             throw new AccessDeniedException();
         }
 
-        $this->itemPersister->persist($request);
+        $this->itemPersister->persistItem($request);
 
         $response = new Response();
         $createResponseEvent = new CreateResponseEvent($request, $response);

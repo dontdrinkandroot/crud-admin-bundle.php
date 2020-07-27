@@ -10,5 +10,5 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface TemplateProviderInterface extends ProviderInterface
 {
-    public function provide(Request $request): ?string;
+    public function provideTemplate(Request $request): ?string;
 }

@@ -22,7 +22,7 @@ class DefaultTemplateProvider implements TemplateProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provide(Request $request): ?string
+    public function provideTemplate(Request $request): ?string
     {
         switch ($request->attributes->get(RequestAttributes::OPERATION)) {
             case CrudOperation::LIST:

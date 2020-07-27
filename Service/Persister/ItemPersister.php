@@ -24,7 +24,7 @@ class ItemPersister implements ProviderServiceInterface
         $this->providers[] = $provider;
     }
 
-    public function persist(Request $request): bool
+    public function persistItem(Request $request): bool
     {
         foreach ($this->providers as $provider) {
             if ($provider->supports($request)) {

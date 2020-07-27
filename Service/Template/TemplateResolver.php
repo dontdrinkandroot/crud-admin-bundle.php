@@ -37,7 +37,7 @@ class TemplateResolver implements ProviderServiceInterface
     {
         foreach ($this->providers as $provider) {
             if ($provider->supports($request)) {
-                $result = $provider->provide($request);
+                $result = $provider->provideTemplate($request);
                 if (null !== $result) {
                     return $result;
                 }

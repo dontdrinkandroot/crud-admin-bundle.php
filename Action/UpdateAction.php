@@ -8,7 +8,6 @@ use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -60,7 +59,7 @@ class UpdateAction
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->itemPersister->persist($request);
+            $this->itemPersister->persistItem($request);
         }
 
         $response = new Response();
