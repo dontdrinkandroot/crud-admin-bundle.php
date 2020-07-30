@@ -16,14 +16,11 @@ class DefaultDeleteResponseListener
 {
     private RoutesResolver $routesResolver;
 
-    private ItemResolver $itemResolver;
-
     private RouterInterface $router;
 
-    public function __construct(RoutesResolver $routesResolver, ItemResolver $itemResolver, RouterInterface $router)
+    public function __construct(RoutesResolver $routesResolver, RouterInterface $router)
     {
         $this->routesResolver = $routesResolver;
-        $this->itemResolver = $itemResolver;
         $this->router = $router;
     }
 
@@ -37,13 +34,13 @@ class DefaultDeleteResponseListener
 
         $response = $event->getResponse();
         $routes = $this->routesResolver->resolve($request);
-        $entity = $this->itemResolver->resolve($request);
         if (true === RequestAttributes::getPersistSuccess($request)) {
-            $url = $this->router->generate($routes[CrudOperation::LIST]);
-            $response->setStatusCode(302);
-            $response->headers->set('Location', $url);
 
-            return;
+            if (array_key_exists(CrudOperation::LIST, $routes)) {
+                $url = $this->router->generate($routes[CrudOperation::LIST]);
+                $response->setStatusCode(302);
+                $response->headers->set('Location', $url);
+            }
         }
     }
 }
