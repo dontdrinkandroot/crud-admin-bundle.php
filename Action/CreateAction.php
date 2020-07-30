@@ -4,10 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Action;
 
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,7 +27,10 @@ class CreateAction
 
     private ItemPersister $itemPersister;
 
+    private NewInstanceResolver $newInstanceResolver;
+
     public function __construct(
+        NewInstanceResolver $newInstanceResolver,
         FormResolver $formResolver,
         ItemPersister $itemPersister,
         AuthorizationCheckerInterface $authorizationChecker,
@@ -38,16 +40,17 @@ class CreateAction
         $this->authorizationChecker = $authorizationChecker;
         $this->eventDispatcher = $eventDispatcher;
         $this->itemPersister = $itemPersister;
+        $this->newInstanceResolver = $newInstanceResolver;
     }
 
     public function __invoke(Request $request): Response
     {
         $request->attributes->set(RequestAttributes::OPERATION, CrudOperation::CREATE);
         $entityClass = RequestAttributes::getEntityClass($request);
-        if (!$this->authorizationChecker->isGranted(CrudOperation::CREATE, $entityClass)) {
+        $entity = $this->newInstanceResolver->resolve($request);
+        if (!$this->authorizationChecker->isGranted(CrudOperation::CREATE, $entity)) {
             throw new AccessDeniedException();
         }
-        RequestAttributes::setData($request, new $entityClass());
 
         $form = $this->formResolver->resolve($request);
         assert(null !== $form);

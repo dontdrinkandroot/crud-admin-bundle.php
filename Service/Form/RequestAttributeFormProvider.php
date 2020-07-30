@@ -39,6 +39,7 @@ class RequestAttributeFormProvider implements FormProviderInterface
     {
         $entity = $this->itemResolver->resolve($request);
 
-        return $this->formFactory->create(RequestAttributes::getFormType($request), $entity);
+        return $this->formFactory->create(RequestAttributes::getFormType($request), $entity)
+            ->add('submit', SubmitType::class);
     }
 }

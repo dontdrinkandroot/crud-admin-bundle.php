@@ -7,6 +7,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionPro
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
@@ -55,6 +56,9 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(IdProviderInterface::class)
             ->addTag('ddr_crud_admin.id_provider');
+        $container
+            ->registerForAutoconfiguration(NewInstanceProviderInterface::class)
+            ->addTag('ddr_crud_admin.new_instance_provider');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Symfony\Component\HttpFoundation\Request;
 

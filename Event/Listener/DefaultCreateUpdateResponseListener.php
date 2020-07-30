@@ -92,7 +92,6 @@ class DefaultCreateUpdateResponseListener
         $title = $this->titleResolver->resolve($request);
         $form = $this->formResolver->resolve($request);
         assert(null !== $form);
-        $form->add('submit', SubmitType::class);
 
         $context = [
             'entity' => $entity,

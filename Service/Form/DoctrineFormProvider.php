@@ -69,6 +69,8 @@ class DoctrineFormProvider implements FormProviderInterface
             }
         }
 
+        $formBuilder->add('submit', SubmitType::class);
+
         return $formBuilder->getForm();
     }
 }
