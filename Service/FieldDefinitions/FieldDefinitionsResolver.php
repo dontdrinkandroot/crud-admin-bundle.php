@@ -4,28 +4,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class FieldDefinitionsResolver implements ProviderServiceInterface
+class FieldDefinitionsResolver extends AbstractProviderService
 {
-    /** @var FieldDefinitionProviderInterface[] */
-    private array $providers = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addProvider(ProviderInterface $provider): void
-    {
-        assert($provider instanceof FieldDefinitionProviderInterface);
-        $this->providers[] = $provider;
-    }
-
     /**
      * @param Request $request
      *
@@ -47,9 +33,10 @@ class FieldDefinitionsResolver implements ProviderServiceInterface
      */
     private function resolveFromProviders(Request $request)
     {
-        foreach ($this->providers as $fieldDefinitionProvider) {
-            if ($fieldDefinitionProvider->supportsRequest($request)) {
-                $fieldDefinitions = $fieldDefinitionProvider->provideFieldDefinitions($request);
+        foreach ($this->getProviders() as $provider) {
+            assert($provider instanceof FieldDefinitionProviderInterface);
+            if ($provider->supportsRequest($request)) {
+                $fieldDefinitions = $provider->provideFieldDefinitions($request);
                 if (null !== $fieldDefinitions) {
                     return $fieldDefinitions;
                 }

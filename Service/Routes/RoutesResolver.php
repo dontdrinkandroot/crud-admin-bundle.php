@@ -3,29 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Routes;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class RoutesResolver implements ProviderServiceInterface
+class RoutesResolver extends AbstractProviderService
 {
-    /** @var RoutesProviderInterface[] */
-    private $providers = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addProvider(ProviderInterface $provider): void
-    {
-        assert($provider instanceof RoutesProviderInterface);
-        $this->providers[] = $provider;
-    }
-
     public function resolve(Request $request): ?array
     {
         if (!$request->attributes->has(RequestAttributes::ROUTES)) {
@@ -37,9 +22,10 @@ class RoutesResolver implements ProviderServiceInterface
 
     private function resolveFromProviders(Request $request): ?array
     {
-        foreach ($this->providers as $routeProvider) {
-            if ($routeProvider->supportsRequest($request)) {
-                $routes = $routeProvider->provideRoutes($request);
+        foreach ($this->getProviders() as $provider) {
+            assert($provider instanceof RoutesProviderInterface);
+            if ($provider->supportsRequest($request)) {
+                $routes = $provider->provideRoutes($request);
                 if (null !== $routes) {
                     return $routes;
                 }

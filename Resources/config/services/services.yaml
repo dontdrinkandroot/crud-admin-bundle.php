@@ -1,22 +1,40 @@
 services:
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.title_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.field_definitions_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.collection_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.item_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.routes_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.template_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.form_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.item_persister_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver: ~
+    Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.id_provider
 
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultListResponseListener:
         arguments:

@@ -2,28 +2,17 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class IdResolver implements ProviderServiceInterface
+class IdResolver extends AbstractProviderService
 {
-    /** @var IdProviderInterface[] */
-    private $providers = [];
-
-    public function addProvider(ProviderInterface $provider): void
-    {
-        assert($provider instanceof IdProviderInterface);
-        $this->providers[] = $provider;
-    }
-
     public function resolve(object $entity)
     {
-        foreach ($this->providers as $provider) {
+        foreach ($this->getProviders() as $provider) {
+            assert($provider instanceof IdProviderInterface);
             if ($provider->supportsEntity($entity)) {
                 $result = $provider->provideId($entity);
                 if (null !== $result) {

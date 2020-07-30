@@ -3,15 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
+use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class TemplateResolver implements ProviderServiceInterface
+class TemplateResolver extends AbstractProviderService
 {
     /** @var TemplateProviderInterface[] */
     private $providers = [];
@@ -36,7 +35,8 @@ class TemplateResolver implements ProviderServiceInterface
 
     public function resolveFromProviders(Request $request)
     {
-        foreach ($this->providers as $provider) {
+        foreach ($this->getProviders() as $provider) {
+            assert($provider instanceof TemplateProviderInterface);
             if ($provider->supportsRequest($request)) {
                 $result = $provider->provideTemplate($request);
                 if (null !== $result) {

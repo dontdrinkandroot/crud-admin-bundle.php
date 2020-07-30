@@ -3,28 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class TitleResolver implements ProviderServiceInterface
+class TitleResolver extends AbstractProviderService
 {
-    /** @var TitleProviderInterface[] */
-    private array $providers = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addProvider(ProviderInterface $provider): void
-    {
-        assert($provider instanceof TitleProviderInterface);
-        $this->providers[] = $provider;
-    }
-
     public function resolve(Request $request): ?string
     {
         if (!$request->attributes->has(RequestAttributes::TITLE)) {
@@ -36,9 +22,10 @@ class TitleResolver implements ProviderServiceInterface
 
     public function resolveFromProviders(Request $request): ?string
     {
-        foreach ($this->providers as $titleProvider) {
-            if ($titleProvider->supportsRequest($request)) {
-                $title = $titleProvider->provideTitle($request);
+        foreach ($this->getProviders() as $provider) {
+            assert($provider instanceof TitleProviderInterface);
+            if ($provider->supportsRequest($request)) {
+                $title = $provider->provideTitle($request);
                 if (null !== $title) {
                     return $title;
                 }

@@ -3,8 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,20 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class CollectionResolver implements ProviderServiceInterface
+class CollectionResolver extends AbstractProviderService
 {
-    /** @var CollectionProviderInterface[] */
-    private array $providers = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addProvider(ProviderInterface $provider): void
-    {
-        assert($provider instanceof CollectionProviderInterface);
-        $this->providers[] = $provider;
-    }
-
     public function resolve(Request $request): PaginationInterface
     {
         if (!$request->attributes->has(RequestAttributes::DATA)) {
@@ -37,9 +24,10 @@ class CollectionResolver implements ProviderServiceInterface
 
     public function resolveFromProviders(Request $request): ?PaginationInterface
     {
-        foreach ($this->providers as $collectionProvider) {
-            if ($collectionProvider->supportsRequest($request)) {
-                $data = $collectionProvider->provideCollection($request);
+        foreach ($this->getProviders() as $provider) {
+            assert($provider instanceof CollectionProviderInterface);
+            if ($provider->supportsRequest($request)) {
+                $data = $provider->provideCollection($request);
                 if (null !== $data) {
                     return $data;
                 }

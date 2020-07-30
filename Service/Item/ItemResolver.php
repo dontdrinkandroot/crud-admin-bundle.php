@@ -3,28 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class ItemResolver implements ProviderServiceInterface
+class ItemResolver extends AbstractProviderService
 {
-    /** @var ItemProviderInterface[] */
-    private array $providers = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addProvider(ProviderInterface $provider): void
-    {
-        assert($provider instanceof ItemProviderInterface);
-        $this->providers[] = $provider;
-    }
-
     public function resolve(Request $request): ?object
     {
         if (!$request->attributes->has(RequestAttributes::DATA)) {
@@ -36,9 +22,10 @@ class ItemResolver implements ProviderServiceInterface
 
     private function resolveFromProviders(Request $request): ?object
     {
-        foreach ($this->providers as $itemProvider) {
-            if ($itemProvider->supportsRequest($request)){
-                $entity = $itemProvider->provideItem($request);
+        foreach ($this->getProviders() as $provider) {
+            assert($provider instanceof ItemProviderInterface);
+            if ($provider->supportsRequest($request)) {
+                $entity = $provider->provideItem($request);
                 if (null !== $entity) {
                     return $entity;
                 }

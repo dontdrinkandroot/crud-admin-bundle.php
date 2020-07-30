@@ -3,30 +3,15 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class FormResolver implements ProviderServiceInterface
+class FormResolver extends AbstractProviderService
 {
-    /** @var FormProviderInterface[] */
-    private $providers = [];
-
-    /**
-     * {@inheritdoc}
-     */
-    public function addProvider(ProviderInterface $provider): void
-    {
-        assert($provider instanceof FormProviderInterface);
-        $this->providers[] = $provider;
-    }
-
     public function resolve(Request $request): ?FormInterface
     {
         if (!$request->attributes->has(RequestAttributes::FORM)) {
@@ -38,7 +23,8 @@ class FormResolver implements ProviderServiceInterface
 
     public function resolveFromProviders(Request $request)
     {
-        foreach ($this->providers as $provider) {
+        foreach ($this->getProviders() as $provider) {
+            assert($provider instanceof FormProviderInterface);
             if ($provider->supportsRequest($request)) {
                 $result = $provider->provideForm($request);
                 if (null !== $result) {
