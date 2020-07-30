@@ -11,6 +11,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Router;
 use Twig\Environment;
 
@@ -91,6 +92,7 @@ class DefaultCreateUpdateResponseListener
         $title = $this->titleResolver->resolve($request);
         $form = $this->formResolver->resolve($request);
         assert(null !== $form);
+        $form->add('submit', SubmitType::class);
 
         $context = [
             'entity' => $entity,

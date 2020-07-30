@@ -68,7 +68,6 @@ class DoctrineFormProvider implements FormProviderInterface
                 );
             }
         }
-        $formBuilder->add('submit', SubmitType::class, ['label' => 'Save']);
 
         return $formBuilder->getForm();
     }

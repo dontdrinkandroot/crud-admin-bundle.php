@@ -128,27 +128,26 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Service\Title\DefaultTitleProvider:
         tags:
             -   name: 'ddr_crud_admin.title_provider'
-                priority: 250
+                priority: -250
 
     Dontdrinkandroot\CrudAdminBundle\Service\Routes\DefaultRoutesProvider:
         arguments:
             - '@router'
         tags:
             -   name: 'ddr_crud_admin.routes_provider'
-                priority: 250
+                priority: -250
 
     Dontdrinkandroot\CrudAdminBundle\Service\Template\DefaultTemplateProvider:
         tags:
             -   name: 'ddr_crud_admin.template_provider'
-                priority: 250
+                priority: -250
 
     Dontdrinkandroot\CrudAdminBundle\Service\Form\RequestAttributeFormProvider:
         arguments:
             - '@form.factory'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
         tags:
-            -   name: 'ddr_crud_admin.form_provider'
-                priority: 0
+            -  { name: 'ddr_crud_admin.form_provider', priority: 0 }
 
     Dontdrinkandroot\CrudAdminBundle\Twig\CrudAdminExtension:
         arguments:

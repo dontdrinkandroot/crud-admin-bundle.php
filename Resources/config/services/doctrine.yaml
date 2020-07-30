@@ -5,7 +5,7 @@ services:
             - '@doctrine'
         tags:
             -   name: 'ddr_crud_admin.item_provider'
-                priority: 200
+                priority: -200
 
     Dontdrinkandroot\CrudAdminBundle\Service\Collection\DoctrineCollectionProvider:
         arguments:
@@ -14,14 +14,14 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
         tags:
             -   name: 'ddr_crud_admin.collection_provider'
-                priority: 200
+                priority: -200
 
     Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\DoctrineFieldDefinitionProvider:
         arguments:
             - '@doctrine'
         tags:
             -   name: 'ddr_crud_admin.field_definitions_provider'
-                priority: 200
+                priority: -200
 
     Dontdrinkandroot\CrudAdminBundle\Service\Form\DoctrineFormProvider:
         arguments:
@@ -29,15 +29,14 @@ services:
             - '@form.factory'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
         tags:
-            -   name: 'ddr_crud_admin.form_provider'
-                priority: 200
+            - { name: 'ddr_crud_admin.form_provider', priority: -200 }
 
     Dontdrinkandroot\CrudAdminBundle\Service\Persister\DoctrineItemPersisterProvider:
         arguments:
             - '@doctrine'
         tags:
             -   name: 'ddr_crud_admin.item_persister_provider'
-                priority: 200
+                priority: -200
 
     Dontdrinkandroot\CrudAdminBundle\Service\Id\DoctrineIdProvider:
         arguments:
@@ -45,4 +44,4 @@ services:
             - '@property_accessor'
         tags:
             -   name: 'ddr_crud_admin.id_provider'
-                priority: 200
+                priority: -200
