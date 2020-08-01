@@ -35,7 +35,11 @@ class FieldDefinitionsResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FieldDefinitionProviderInterface);
-            if ($provider->supportsRequest($request)) {
+            if ($provider->supports(
+                RequestAttributes::getEntityClass($request),
+                RequestAttributes::getOperation($request),
+                $request
+            )) {
                 $fieldDefinitions = $provider->provideFieldDefinitions($request);
                 if (null !== $fieldDefinitions) {
                     return $fieldDefinitions;

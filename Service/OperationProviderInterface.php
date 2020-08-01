@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface RequestProviderInterface extends ProviderInterface
+interface OperationProviderInterface extends ProviderInterface
 {
-    public function supportsRequest(Request $request): bool;
+    public function supports(string $entityClass, string $crudOperation, Request $request): bool;
 }

@@ -24,7 +24,11 @@ class ItemResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof ItemProviderInterface);
-            if ($provider->supportsRequest($request)) {
+            if ($provider->supports(
+                RequestAttributes::getEntityClass($request),
+                RequestAttributes::getOperation($request),
+                $request
+            )) {
                 $entity = $provider->provideItem($request);
                 if (null !== $entity) {
                     return $entity;

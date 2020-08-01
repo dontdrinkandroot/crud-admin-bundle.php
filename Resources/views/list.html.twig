@@ -61,18 +61,21 @@
                             <span class="fas fa-fw fa-ellipsis-v"></span>
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            {% if routes.READ is defined and is_granted('READ', entity) %}
-                                <a class="dropdown-item" href="{{ path(routes['READ'], {'id':entity|ddrCrudAdminId}) }}">
+                            {% set readRoute = entity|ddrCrudAdminPath('READ') %}
+                            {% if readRoute is not null %}
+                                <a class="dropdown-item" href="{{ readRoute }}">
                                     Show
                                 </a>
                             {% endif %}
-                            {% if routes.UPDATE is defined and is_granted('UPDATE', entity) %}
-                                <a class="dropdown-item" href="{{ path(routes['UPDATE'], {'id':entity|ddrCrudAdminId}) }}">
+                            {% set updateRoute = entity|ddrCrudAdminPath('UPDATE') %}
+                            {% if updateRoute is not null %}
+                                <a class="dropdown-item" href="{{ updateRoute }}">
                                     Edit
                                 </a>
                             {% endif %}
-                            {% if routes.DELETE is defined and is_granted('DELETE', entity) %}
-                                <a class="dropdown-item" href="{{ path(routes['DELETE'], {'id':entity|ddrCrudAdminId}) }}">
+                            {% set deleteRoute = entity|ddrCrudAdminPath('DELETE') %}
+                            {% if deleteRoute is not null %}
+                                <a class="dropdown-item" href="{{ deleteRoute }}">
                                     Delete
                                 </a>
                             {% endif %}

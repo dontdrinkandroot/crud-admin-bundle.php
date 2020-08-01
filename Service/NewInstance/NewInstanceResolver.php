@@ -25,7 +25,11 @@ class NewInstanceResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof NewInstanceProviderInterface);
-            if ($provider->supportsRequest($request)) {
+            if ($provider->supports(
+                RequestAttributes::getEntityClass($request),
+                RequestAttributes::getOperation($request),
+                $request
+            )) {
                 $entity = $provider->provideNewInstance($request);
                 if (null !== $entity) {
                     return $entity;

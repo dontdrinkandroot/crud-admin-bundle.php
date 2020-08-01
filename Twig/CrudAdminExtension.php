@@ -4,6 +4,8 @@ namespace Dontdrinkandroot\CrudAdminBundle\Twig;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -17,10 +19,16 @@ class CrudAdminExtension extends AbstractExtension
 
     private IdResolver $idResolver;
 
-    public function __construct(PropertyAccessor $propertyAccessor, IdResolver $idResolver)
+    private UrlResolver $urlResolver;
+
+    private RequestStack $requestStack;
+
+    public function __construct(PropertyAccessor $propertyAccessor, IdResolver $idResolver, UrlResolver $urlResolver, RequestStack  $requestStack)
     {
         $this->propertyAccessor = $propertyAccessor;
         $this->idResolver = $idResolver;
+        $this->urlResolver = $urlResolver;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -35,8 +43,8 @@ class CrudAdminExtension extends AbstractExtension
                 ['is_safe' => ['html']]
             ),
             new TwigFilter(
-                'ddrCrudAdminId',
-                [$this, 'getId'],
+                'ddrCrudAdminPath',
+                [$this, 'getUrl'],
             )
         ];
     }
@@ -49,11 +57,8 @@ class CrudAdminExtension extends AbstractExtension
         return $value;
     }
 
-    public function getId(object $entity)
+    public function getUrl($entityOrClass, string $crudOperation): ?string
     {
-        $id = $this->idResolver->resolve($entity);
-        assert(null !== $id);
-
-        return $id;
+        return $this->urlResolver->resolve($entityOrClass, $crudOperation, $this->requestStack->getCurrentRequest());
     }
 }

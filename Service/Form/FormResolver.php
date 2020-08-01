@@ -25,7 +25,11 @@ class FormResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FormProviderInterface);
-            if ($provider->supportsRequest($request)) {
+            if ($provider->supports(
+                RequestAttributes::getEntityClass($request),
+                RequestAttributes::getOperation($request),
+                $request
+            )) {
                 $result = $provider->provideForm($request);
                 if (null !== $result) {
                     return $result;

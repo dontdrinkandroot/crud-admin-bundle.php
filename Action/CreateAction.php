@@ -46,7 +46,6 @@ class CreateAction
     public function __invoke(Request $request): Response
     {
         $request->attributes->set(RequestAttributes::OPERATION, CrudOperation::CREATE);
-        $entityClass = RequestAttributes::getEntityClass($request);
         $entity = $this->newInstanceResolver->resolve($request);
         if (!$this->authorizationChecker->isGranted(CrudOperation::CREATE, $entity)) {
             throw new AccessDeniedException();

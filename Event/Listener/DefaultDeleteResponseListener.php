@@ -7,6 +7,7 @@ use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -18,10 +19,15 @@ class DefaultDeleteResponseListener
 
     private RouterInterface $router;
 
-    public function __construct(RoutesResolver $routesResolver, RouterInterface $router)
+    /**
+     * @var UrlResolver
+     */
+    private UrlResolver $urlResolver;
+
+    public function __construct(RouterInterface $router, UrlResolver $urlResolver)
     {
-        $this->routesResolver = $routesResolver;
         $this->router = $router;
+        $this->urlResolver = $urlResolver;
     }
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
@@ -33,13 +39,17 @@ class DefaultDeleteResponseListener
         }
 
         $response = $event->getResponse();
-        $routes = $this->routesResolver->resolve($request);
         if (true === RequestAttributes::getPersistSuccess($request)) {
 
-            if (array_key_exists(CrudOperation::LIST, $routes)) {
-                $url = $this->router->generate($routes[CrudOperation::LIST]);
+            $redirectUrl = $this->urlResolver->resolve(
+                RequestAttributes::getEntityClass($request),
+                CrudOperation::LIST,
+                $request
+            );
+
+            if (null !== $redirectUrl) {
                 $response->setStatusCode(302);
-                $response->headers->set('Location', $url);
+                $response->headers->set('Location', $redirectUrl);
             }
         }
     }

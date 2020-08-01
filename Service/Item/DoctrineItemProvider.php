@@ -22,7 +22,7 @@ class DoctrineItemProvider implements ItemProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsRequest(Request $request): bool
+    public function supports(string $entityClass, string $crudOperation, Request $request): bool
     {
         return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
     }

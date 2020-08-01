@@ -24,7 +24,11 @@ class RoutesResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof RoutesProviderInterface);
-            if ($provider->supportsRequest($request)) {
+            if ($provider->supports(
+                RequestAttributes::getEntityClass($request),
+                RequestAttributes::getOperation($request),
+                $request
+            )) {
                 $routes = $provider->provideRoutes($request);
                 if (null !== $routes) {
                     return $routes;

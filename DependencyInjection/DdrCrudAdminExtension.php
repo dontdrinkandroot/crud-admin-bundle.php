@@ -12,6 +12,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInte
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
@@ -59,6 +60,9 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(NewInstanceProviderInterface::class)
             ->addTag('ddr_crud_admin.new_instance_provider');
+        $container
+            ->registerForAutoconfiguration(UrlProviderInterface::class)
+            ->addTag('ddr_crud_admin.url_provider');
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

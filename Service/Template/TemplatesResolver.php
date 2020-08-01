@@ -37,7 +37,11 @@ class TemplatesResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof TemplatesProviderInterface);
-            if ($provider->supportsRequest($request)) {
+            if ($provider->supports(
+                RequestAttributes::getEntityClass($request),
+                RequestAttributes::getOperation($request),
+                $request
+            )) {
                 $result = $provider->provideTemplates($request);
                 if (null !== $result) {
                     return $result;

@@ -40,6 +40,11 @@ services:
         arguments:
             - !tagged_iterator ddr_crud_admin.new_instance_provider
 
+    Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.url_provider
+
+
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultListResponseListener:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
@@ -86,8 +91,8 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultDeleteResponseListener:
         arguments:
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@router'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
         tags:
             -   name: 'kernel.event_listener'
                 event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent
@@ -161,9 +166,20 @@ services:
         tags:
             - { name: 'ddr_crud_admin.new_instance_provider', priority: -250 }
 
+    Dontdrinkandroot\CrudAdminBundle\Service\Url\DefaultUrlProvider:
+        arguments:
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
+            - '@router'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver'
+            - '@security.authorization_checker'
+        tags:
+            - { name: 'ddr_crud_admin.url_provider', priority: -250 }
+
     Dontdrinkandroot\CrudAdminBundle\Twig\CrudAdminExtension:
         arguments:
             - '@property_accessor'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
+            - '@request_stack'
         tags:
             - { name: twig.extension }

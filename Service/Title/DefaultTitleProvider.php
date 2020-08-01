@@ -16,7 +16,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsRequest(Request $request): bool
+    public function supports(string $entityClass, string $crudOperation, Request $request): bool
     {
         return true;
     }

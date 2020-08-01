@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderServiceInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,7 +25,11 @@ class CollectionResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof CollectionProviderInterface);
-            if ($provider->supportsRequest($request)) {
+            if ($provider->supports(
+                RequestAttributes::getEntityClass($request),
+                RequestAttributes::getOperation($request),
+                $request
+            )) {
                 $data = $provider->provideCollection($request);
                 if (null !== $data) {
                     return $data;

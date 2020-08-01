@@ -15,7 +15,11 @@ class ItemPersister extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof ItemPersisterProviderInterface);
-            if ($provider->supportsRequest($request)) {
+            if ($provider->supports(
+                RequestAttributes::getEntityClass($request),
+                RequestAttributes::getOperation($request),
+                $request
+            )) {
                 $result = $provider->persist($request);
                 if (true === $result) {
                     RequestAttributes::setPersistSuccess($request, $result);

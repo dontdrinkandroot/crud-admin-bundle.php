@@ -3,7 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RequestProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\OperationProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
