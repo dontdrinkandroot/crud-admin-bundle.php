@@ -20,9 +20,9 @@ services:
         arguments:
             - !tagged_iterator ddr_crud_admin.routes_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver:
+    Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver:
         arguments:
-            - !tagged_iterator ddr_crud_admin.template_provider
+            - !tagged_iterator ddr_crud_admin.templates_provider
 
     Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver:
         arguments:
@@ -46,7 +46,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
             - '@twig'
         tags:
             -   name: 'kernel.event_listener'
@@ -60,7 +60,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
             - '@twig'
         tags:
             -   name: 'kernel.event_listener'
@@ -71,7 +71,7 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultCreateUpdateResponseListener:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
@@ -145,9 +145,9 @@ services:
             -   name: 'ddr_crud_admin.routes_provider'
                 priority: -250
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Template\DefaultTemplateProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\Template\DefaultTemplatesProvider:
         tags:
-            -   name: 'ddr_crud_admin.template_provider'
+            -   name: 'ddr_crud_admin.templates_provider'
                 priority: -250
 
     Dontdrinkandroot\CrudAdminBundle\Service\Form\RequestAttributeFormProvider:

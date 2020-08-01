@@ -8,7 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Twig\Environment;
 
@@ -25,7 +25,7 @@ class DefaultListResponseListener
 
     private RoutesResolver $routesResolver;
 
-    private TemplateResolver $templateResolver;
+    private TemplatesResolver $templateResolver;
 
     private Environment $twig;
 
@@ -34,7 +34,7 @@ class DefaultListResponseListener
         CollectionResolver $collectionResolver,
         FieldDefinitionsResolver $fieldDefinitionsResolver,
         RoutesResolver $routesResolver,
-        TemplateResolver $templateResolver,
+        TemplatesResolver $templateResolver,
         Environment $twig
     ) {
         $this->titleResolver = $titleResolver;
@@ -48,12 +48,14 @@ class DefaultListResponseListener
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
         $request = $event->getRequest();
-        if (CrudOperation::LIST !== RequestAttributes::getOperation($request)) {
+        $crudOperation = RequestAttributes::getOperation($request);
+        if (CrudOperation::LIST !== $crudOperation) {
             return;
         }
 
-        $template = $this->templateResolver->resolve($request);
-        assert(null !== $template);
+        $templates = $this->templateResolver->resolve($request);
+        assert(null !== $templates);
+        assert(isset($templates[$crudOperation]));
         $context = [
             'title'            => $this->titleResolver->resolve($request),
             'entities'         => $this->collectionResolver->resolve($request),
@@ -61,7 +63,7 @@ class DefaultListResponseListener
             'routes'           => $this->routesResolver->resolve($request)
         ];
 
-        $content = $this->twig->render($template, $context);
+        $content = $this->twig->render($templates[$crudOperation], $context);
 
         $event->getResponse()->setContent($content);
     }

@@ -10,7 +10,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -48,8 +48,8 @@ class DdrCrudAdminExtension extends Extension
             ->registerForAutoconfiguration(TitleProviderInterface::class)
             ->addTag('ddr_crud_admin.title_provider');
         $container
-            ->registerForAutoconfiguration(TemplateProviderInterface::class)
-            ->addTag('ddr_crud_admin.template_provider');
+            ->registerForAutoconfiguration(TemplatesProviderInterface::class)
+            ->addTag('ddr_crud_admin.templates_provider');
         $container
             ->registerForAutoconfiguration(ItemPersisterProviderInterface::class)
             ->addTag('ddr_crud_admin.item_persister_provider');

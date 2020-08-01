@@ -17,11 +17,12 @@ class RequestAttributes
     public const TITLE = 'ddr_crud_admin.title';
     public const OPERATION = 'ddr_crud_admin.operation';
     public const FORM = 'ddr_crud_admin.form';
-    public const TEMPLATE = 'ddr_crud_admin.template';
+    public const TEMPLATES = 'ddr_crud_admin.templates';
     public const PERSIST_SUCCESS = 'ddr_crud_admin.persist_success';
     public const DEFAULT_SORT_FIELD_NAME = 'ddr_crud_admin.default_sort_field_name';
     public const DEFAULT_SORT_DIRECTION = 'ddr_crud_admin.default_sort_direction';
     public const FORM_TYPE = 'ddr_crud_admin.form_type';
+    public const TEMPLATES_PATH = 'ddr_crud_admin.templates.path';
 
     public static function getId(Request $request)
     {
@@ -81,5 +82,10 @@ class RequestAttributes
     public static function getRoutesPrefix(Request $request): ?string
     {
         return $request->attributes->get(self::ROUTES_PREFIX);
+    }
+
+    public static function getTemplatesPath(Request $request)
+    {
+        return $request->attributes->get(self::TEMPLATES_PATH);
     }
 }

@@ -9,7 +9,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Router;
@@ -20,7 +20,7 @@ use Twig\Environment;
  */
 class DefaultCreateUpdateResponseListener
 {
-    private TemplateResolver $templateResolver;
+    private TemplatesResolver $templateResolver;
 
     private TitleResolver $titleResolver;
 
@@ -38,7 +38,7 @@ class DefaultCreateUpdateResponseListener
 
     public function __construct(
         ItemResolver $itemResolver,
-        TemplateResolver $templateResolver,
+        TemplatesResolver $templateResolver,
         TitleResolver $titleResolver,
         RoutesResolver $routesResolver,
         FormResolver $formResolver,
@@ -87,8 +87,9 @@ class DefaultCreateUpdateResponseListener
             return;
         }
 
-        $template = $this->templateResolver->resolve($request);
-        assert(null !== $template);
+        $templates = $this->templateResolver->resolve($request);
+        assert(null !== $templates);
+        assert(isset($templates[$crudOperation]));
         $title = $this->titleResolver->resolve($request);
         $form = $this->formResolver->resolve($request);
         assert(null !== $form);
@@ -100,7 +101,7 @@ class DefaultCreateUpdateResponseListener
             'form'   => $form->createView()
         ];
 
-        $content = $this->twig->render($template, $context);
+        $content = $this->twig->render($templates[$crudOperation], $context);
 
         $response->setContent($content);
     }

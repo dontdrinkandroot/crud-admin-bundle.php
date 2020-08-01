@@ -10,9 +10,9 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class TemplateResolver extends AbstractProviderService
+class TemplatesResolver extends AbstractProviderService
 {
-    /** @var TemplateProviderInterface[] */
+    /** @var TemplatesProviderInterface[] */
     private $providers = [];
 
     /**
@@ -20,25 +20,25 @@ class TemplateResolver extends AbstractProviderService
      */
     public function addProvider(ProviderInterface $provider): void
     {
-        assert($provider instanceof TemplateProviderInterface);
+        assert($provider instanceof TemplatesProviderInterface);
         $this->providers[] = $provider;
     }
 
-    public function resolve(Request $request): ?string
+    public function resolve(Request $request): ?array
     {
-        if (!$request->attributes->has(RequestAttributes::TEMPLATE)) {
-            $request->attributes->set(RequestAttributes::TEMPLATE, $this->resolveFromProviders($request));
+        if (!$request->attributes->has(RequestAttributes::TEMPLATES)) {
+            $request->attributes->set(RequestAttributes::TEMPLATES, $this->resolveFromProviders($request));
         }
 
-        return $request->attributes->get(RequestAttributes::TEMPLATE);
+        return $request->attributes->get(RequestAttributes::TEMPLATES);
     }
 
     public function resolveFromProviders(Request $request)
     {
         foreach ($this->getProviders() as $provider) {
-            assert($provider instanceof TemplateProviderInterface);
+            assert($provider instanceof TemplatesProviderInterface);
             if ($provider->supportsRequest($request)) {
-                $result = $provider->provideTemplate($request);
+                $result = $provider->provideTemplates($request);
                 if (null !== $result) {
                     return $result;
                 }

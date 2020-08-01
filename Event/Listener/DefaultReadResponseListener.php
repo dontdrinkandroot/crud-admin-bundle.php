@@ -8,7 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Twig\Environment;
 
@@ -27,14 +27,14 @@ class DefaultReadResponseListener
 
     private Environment $twig;
 
-    private TemplateResolver $templateResolver;
+    private TemplatesResolver $templateResolver;
 
     public function __construct(
         ItemResolver $itemResolver,
         TitleResolver $titleResolver,
         RoutesResolver $routesResolver,
         FieldDefinitionsResolver $fieldDefinitionsResolver,
-        TemplateResolver $templateResolver,
+        TemplatesResolver $templateResolver,
         Environment $twig
     ) {
         $this->itemResolver = $itemResolver;
@@ -48,13 +48,15 @@ class DefaultReadResponseListener
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
         $request = $event->getRequest();
-        if (CrudOperation::READ !== $request->get(RequestAttributes::OPERATION)) {
+        $crudOperation = RequestAttributes::getOperation($request);
+        if (CrudOperation::READ !== $crudOperation) {
             return;
         }
 
         $entity = $this->itemResolver->resolve($request);
-        $template = $this->templateResolver->resolve($request);
-        assert(null !== $template);
+        $templates = $this->templateResolver->resolve($request);
+        assert(null !== $templates);
+        assert(isset($templates[$crudOperation]));
         $title = $this->titleResolver->resolve($request);
         $routes = $this->routesResolver->resolve($request);
         $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($request);
@@ -66,7 +68,7 @@ class DefaultReadResponseListener
             'fieldDefinitions' => $fieldDefinitions
         ];
 
-        $content = $this->twig->render($template, $context);
+        $content = $this->twig->render($templates[$crudOperation], $context);
 
         $event->getResponse()->setContent($content);
     }

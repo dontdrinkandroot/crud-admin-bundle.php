@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface TemplateProviderInterface extends RequestProviderInterface
+interface TemplatesProviderInterface extends RequestProviderInterface
 {
-    public function provideTemplate(Request $request): ?string;
+    public function provideTemplates(Request $request): ?array;
 }
