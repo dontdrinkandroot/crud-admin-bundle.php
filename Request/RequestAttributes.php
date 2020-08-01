@@ -11,6 +11,7 @@ class RequestAttributes
 {
     public const DATA = 'ddr_crud_admin.data';
     public const ROUTES = 'ddr_crud_admin.routes';
+    public const ROUTES_PREFIX = 'ddr_crud_admin.routes.prefix';
     public const FIELD_DEFINITIONS = 'ddr_crud_admin.field_definitions';
     public const ENTITY_CLASS = 'ddr_crud_admin.entity_class';
     public const TITLE = 'ddr_crud_admin.title';
@@ -75,5 +76,10 @@ class RequestAttributes
     public static function getFormType(Request $request): ?string
     {
         return $request->attributes->get(self::FORM_TYPE);
+    }
+
+    public static function getRoutesPrefix(Request $request): ?string
+    {
+        return $request->attributes->get(self::ROUTES_PREFIX);
     }
 }
