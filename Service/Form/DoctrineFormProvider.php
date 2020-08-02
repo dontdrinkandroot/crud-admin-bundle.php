@@ -55,7 +55,13 @@ class DoctrineFormProvider implements FormProviderInterface
         $formBuilder = $this->formFactory->createBuilder(FormType::class, $entity);
         $shortName = ClassNameUtils::getShortName($entityClass);
 
-        foreach ($classMetadata->fieldMappings as $fieldMapping) {
+        $fields = $this->getFields($request);
+        if (null === $fields) {
+            $fields = array_keys($classMetadata->fieldMappings);
+        }
+
+        foreach ($fields as $field) {
+            $fieldMapping = $classMetadata->fieldMappings[$field];
             $fieldName = $fieldMapping['fieldName'];
             if (!array_key_exists('id', $fieldMapping) || false === $fieldMapping['id']) {
                 $formBuilder->add(
@@ -72,5 +78,20 @@ class DoctrineFormProvider implements FormProviderInterface
         $formBuilder->add('submit', SubmitType::class);
 
         return $formBuilder->getForm();
+    }
+
+    private function getFields(Request $request): ?array
+    {
+        $operation = RequestAttributes::getOperation($request);
+        $fields = RequestAttributes::getFields($request);
+        if (null === $fields) {
+            return null;
+        }
+
+        if (array_key_exists($operation, $fields)) {
+            return $fields[$operation];
+        }
+
+        return null;
     }
 }

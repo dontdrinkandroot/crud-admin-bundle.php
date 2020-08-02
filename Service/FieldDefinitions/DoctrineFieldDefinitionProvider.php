@@ -42,8 +42,14 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
 
         $className = ClassNameUtils::getShortName($entityClass);
 
+        $fields = $this->getFields($request);
+        if (null === $fields) {
+            $fields = array_keys($classMetadata->fieldMappings);
+        }
+
         $fieldDefinitions = [];
-        foreach ($classMetadata->fieldMappings as $fieldMapping) {
+        foreach ($fields as $field) {
+            $fieldMapping = $classMetadata->fieldMappings[$field];
             $type = $fieldMapping['type'];
             $fieldName = $fieldMapping['fieldName'];
             $filterable = false;
@@ -61,5 +67,20 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
         }
 
         return $fieldDefinitions;
+    }
+
+    private function getFields(Request $request): ?array
+    {
+        $operation = RequestAttributes::getOperation($request);
+        $fields = RequestAttributes::getFields($request);
+        if (null === $fields) {
+            return null;
+        }
+
+        if (array_key_exists($operation, $fields)) {
+            return $fields[$operation];
+        }
+
+        return null;
     }
 }

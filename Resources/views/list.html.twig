@@ -27,7 +27,9 @@
         {% endif %}
     {% endfor %}
 
-    {{ knp_pagination_filter(entities, filterFields) }}
+    {% if filterFields is not empty %}
+        {{ knp_pagination_filter(entities, filterFields) }}
+    {% endif %}
 
     <table class="table table-sm table-bordered">
         <thead>

@@ -13,6 +13,7 @@ class RequestAttributes
     public const ROUTES = 'ddr_crud_admin.routes';
     public const ROUTES_PREFIX = 'ddr_crud_admin.routes.prefix';
     public const FIELD_DEFINITIONS = 'ddr_crud_admin.field_definitions';
+    public const FIELDS = 'ddr_crud_admin.fields';
     public const ENTITY_CLASS = 'ddr_crud_admin.entity_class';
     public const TITLE = 'ddr_crud_admin.title';
     public const OPERATION = 'ddr_crud_admin.operation';
@@ -87,5 +88,10 @@ class RequestAttributes
     public static function getTemplatesPath(Request $request)
     {
         return $request->attributes->get(self::TEMPLATES_PATH);
+    }
+
+    public static function getFields(Request $request)
+    {
+        return $request->attributes->get(self::FIELDS);
     }
 }
