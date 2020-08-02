@@ -11,6 +11,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Routing\Router;
 use Twig\Environment;
@@ -36,15 +37,16 @@ class DefaultCreateUpdateResponseListener
 
     private IdResolver $idResolver;
 
+    private UrlResolver $urlResolver;
+
     public function __construct(
         ItemResolver $itemResolver,
         TemplatesResolver $templateResolver,
         TitleResolver $titleResolver,
         RoutesResolver $routesResolver,
         FormResolver $formResolver,
-        IdResolver $idResolver,
         Environment $twig,
-        Router $router
+        UrlResolver $urlResolver
     ) {
         $this->templateResolver = $templateResolver;
         $this->titleResolver = $titleResolver;
@@ -52,8 +54,7 @@ class DefaultCreateUpdateResponseListener
         $this->formResolver = $formResolver;
         $this->twig = $twig;
         $this->itemResolver = $itemResolver;
-        $this->router = $router;
-        $this->idResolver = $idResolver;
+        $this->urlResolver = $urlResolver;
     }
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
@@ -69,14 +70,13 @@ class DefaultCreateUpdateResponseListener
         $entity = $this->itemResolver->resolve($request);
         if (true === RequestAttributes::getPersistSuccess($request)) {
 
-            $redirectUrl = null;
-            if (array_key_exists(CrudOperation::READ, $routes)) {
-                $redirectUrl = $this->router->generate(
-                    $routes[CrudOperation::READ],
-                    ['id' => $this->idResolver->resolve($entity)]
+            $redirectUrl = $this->urlResolver->resolve($entity, CrudOperation::READ, $request);
+            if (null === $redirectUrl) {
+                $redirectUrl = $this->urlResolver->resolve(
+                    RequestAttributes::getEntityClass($request),
+                    CrudOperation::LIST,
+                    $request
                 );
-            } elseif (array_key_exists(CrudOperation::LIST, $routes)) {
-                $redirectUrl = $this->router->generate($routes[CrudOperation::LIST]);
             }
 
             if (null !== $redirectUrl) {

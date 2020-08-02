@@ -2,12 +2,13 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesProviderInterface;
@@ -31,8 +32,11 @@ class DdrCrudAdminExtension extends Extension
     public function load(array $configs, ContainerBuilder $container)
     {
         $container
-            ->registerForAutoconfiguration(CollectionProviderInterface::class)
-            ->addTag('ddr_crud_admin.collection_provider');
+            ->registerForAutoconfiguration(PaginationProviderInterface::class)
+            ->addTag('ddr_crud_admin.pagination_provider');
+        $container
+            ->registerForAutoconfiguration(PaginationTargetProvider::class)
+            ->addTag('ddr_crud_admin.pagination_target_provider');
         $container
             ->registerForAutoconfiguration(FieldDefinitionProviderInterface::class)
             ->addTag('ddr_crud_admin.field_definitions_provider');

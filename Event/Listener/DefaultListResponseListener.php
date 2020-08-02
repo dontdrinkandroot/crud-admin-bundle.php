@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
@@ -19,7 +19,7 @@ class DefaultListResponseListener
 {
     private TitleResolver $titleResolver;
 
-    private CollectionResolver $collectionResolver;
+    private PaginationResolver $paginationResolver;
 
     private FieldDefinitionsResolver $fieldDefinitionsResolver;
 
@@ -31,14 +31,14 @@ class DefaultListResponseListener
 
     public function __construct(
         TitleResolver $titleResolver,
-        CollectionResolver $collectionResolver,
+        PaginationResolver $paginationResolver,
         FieldDefinitionsResolver $fieldDefinitionsResolver,
         RoutesResolver $routesResolver,
         TemplatesResolver $templateResolver,
         Environment $twig
     ) {
         $this->titleResolver = $titleResolver;
-        $this->collectionResolver = $collectionResolver;
+        $this->paginationResolver = $paginationResolver;
         $this->fieldDefinitionsResolver = $fieldDefinitionsResolver;
         $this->routesResolver = $routesResolver;
         $this->templateResolver = $templateResolver;
@@ -58,7 +58,7 @@ class DefaultListResponseListener
         assert(isset($templates[$crudOperation]));
         $context = [
             'title'            => $this->titleResolver->resolve($request),
-            'entities'         => $this->collectionResolver->resolve($request),
+            'entities'         => $this->paginationResolver->resolve($request),
             'fieldDefinitions' => $this->fieldDefinitionsResolver->resolve($request),
             'routes'           => $this->routesResolver->resolve($request)
         ];

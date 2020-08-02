@@ -1,16 +1,17 @@
 <?php
 
-namespace Dontdrinkandroot\CrudAdminBundle\Service\Collection;
+namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class CollectionResolver extends AbstractProviderService
+class PaginationResolver extends AbstractProviderService
 {
     public function resolve(Request $request): PaginationInterface
     {
@@ -24,7 +25,7 @@ class CollectionResolver extends AbstractProviderService
     public function resolveFromProviders(Request $request): ?PaginationInterface
     {
         foreach ($this->getProviders() as $provider) {
-            assert($provider instanceof CollectionProviderInterface);
+            assert($provider instanceof PaginationProviderInterface);
             if ($provider->supports(
                 RequestAttributes::getEntityClass($request),
                 RequestAttributes::getOperation($request),

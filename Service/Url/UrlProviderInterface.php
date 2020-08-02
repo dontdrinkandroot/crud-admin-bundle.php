@@ -7,5 +7,5 @@ use Symfony\Component\HttpFoundation\Request;
 
 interface UrlProviderInterface extends OperationProviderInterface
 {
-    public function provideUrl($entityOrClass, string $crudOperation, Request $request);
+    public function provideUrl($entityOrClass, string $crudOperation, Request $request): ?string;
 }

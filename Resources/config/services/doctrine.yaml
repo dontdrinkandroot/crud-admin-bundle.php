@@ -7,13 +7,11 @@ services:
             -   name: 'ddr_crud_admin.item_provider'
                 priority: -200
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Collection\DoctrineCollectionProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\DoctrinePaginationTargetProvider:
         arguments:
             - '@doctrine'
-            - '@knp_paginator'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
         tags:
-            -   name: 'ddr_crud_admin.collection_provider'
+            -   name: 'ddr_crud_admin.pagination_target_provider'
                 priority: -200
 
     Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\DoctrineFieldDefinitionProvider:

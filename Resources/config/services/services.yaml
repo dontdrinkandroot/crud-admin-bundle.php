@@ -8,9 +8,13 @@ services:
         arguments:
             - !tagged_iterator ddr_crud_admin.field_definitions_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver:
+    Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver:
         arguments:
-            - !tagged_iterator ddr_crud_admin.collection_provider
+            - !tagged_iterator ddr_crud_admin.pagination_provider
+
+    Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.pagination_target_provider
 
     Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver:
         arguments:
@@ -48,7 +52,7 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultListResponseListener:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Collection\CollectionResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
@@ -80,9 +84,8 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver'
             - '@twig'
-            - '@router'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
         tags:
             -   name: 'kernel.event_listener'
                 event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent
@@ -141,6 +144,15 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Service\Title\DefaultTitleProvider:
         tags:
             -   name: 'ddr_crud_admin.title_provider'
+                priority: -250
+
+    Dontdrinkandroot\CrudAdminBundle\Service\Pagination\DefaultPaginationProvider:
+        arguments:
+            - '@knp_paginator'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
+        tags:
+            -   name: 'ddr_crud_admin.pagination_provider'
                 priority: -250
 
     Dontdrinkandroot\CrudAdminBundle\Service\Routes\DefaultRoutesProvider:
