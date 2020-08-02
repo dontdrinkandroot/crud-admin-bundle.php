@@ -15,12 +15,17 @@ class UrlResolver extends AbstractProviderService
 {
     public function resolve($entityOrClass, string $crudOperation, Request $request): ?string
     {
+        $entityClass = $entityOrClass;
+        if (is_object($entityOrClass)) {
+            $entityClass = get_class($entityClass);
+        }
+
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof UrlProviderInterface);
-            if ($provider->supports(RequestAttributes::getEntityClass($request), $crudOperation, $request)) {
-                $title = $provider->provideUrl($entityOrClass, $crudOperation, $request);
-                if (null !== $title) {
-                    return $title;
+            if ($provider->supports($entityClass, $crudOperation, $request)) {
+                $url = $provider->provideUrl($entityOrClass, $crudOperation, $request);
+                if (null !== $url) {
+                    return $url;
                 }
             }
         }

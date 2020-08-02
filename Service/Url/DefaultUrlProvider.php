@@ -58,6 +58,7 @@ class DefaultUrlProvider implements UrlProviderInterface
         $routes = $this->routesResolver->resolve($request);
         switch ($crudOperation) {
             case CrudOperation::LIST:
+            case CrudOperation::CREATE:
                 return $this->router->generate($routes[$crudOperation]);
             default:
                 $id = $this->idResolver->resolve($entityOrClass);

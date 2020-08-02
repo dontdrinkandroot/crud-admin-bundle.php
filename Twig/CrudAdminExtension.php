@@ -77,6 +77,8 @@ class CrudAdminExtension extends AbstractExtension
                 return $value->format('Y-m-d');
             case 'boolean';
                 return $value ? '<span class="fas fa-check"></span>' : '<span class="fas fa-times"></span>';
+            case 'json':
+                return implode(',',$value);
         }
 
         $value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');

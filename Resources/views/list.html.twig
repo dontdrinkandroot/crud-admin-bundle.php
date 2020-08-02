@@ -6,7 +6,7 @@
     <div class="ddr-page-header ddr-action-container">
         <h1 class="ddr-content">{{ title }}</h1>
         <div class="ddr-actions">
-            {% set createRoute = app.request.get('ddr_crud_admin.entity_class')|ddrCrudAdminPath('LIST') %}
+            {% set createRoute = app.request.get('ddr_crud_admin.entity_class')|ddrCrudAdminPath('CREATE') %}
             {% if createRoute is not null %}
                 <a class="btn btn-primary btn-lg ddr-btn-icon" href="{{ createRoute }}">
                     <span class="fas fa-fw fa-plus"></span>
