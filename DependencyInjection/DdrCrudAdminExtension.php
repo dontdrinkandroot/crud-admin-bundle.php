@@ -3,7 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
@@ -39,7 +39,7 @@ class DdrCrudAdminExtension extends Extension
             ->registerForAutoconfiguration(PaginationTargetProvider::class)
             ->addTag('ddr_crud_admin.pagination_target_provider');
         $container
-            ->registerForAutoconfiguration(FieldDefinitionProviderInterface::class)
+            ->registerForAutoconfiguration(FieldDefinitionsProviderInterface::class)
             ->addTag('ddr_crud_admin.field_definitions_provider');
         $container
             ->registerForAutoconfiguration(FormProviderInterface::class)

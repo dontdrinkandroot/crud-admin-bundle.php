@@ -4,7 +4,7 @@ services:
         arguments:
             - !tagged_iterator ddr_crud_admin.title_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver:
+    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver:
         arguments:
             - !tagged_iterator ddr_crud_admin.field_definitions_provider
 
@@ -56,7 +56,7 @@ services:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
             - '@twig'
@@ -71,7 +71,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
             - '@twig'
         tags:
@@ -156,7 +156,7 @@ services:
         arguments:
             - '@knp_paginator'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\FieldDefinitionsResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver'
         tags:
             -   name: 'ddr_crud_admin.pagination_provider'
                 priority: -250

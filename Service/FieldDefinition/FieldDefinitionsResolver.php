@@ -1,11 +1,12 @@
 <?php
 
-namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
+namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -33,10 +34,10 @@ class FieldDefinitionsResolver extends AbstractProviderService
      *
      * @return FieldDefinition[]|null
      */
-    private function resolveFromProviders(CrudAdminContext $context)
+    private function resolveFromProviders(CrudAdminContext $context): ?array
     {
         foreach ($this->getProviders() as $provider) {
-            assert($provider instanceof FieldDefinitionProviderInterface);
+            assert($provider instanceof FieldDefinitionsProviderInterface);
             if ($provider->supports($context)) {
                 $fieldDefinitions = $provider->provideFieldDefinitions($context);
                 if (null !== $fieldDefinitions) {

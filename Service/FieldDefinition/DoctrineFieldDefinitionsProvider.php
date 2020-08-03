@@ -1,12 +1,13 @@
 <?php
 
-namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
+namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\Utils\ClassNameUtils;
@@ -16,7 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterface
+class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
     private ManagerRegistry $managerRegistry;
 

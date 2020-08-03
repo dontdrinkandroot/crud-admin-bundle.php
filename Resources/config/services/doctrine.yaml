@@ -14,7 +14,7 @@ services:
             -   name: 'ddr_crud_admin.pagination_target_provider'
                 priority: -200
 
-    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\DoctrineFieldDefinitionProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\DoctrineFieldDefinitionsProvider:
         arguments:
             - '@doctrine'
             - '@translator'

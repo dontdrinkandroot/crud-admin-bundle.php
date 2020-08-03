@@ -1,6 +1,6 @@
 <?php
 
-namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
+namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface FieldDefinitionProviderInterface extends CrudAdminProviderInterface
+interface FieldDefinitionsProviderInterface extends CrudAdminProviderInterface
 {
     /**
      * @param CrudAdminContext $context
