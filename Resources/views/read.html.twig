@@ -3,32 +3,32 @@
 {% block ddr_crud_admin_title %}{{ title }}{% endblock ddr_crud_admin_title %}
 
 {% block ddr_crud_admin_header %}
-    <div class="ddr-page-header ddr-action-container">
-        <h1 class="ddr-content">{{ title }}</h1>
-        <div class="ddr-actions">
+    <div class="py-3 mb-4 border-bottom d-flex">
+        <h1 class="mb-0 align-self-center flex-fill">{{ title }}</h1>
+        <div class="d-inline-flex align-self-center">
             {% block ddr_crud_admin_read_actions %}
                 {% set updateRoute = entity|ddrCrudAdminPath('UPDATE') %}
                 {% set deleteRoute = entity|ddrCrudAdminPath('DELETE') %}
                 {% if (updateRoute is not null or deleteRoute is not null) %}
                     <div class="dropdown">
-                        <button class="dropdown-toggle ddr-no-caret btn btn-link btn-lg ddr-btn-icon"
+                        <button class="dropdown-toggle btn btn-lg btn-primary"
                                 type="button"
                                 id="dropdownMenuButton"
                                 data-toggle="dropdown"
                                 aria-haspopup="true"
                                 aria-expanded="false"
                         >
-                            <span class="fas fa-fw fa-ellipsis-v"></span>
+                            {{ 'ACTIONS'|trans({}, 'DdrCrudAdmin') }}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             {% if routes.UPDATE is defined and is_granted('UPDATE', entity) %}
                                 <a class="dropdown-item" href="{{ updateRoute }}">
-                                    Edit
+                                    {{ 'UPDATE'|trans({}, 'DdrCrudAdmin') }}
                                 </a>
                             {% endif %}
                             {% if routes.DELETE is defined and is_granted('DELETE', entity) %}
                                 <a class="dropdown-item" href="{{ deleteRoute }}">
-                                    Delete
+                                    {{ 'DELETE'|trans({}, 'DdrCrudAdmin') }}
                                 </a>
                             {% endif %}
                         </div>
@@ -43,7 +43,7 @@
 
     <dl>
         {% for fieldDefinition in fieldDefinitions %}
-            <dt>{{ fieldDefinition.label|trans({}) }}</dt>
+            <dt>{{ fieldDefinition.label) }}</dt>
             <dd>{{ entity|ddrCrudAdminFieldDefinitionValue(fieldDefinition) }}</dd>
         {% endfor %}
     </dl>

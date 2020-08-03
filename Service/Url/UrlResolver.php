@@ -13,17 +13,17 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class UrlResolver extends AbstractProviderService
 {
-    public function resolve($entityOrClass, string $crudOperation, Request $request): ?string
+    public function resolve(?object $entity = null, string $crudOperation, Request $request): ?string
     {
-        $entityClass = $entityOrClass;
-        if (is_object($entityOrClass)) {
-            $entityClass = get_class($entityClass);
+        $entityClass = RequestAttributes::getEntityClass($request);
+        if (null !== $entity) {
+            assert(get_class($entity) === RequestAttributes::getEntityClass($request), 'EntityClass not matching');
         }
 
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof UrlProviderInterface);
             if ($provider->supports($entityClass, $crudOperation, $request)) {
-                $url = $provider->provideUrl($entityOrClass, $crudOperation, $request);
+                $url = $provider->provideUrl($entity, $crudOperation, $request);
                 if (null !== $url) {
                     return $url;
                 }

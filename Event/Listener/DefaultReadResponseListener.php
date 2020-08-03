@@ -65,7 +65,7 @@ class DefaultReadResponseListener
             'title'            => $title,
             'entity'           => $entity,
             'routes'           => $routes,
-            'fieldDefinitions' => $fieldDefinitions
+            'fieldDefinitions' => $fieldDefinitions,
         ];
 
         $content = $this->twig->render($templates[$crudOperation], $context);

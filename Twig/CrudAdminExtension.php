@@ -11,6 +11,7 @@ use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -40,6 +41,16 @@ class CrudAdminExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
+    public function getFunctions()
+    {
+        return [
+            new TwigFunction('ddrCrudAdminPath', [$this, 'getUrl']),
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getFilters()
     {
         return [
@@ -50,7 +61,7 @@ class CrudAdminExtension extends AbstractExtension
             ),
             new TwigFilter(
                 'ddrCrudAdminPath',
-                [$this, 'getUrl'],
+                fn(object $entity, string $crudOperation) => $this->getUrl($crudOperation, $entity)
             )
         ];
     }
@@ -68,17 +79,19 @@ class CrudAdminExtension extends AbstractExtension
                     $value instanceof DateTimeInterface,
                     $fieldDefinition->getPropertyPath() . ' was not a DateTimeInterface'
                 );
+
                 return $value->format('Y-m-d H:i:s');
             case 'date':
                 assert(
                     $value instanceof DateTimeInterface,
                     $fieldDefinition->getPropertyPath() . ' was not a DateTimeInterface'
                 );
+
                 return $value->format('Y-m-d');
             case 'boolean';
                 return $value ? '<span class="fas fa-check"></span>' : '<span class="fas fa-times"></span>';
             case 'json':
-                return implode(',',$value);
+                return implode(',', $value);
         }
 
         $value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
@@ -86,8 +99,8 @@ class CrudAdminExtension extends AbstractExtension
         return $value;
     }
 
-    public function getUrl($entityOrClass, string $crudOperation): ?string
+    public function getUrl(string $crudOperation, ?object $entity = null): ?string
     {
-        return $this->urlResolver->resolve($entityOrClass, $crudOperation, $this->requestStack->getCurrentRequest());
+        return $this->urlResolver->resolve($entity, $crudOperation, $this->requestStack->getCurrentRequest());
     }
 }

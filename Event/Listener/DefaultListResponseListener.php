@@ -60,7 +60,7 @@ class DefaultListResponseListener
             'title'            => $this->titleResolver->resolve($request),
             'entities'         => $this->paginationResolver->resolve($request),
             'fieldDefinitions' => $this->fieldDefinitionsResolver->resolve($request),
-            'routes'           => $this->routesResolver->resolve($request)
+            'routes'           => $this->routesResolver->resolve($request),
         ];
 
         $content = $this->twig->render($templates[$crudOperation], $context);
