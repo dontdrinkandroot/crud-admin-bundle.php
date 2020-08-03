@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
 use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Symfony\Component\HttpFoundation\Request;
@@ -20,9 +21,6 @@ class DefaultUrlProvider implements UrlProviderInterface
 
     private IdResolver $idResolver;
 
-    /**
-     * @var AuthorizationCheckerInterface
-     */
     private AuthorizationCheckerInterface $authorizationChecker;
 
     public function __construct(
@@ -40,28 +38,33 @@ class DefaultUrlProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
-        $routes = $this->routesResolver->resolve($request);
+        $routes = $this->routesResolver->resolve($context);
 
-        return null !== $routes && array_key_exists($crudOperation, $routes);
+        return null !== $routes && array_key_exists($context->getCrudOperation(), $routes);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideUrl($entityOrClass, string $crudOperation, Request $request): ?string
+    public function provideUrl(CrudAdminContext $context): ?string
     {
-        if (!$this->authorizationChecker->isGranted($crudOperation, $entityOrClass)) {
+        $crudOperation = $context->getCrudOperation();
+        if (!$this->authorizationChecker->isGranted(
+            $crudOperation,
+            $context->getEntity() ?? $context->getEntityClass()
+        )) {
             return null;
         }
-        $routes = $this->routesResolver->resolve($request);
+
+        $routes = $this->routesResolver->resolve($context);
         switch ($crudOperation) {
             case CrudOperation::LIST:
             case CrudOperation::CREATE:
                 return $this->router->generate($routes[$crudOperation]);
             default:
-                $id = $this->idResolver->resolve($entityOrClass);
+                $id = $this->idResolver->resolve($context);
 
                 return $this->router->generate($routes[$crudOperation], ['id' => $id]);
         }

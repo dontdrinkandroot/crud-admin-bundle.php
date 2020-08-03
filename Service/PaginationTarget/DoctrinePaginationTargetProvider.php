@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -23,17 +24,18 @@ class DoctrinePaginationTargetProvider implements PaginationTargetProvider
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
-        return CrudOperation::LIST === $crudOperation
-            && null !== $this->managerRegistry->getManagerForClass($entityClass);
+        return CrudOperation::LIST === $context->getCrudOperation()
+            && null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function providePaginationTarget(string $entityClass, string $crudOperation, Request $request): ?QueryBuilder
+    public function providePaginationTarget(CrudAdminContext $context): ?QueryBuilder
     {
+        $entityClass = $context->getEntityClass();
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);
 

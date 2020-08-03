@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,7 +13,7 @@ class DefaultTranslationDomainProvider implements TranslationDomainProviderInter
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
         return true;
     }
@@ -20,7 +21,7 @@ class DefaultTranslationDomainProvider implements TranslationDomainProviderInter
     /**
      * {@inheritdoc}
      */
-    public function resolveTranslationDomain(string $entityClass, string $crudOperation, Request $request): ?string
+    public function resolveTranslationDomain(CrudAdminContext $context): ?string
     {
         return 'DdrCrudAdmin';
     }

@@ -28,6 +28,8 @@ services:
             - '@doctrine'
             - '@form.factory'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
+            - '@translator'
         tags:
             - { name: 'ddr_crud_admin.form_provider', priority: -200 }
 

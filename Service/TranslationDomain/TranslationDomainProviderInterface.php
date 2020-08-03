@@ -2,14 +2,16 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\OperationProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\LegacyOperationProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface TranslationDomainProviderInterface extends OperationProviderInterface
+interface TranslationDomainProviderInterface extends CrudAdminProviderInterface
 {
-    public function resolveTranslationDomain(string $entityClass, string $crudOperation, Request $request): ?string;
+    public function resolveTranslationDomain(CrudAdminContext $context): ?string;
 }

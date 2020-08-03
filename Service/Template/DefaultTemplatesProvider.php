@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -14,7 +15,7 @@ class DefaultTemplatesProvider implements TemplatesProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
         return true;
     }
@@ -22,11 +23,14 @@ class DefaultTemplatesProvider implements TemplatesProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTemplates(Request $request): ?array
+    public function provideTemplates(CrudAdminContext $context): ?array
     {
-        $prefix = RequestAttributes::getTemplatesPath($request);
-        if (null === $prefix) {
-            $prefix = '@DdrCrudAdmin/';
+        $prefix = '@DdrCrudAdmin/';
+        if (RequestAttributes::entityClassMatches($context)) {
+            $requestAttributesPrefix = RequestAttributes::getTemplatesPath($context->getRequest());
+            if (null !== $requestAttributesPrefix) {
+                $prefix = $requestAttributesPrefix;
+            }
         }
 
         return [

@@ -2,13 +2,15 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\OperationProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\LegacyOperationProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface ItemPersisterProviderInterface extends OperationProviderInterface
+interface ItemPersisterProviderInterface extends CrudAdminProviderInterface
 {
-    public function persist(Request $request);
+    public function persist(CrudAdminContext $crudAdminContext);
 }

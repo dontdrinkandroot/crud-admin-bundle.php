@@ -4,14 +4,17 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -24,41 +27,51 @@ class DoctrineFormProvider implements FormProviderInterface
 
     private ItemResolver $itemResolver;
 
+    private TranslationDomainResolver $translationDomainResolver;
+
+    private TranslatorInterface $translator;
+
     public function __construct(
         ManagerRegistry $managerRegistry,
         FormFactoryInterface $formFactory,
-        ItemResolver $itemResolver
+        ItemResolver $itemResolver,
+        TranslationDomainResolver $translationDomainResolver,
+        TranslatorInterface $translator
     ) {
         $this->managerRegistry = $managerRegistry;
         $this->formFactory = $formFactory;
         $this->itemResolver = $itemResolver;
+        $this->translationDomainResolver = $translationDomainResolver;
+        $this->translator = $translator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
-        return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
+        return null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideForm(Request $request): ?FormInterface
+    public function provideForm(CrudAdminContext $context): ?FormInterface
     {
-        $entityClass = RequestAttributes::getEntityClass($request);
+        $entityClass = $context->getEntityClass();
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);
         $classMetadata = $entityManager->getClassMetadata($entityClass);
-        $entity = $this->itemResolver->resolve($request);
+        $entity = $this->itemResolver->resolve($context);
         $formBuilder = $this->formFactory->createBuilder(FormType::class, $entity);
         $shortName = ClassNameUtils::getShortName($entityClass);
 
-        $fields = $this->getFields($request);
+        $fields = $this->getFields($context);
         if (null === $fields) {
             $fields = array_keys($classMetadata->fieldMappings);
         }
+
+        $translationDomain = $this->translationDomainResolver->resolve($context);
 
         foreach ($fields as $field) {
             $fieldMapping = $classMetadata->fieldMappings[$field];
@@ -68,22 +81,29 @@ class DoctrineFormProvider implements FormProviderInterface
                     $fieldName,
                     null,
                     [
-                        'label' => $shortName . '.' . $fieldName
-//                    , 'translation_domain' => $this->getTranslationDomain($attributes)
+                        'label' => $this->translator->trans(ucfirst($fieldName), [], $translationDomain)
                     ]
                 );
             }
         }
 
-        $formBuilder->add('submit', SubmitType::class);
+        $formBuilder->add(
+            'submit',
+            SubmitType::class,
+            ['translation_domain' => 'DdrCrudAdmin']
+        );
 
         return $formBuilder->getForm();
     }
 
-    private function getFields(Request $request): ?array
+    private function getFields(CrudAdminContext $context): ?array
     {
-        $operation = RequestAttributes::getOperation($request);
-        $fields = RequestAttributes::getFields($request);
+        $operation = $context->getCrudOperation();
+        if (!RequestAttributes::entityClassMatches($context)) {
+            return null;
+        }
+
+        $fields = RequestAttributes::getFields($context->getRequest());
         if (null === $fields) {
             return null;
         }

@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
@@ -17,13 +18,14 @@ class FieldDefinitionsResolver extends AbstractProviderService
      *
      * @return FieldDefinition[]|null
      */
-    public function resolve(Request $request): ?array
+    public function resolve(CrudAdminContext $context): ?array
     {
-        if (!$request->attributes->has(RequestAttributes::FIELD_DEFINITIONS)) {
-            $request->attributes->set(RequestAttributes::FIELD_DEFINITIONS, $this->resolveFromProviders($request));
+        if (!$context->isFieldDefinitionsResolved()) {
+            $context->setFieldDefinitions($this->resolveFromProviders($context));
+            $context->setFieldDefinitionsResolved();
         }
 
-        return $request->attributes->get(RequestAttributes::FIELD_DEFINITIONS);
+        return $context->getFieldDefinitions();
     }
 
     /**
@@ -31,16 +33,12 @@ class FieldDefinitionsResolver extends AbstractProviderService
      *
      * @return FieldDefinition[]|null
      */
-    private function resolveFromProviders(Request $request)
+    private function resolveFromProviders(CrudAdminContext $context)
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FieldDefinitionProviderInterface);
-            if ($provider->supports(
-                RequestAttributes::getEntityClass($request),
-                RequestAttributes::getOperation($request),
-                $request
-            )) {
-                $fieldDefinitions = $provider->provideFieldDefinitions($request);
+            if ($provider->supports($context)) {
+                $fieldDefinitions = $provider->provideFieldDefinitions($context);
                 if (null !== $fieldDefinitions) {
                     return $fieldDefinitions;
                 }

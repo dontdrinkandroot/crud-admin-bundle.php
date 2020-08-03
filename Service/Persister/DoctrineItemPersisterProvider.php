@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -23,12 +24,13 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
         return
-            null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request))
+            null !== $context->getEntity()
+            && null !== $this->managerRegistry->getManagerForClass($context->getEntityClass())
             && in_array(
-                RequestAttributes::getOperation($request),
+                $context->getCrudOperation(),
                 [CrudOperation::CREATE, CrudOperation::UPDATE, CrudOperation::DELETE],
                 true
             );
@@ -37,21 +39,21 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function persist(Request $request): bool
+    public function persist(CrudAdminContext $context): bool
     {
-        $entityManager = $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
+        $entityManager = $this->managerRegistry->getManagerForClass($context->getEntityClass());
         assert($entityManager instanceof EntityManagerInterface);
 
-        switch (RequestAttributes::getOperation($request)) {
+        switch ($context->getCrudOperation()) {
             case CrudOperation::CREATE:
-                $entityManager->persist(RequestAttributes::getData($request));
+                $entityManager->persist($context->getEntity());
                 $entityManager->flush();
                 break;
             case CrudOperation::UPDATE:
                 $entityManager->flush();
                 break;
             case CrudOperation::DELETE:
-                $entityManager->remove(RequestAttributes::getData($request));
+                $entityManager->remove($context->getEntity());
                 $entityManager->flush();
                 break;
         }

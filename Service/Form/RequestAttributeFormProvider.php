@@ -2,8 +2,10 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -18,8 +20,11 @@ class RequestAttributeFormProvider implements FormProviderInterface
 
     private ItemResolver $itemResolver;
 
-    public function __construct(FormFactoryInterface $formFactory, ItemResolver $itemResolver)
-    {
+
+    public function __construct(
+        FormFactoryInterface $formFactory,
+        ItemResolver $itemResolver
+    ) {
         $this->formFactory = $formFactory;
         $this->itemResolver = $itemResolver;
     }
@@ -27,19 +32,29 @@ class RequestAttributeFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
-        return $request->attributes->has(RequestAttributes::FORM_TYPE);
+        $entityClass = $context->getEntityClass();
+        if ($entityClass !== RequestAttributes::getEntityClass($context->getRequest())) {
+            return false;
+        }
+
+        return RequestAttributes::entityClassMatches($context)
+            && $context->getRequest()->attributes->has(RequestAttributes::FORM_TYPE);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideForm(Request $request): ?FormInterface
+    public function provideForm(CrudAdminContext $context): ?FormInterface
     {
-        $entity = $this->itemResolver->resolve($request);
+        $entity = $this->itemResolver->resolve($context);
 
-        return $this->formFactory->create(RequestAttributes::getFormType($request), $entity)
-            ->add('submit', SubmitType::class);
+        return $this->formFactory->create(RequestAttributes::getFormType($context->getRequest()), $entity)
+            ->add(
+                'submit',
+                SubmitType::class,
+                ['translation_domain' => 'DdrCrudAdmin']
+            );
     }
 }

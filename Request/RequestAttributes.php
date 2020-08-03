@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Request;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -9,22 +10,15 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RequestAttributes
 {
-    public const DATA = 'ddr_crud_admin.data';
-    public const ROUTES = 'ddr_crud_admin.routes';
     public const ROUTES_PREFIX = 'ddr_crud_admin.routes.prefix';
-    public const FIELD_DEFINITIONS = 'ddr_crud_admin.field_definitions';
     public const FIELDS = 'ddr_crud_admin.fields';
     public const ENTITY_CLASS = 'ddr_crud_admin.entity_class';
-    public const TITLE = 'ddr_crud_admin.title';
-    public const OPERATION = 'ddr_crud_admin.operation';
-    public const FORM = 'ddr_crud_admin.form';
-    public const TEMPLATES = 'ddr_crud_admin.templates';
-    public const PERSIST_SUCCESS = 'ddr_crud_admin.persist_success';
     public const DEFAULT_SORT_FIELD_NAME = 'ddr_crud_admin.default_sort_field_name';
     public const DEFAULT_SORT_DIRECTION = 'ddr_crud_admin.default_sort_direction';
     public const FORM_TYPE = 'ddr_crud_admin.form_type';
     public const TEMPLATES_PATH = 'ddr_crud_admin.templates.path';
     public const TRANSLATION_DOMAIN = 'ddr_crud_admin.translation_domain';
+    public const TEMPLATES = 'ddr_crud_admin.templates';
 
     public static function getId(Request $request)
     {
@@ -34,36 +28,6 @@ class RequestAttributes
     public static function getEntityClass(Request $request): ?string
     {
         return $request->attributes->get(self::ENTITY_CLASS);
-    }
-
-    public static function getOperation(Request $request): ?string
-    {
-        return $request->attributes->get(self::OPERATION);
-    }
-
-    public static function setOperation(Request $request, string $operation): void
-    {
-        $request->attributes->set(self::OPERATION, $operation);
-    }
-
-    public static function getData(Request $request): ?object
-    {
-        return $request->attributes->get(self::DATA);
-    }
-
-    public static function setData(Request $request, object $data): void
-    {
-        $request->attributes->set(self::DATA, $data);
-    }
-
-    public static function setPersistSuccess(Request $request, bool $result)
-    {
-        $request->attributes->set(self::PERSIST_SUCCESS, $result);
-    }
-
-    public static function getPersistSuccess(Request $request): ?bool
-    {
-        return $request->attributes->get(self::PERSIST_SUCCESS);
     }
 
     public static function getDefaultSortFieldName(Request $request)
@@ -94,5 +58,20 @@ class RequestAttributes
     public static function getFields(Request $request)
     {
         return $request->attributes->get(self::FIELDS);
+    }
+
+    public static function entityClassMatches(CrudAdminContext $context)
+    {
+        return self::getEntityClass($context->getRequest()) === $context->getEntityClass();
+    }
+
+    public static function getTemplates(Request $request)
+    {
+        return $request->attributes->get(self::TEMPLATES);
+    }
+
+    public static function getTranslationDomain(Request $request): ?string
+    {
+        return $request->attributes->get(self::TRANSLATION_DOMAIN);
     }
 }

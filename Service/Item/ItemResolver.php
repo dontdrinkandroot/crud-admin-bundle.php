@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,25 +12,22 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ItemResolver extends AbstractProviderService
 {
-    public function resolve(Request $request): ?object
+    public function resolve(CrudAdminContext $context): ?object
     {
-        if (!$request->attributes->has(RequestAttributes::DATA)) {
-            $request->attributes->set(RequestAttributes::DATA, $this->resolveFromProviders($request));
+        if (!$context->isEntityResolved()) {
+            $context->setEntity($this->resolveFromProviders($context));
+            $context->setEntityResolved();
         }
 
-        return $request->attributes->get(RequestAttributes::DATA);
+        return $context->getEntity();
     }
 
-    private function resolveFromProviders(Request $request): ?object
+    private function resolveFromProviders(CrudAdminContext $context): ?object
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof ItemProviderInterface);
-            if ($provider->supports(
-                RequestAttributes::getEntityClass($request),
-                RequestAttributes::getOperation($request),
-                $request
-            )) {
-                $entity = $provider->provideItem($request);
+            if ($provider->supports($context)) {
+                $entity = $provider->provideItem($context);
                 if (null !== $entity) {
                     return $entity;
                 }

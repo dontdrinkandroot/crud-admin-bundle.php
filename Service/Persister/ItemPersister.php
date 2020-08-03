@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,19 +12,14 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class ItemPersister extends AbstractProviderService
 {
-    public function persistItem(Request $request): bool
+    public function persistItem(CrudAdminContext $context): bool
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof ItemPersisterProviderInterface);
-            if ($provider->supports(
-                RequestAttributes::getEntityClass($request),
-                RequestAttributes::getOperation($request),
-                $request
-            )) {
-                $result = $provider->persist($request);
+            if ($provider->supports($context)) {
+                $result = $provider->persist($context);
                 if (true === $result) {
-                    RequestAttributes::setPersistSuccess($request, $result);
-
+                    $context->setItemPersisted();
                     return true;
                 }
             }

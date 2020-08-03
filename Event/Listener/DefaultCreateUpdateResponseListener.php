@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
@@ -59,24 +60,24 @@ class DefaultCreateUpdateResponseListener
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
+        $context = $event->getContext();
         $request = $event->getRequest();
-        $crudOperation = $request->get(RequestAttributes::OPERATION);
+        $crudOperation = $context->getCrudOperation();
         if (!in_array($crudOperation, [CrudOperation::CREATE, CrudOperation::UPDATE], true)) {
             return;
         }
 
         $response = $event->getResponse();
-        $routes = $this->routesResolver->resolve($request);
-        $entity = $this->itemResolver->resolve($request);
-        if (true === RequestAttributes::getPersistSuccess($request)) {
+        $routes = $this->routesResolver->resolve($context);
+        $entity = $this->itemResolver->resolve($context);
+        if ($context->isItemPersisted()) {
 
-            $redirectUrl = $this->urlResolver->resolve($entity, CrudOperation::READ, $request);
+            $redirectContext = $context->recreateWithOperation(CrudOperation::READ)
+                ->setEntity($context->getEntity());
+            $redirectUrl = $this->urlResolver->resolve($redirectContext);
             if (null === $redirectUrl) {
-                $redirectUrl = $this->urlResolver->resolve(
-                    RequestAttributes::getEntityClass($request),
-                    CrudOperation::LIST,
-                    $request
-                );
+                $redirectContext = $context->recreateWithOperation(CrudOperation::LIST);
+                $redirectUrl = $this->urlResolver->resolve($redirectContext);
             }
 
             if (null !== $redirectUrl) {
@@ -87,11 +88,11 @@ class DefaultCreateUpdateResponseListener
             return;
         }
 
-        $templates = $this->templateResolver->resolve($request);
+        $templates = $this->templateResolver->resolve($context);
         assert(null !== $templates);
         assert(isset($templates[$crudOperation]));
-        $title = $this->titleResolver->resolve($request);
-        $form = $this->formResolver->resolve($request);
+        $title = $this->titleResolver->resolve($context);
+        $form = $this->formResolver->resolve($context);
         assert(null !== $form);
 
         $context = [

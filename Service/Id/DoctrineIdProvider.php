@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -28,16 +29,20 @@ class DoctrineIdProvider implements IdProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsEntity(object $entity): bool
+    public function supports(CrudAdminContext $context)
     {
-        return null !== $this->managerRegistry->getManagerForClass(ClassUtils::getClass($entity));
+        $entity = $context->getEntity();
+
+        return null !== $entity
+            && null !== $this->managerRegistry->getManagerForClass(ClassUtils::getClass($entity));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideId(object $entity)
+    public function provideId(CrudAdminContext $context)
     {
+        $entity = $context->getEntity();
         $entityClass = ClassUtils::getClass($entity);
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);

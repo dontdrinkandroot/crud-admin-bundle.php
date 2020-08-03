@@ -4,9 +4,8 @@ namespace Dontdrinkandroot\CrudAdminBundle\Action;
 
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
@@ -45,8 +44,8 @@ class UpdateAction
 
     public function __invoke(Request $request): Response
     {
-        RequestAttributes::setOperation($request, CrudOperation::UPDATE);
-        $entity = $this->itemResolver->resolve($request);
+        $context = new CrudAdminContext(RequestAttributes::getEntityClass($request), CrudOperation::UPDATE, $request);
+        $entity = $this->itemResolver->resolve($context);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -54,16 +53,16 @@ class UpdateAction
             throw new AccessDeniedException();
         }
 
-        $form = $this->formResolver->resolve($request);
+        $form = $this->formResolver->resolve($context);
         assert(null !== $form);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->itemPersister->persistItem($request);
+            $this->itemPersister->persistItem($context);
         }
 
         $response = new Response();
-        $createResponseEvent = new CreateResponseEvent($request, $response);
+        $createResponseEvent = new CreateResponseEvent($context, $response);
         $this->eventDispatcher->dispatch($createResponseEvent);
 
         return $createResponseEvent->getResponse();

@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\Form\FormInterface;
@@ -12,25 +13,22 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class FormResolver extends AbstractProviderService
 {
-    public function resolve(Request $request): ?FormInterface
+    public function resolve(CrudAdminContext $context): ?FormInterface
     {
-        if (!$request->attributes->has(RequestAttributes::FORM)) {
-            $request->attributes->set(RequestAttributes::FORM, $this->resolveFromProviders($request));
+        if (!$context->isFormResolved()) {
+            $context->setForm($this->resolveFromProviders($context));
+            $context->setFormResolved();
         }
 
-        return $request->attributes->get(RequestAttributes::FORM);
+       return $context->getForm();
     }
 
-    public function resolveFromProviders(Request $request)
+    public function resolveFromProviders(CrudAdminContext $context)
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FormProviderInterface);
-            if ($provider->supports(
-                RequestAttributes::getEntityClass($request),
-                RequestAttributes::getOperation($request),
-                $request
-            )) {
-                $result = $provider->provideForm($request);
+            if ($provider->supports($context)) {
+                $result = $provider->provideForm($context);
                 if (null !== $result) {
                     return $result;
                 }

@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
@@ -13,17 +14,12 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class UrlResolver extends AbstractProviderService
 {
-    public function resolve(?object $entity = null, string $crudOperation, Request $request): ?string
+    public function resolve(CrudAdminContext $context): ?string
     {
-        $entityClass = RequestAttributes::getEntityClass($request);
-        if (null !== $entity) {
-            assert(get_class($entity) === RequestAttributes::getEntityClass($request), 'EntityClass not matching');
-        }
-
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof UrlProviderInterface);
-            if ($provider->supports($entityClass, $crudOperation, $request)) {
-                $url = $provider->provideUrl($entity, $crudOperation, $request);
+            if ($provider->supports($context)) {
+                $url = $provider->provideUrl($context);
                 if (null !== $url) {
                     return $url;
                 }

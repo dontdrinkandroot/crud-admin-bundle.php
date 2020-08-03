@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
@@ -36,7 +37,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
         return true;
     }
@@ -44,29 +45,33 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideCollection(Request $request): PaginationInterface
+    public function provideCollection(CrudAdminContext $context): PaginationInterface
     {
-        $entityClass = RequestAttributes::getEntityClass($request);
-        $crudOperation = RequestAttributes::getOperation($request);
-
-        $paginationTarget = $this->paginationTargetResolver->resolve($entityClass, $crudOperation, $request);
+        $paginationTarget = $this->paginationTargetResolver->resolve($context);
 
         $sortFields = [];
-        $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($request);
+        $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($context);
         foreach ($fieldDefinitions as $fieldDefinition) {
             if ($fieldDefinition->isSortable()) {
                 $sortFields[] = 'entity.' . $fieldDefinition->getPropertyPath();
             }
         }
 
+        $defaultSortFieldName = null;
+        $defaultSortDirection = null;
+        if (RequestAttributes::entityClassMatches($context)) {
+            $defaultSortFieldName = RequestAttributes::getDefaultSortFieldName($context->getRequest());
+            $defaultSortDirection = RequestAttributes::getDefaultSortDirection($context->getRequest());
+        }
+
         return $this->paginator->paginate(
             $paginationTarget,
-            $request->get('page', 1),
-            $request->get('perPage', 10),
+            $context->getRequest()->get('page', 1),
+            $context->getRequest()->get('perPage', 10),
             [
                 PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
-                PaginatorInterface::DEFAULT_SORT_FIELD_NAME => RequestAttributes::getDefaultSortFieldName($request),
-                PaginatorInterface::DEFAULT_SORT_DIRECTION => RequestAttributes::getDefaultSortDirection($request)
+                PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
+                PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection
             ]
         );
     }

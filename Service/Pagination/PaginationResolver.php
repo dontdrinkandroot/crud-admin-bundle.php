@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
@@ -13,27 +14,24 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class PaginationResolver extends AbstractProviderService
 {
-    public function resolve(Request $request): PaginationInterface
+    public function resolve(CrudAdminContext $context): PaginationInterface
     {
-        if (!$request->attributes->has(RequestAttributes::DATA)) {
-            $request->attributes->set(RequestAttributes::DATA, $this->resolveFromProviders($request));
+        if (!$context->isPaginationResolved()) {
+            $context->setPagination($this->resolveFromProviders($context));
+            $context->setPaginationResolved();
         }
 
-        return $request->attributes->get(RequestAttributes::DATA);
+        return $context->getPagination();
     }
 
-    public function resolveFromProviders(Request $request): ?PaginationInterface
+    public function resolveFromProviders(CrudAdminContext $context): ?PaginationInterface
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof PaginationProviderInterface);
-            if ($provider->supports(
-                RequestAttributes::getEntityClass($request),
-                RequestAttributes::getOperation($request),
-                $request
-            )) {
-                $data = $provider->provideCollection($request);
-                if (null !== $data) {
-                    return $data;
+            if ($provider->supports($context)) {
+                $paginationTarget = $provider->provideCollection($context);
+                if (null !== $paginationTarget) {
+                    return $paginationTarget;
                 }
             }
         }

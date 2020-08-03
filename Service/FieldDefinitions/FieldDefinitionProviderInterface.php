@@ -2,19 +2,20 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Service\OperationProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface FieldDefinitionProviderInterface extends OperationProviderInterface
+interface FieldDefinitionProviderInterface extends CrudAdminProviderInterface
 {
     /**
-     * @param Request $request
+     * @param CrudAdminContext $context
      *
      * @return FieldDefinition[]|null
      */
-    public function provideFieldDefinitions(Request $request): ?array;
+    public function provideFieldDefinitions(CrudAdminContext $context): ?array;
 }

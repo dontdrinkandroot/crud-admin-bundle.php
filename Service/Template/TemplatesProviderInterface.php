@@ -2,13 +2,14 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\OperationProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface TemplatesProviderInterface extends OperationProviderInterface
+interface TemplatesProviderInterface extends CrudAdminProviderInterface
 {
-    public function provideTemplates(Request $request): ?array;
+    public function provideTemplates(CrudAdminContext $context): ?array;
 }

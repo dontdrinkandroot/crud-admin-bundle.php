@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Action;
 
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceResolver;
@@ -45,22 +46,22 @@ class CreateAction
 
     public function __invoke(Request $request): Response
     {
-        $request->attributes->set(RequestAttributes::OPERATION, CrudOperation::CREATE);
-        $entity = $this->newInstanceResolver->resolve($request);
+        $context = new CrudAdminContext(RequestAttributes::getEntityClass($request), CrudOperation::CREATE, $request);
+        $entity = $this->newInstanceResolver->resolve($context);
         if (!$this->authorizationChecker->isGranted(CrudOperation::CREATE, $entity)) {
             throw new AccessDeniedException();
         }
 
-        $form = $this->formResolver->resolve($request);
+        $form = $this->formResolver->resolve($context);
         assert(null !== $form);
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->itemPersister->persistItem($request);
+            $this->itemPersister->persistItem($context);
         }
 
         $response = new Response();
-        $createResponseEvent = new CreateResponseEvent($request, $response);
+        $createResponseEvent = new CreateResponseEvent($context, $response);
         $this->eventDispatcher->dispatch($createResponseEvent);
 
         return $createResponseEvent->getResponse();

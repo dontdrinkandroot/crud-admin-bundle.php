@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Routes;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,25 +12,22 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class RoutesResolver extends AbstractProviderService
 {
-    public function resolve(Request $request): ?array
+    public function resolve(CrudAdminContext $context): ?array
     {
-        if (!$request->attributes->has(RequestAttributes::ROUTES)) {
-            $request->attributes->set(RequestAttributes::ROUTES, $this->resolveFromProviders($request));
+        if (!$context->isRoutesResolved()) {
+            $context->setRoutes($this->resolveFromProviders($context));
+            $context->setRoutesResolved();
         }
 
-        return $request->attributes->get(RequestAttributes::ROUTES);
+        return $context->getRoutes();
     }
 
-    private function resolveFromProviders(Request $request): ?array
+    private function resolveFromProviders(CrudAdminContext $context): ?array
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof RoutesProviderInterface);
-            if ($provider->supports(
-                RequestAttributes::getEntityClass($request),
-                RequestAttributes::getOperation($request),
-                $request
-            )) {
-                $routes = $provider->provideRoutes($request);
+            if ($provider->supports($context)) {
+                $routes = $provider->provideRoutes($context);
                 if (null !== $routes) {
                     return $routes;
                 }

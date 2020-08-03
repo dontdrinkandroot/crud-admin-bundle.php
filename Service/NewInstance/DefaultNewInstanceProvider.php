@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\NewInstance;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,14 +14,14 @@ class DefaultNewInstanceProvider implements NewInstanceProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
         return true;
     }
 
-    public function provideNewInstance(Request $request): ?object
+    public function provideNewInstance(CrudAdminContext $context): ?object
     {
-        $entityClass = RequestAttributes::getEntityClass($request);
+        $entityClass = $context->getEntityClass();
 
         return new $entityClass();
     }

@@ -47,20 +47,21 @@ class DefaultListResponseListener
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
+        $context = $event->getContext();
         $request = $event->getRequest();
-        $crudOperation = RequestAttributes::getOperation($request);
+        $crudOperation = $context->getCrudOperation();
         if (CrudOperation::LIST !== $crudOperation) {
             return;
         }
 
-        $templates = $this->templateResolver->resolve($request);
+        $templates = $this->templateResolver->resolve($context);
         assert(null !== $templates);
         assert(isset($templates[$crudOperation]));
         $context = [
-            'title'            => $this->titleResolver->resolve($request),
-            'entities'         => $this->paginationResolver->resolve($request),
-            'fieldDefinitions' => $this->fieldDefinitionsResolver->resolve($request),
-            'routes'           => $this->routesResolver->resolve($request),
+            'title'            => $this->titleResolver->resolve($context),
+            'entities'         => $this->paginationResolver->resolve($context),
+            'fieldDefinitions' => $this->fieldDefinitionsResolver->resolve($context),
+            'routes'           => $this->routesResolver->resolve($context),
         ];
 
         $content = $this->twig->render($templates[$crudOperation], $context);

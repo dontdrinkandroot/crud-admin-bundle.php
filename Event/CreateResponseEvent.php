@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Event;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -10,23 +11,28 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class CreateResponseEvent
 {
-    private Request $request;
-
     private Response $response;
 
-    public function __construct(Request $request, Response $response)
+    private CrudAdminContext $context;
+
+    public function __construct(CrudAdminContext $context, Response $response)
     {
-        $this->request = $request;
         $this->response = $response;
+        $this->context = $context;
     }
 
     public function getRequest(): Request
     {
-        return $this->request;
+        return $this->context->getRequest();
     }
 
     public function getResponse(): Response
     {
         return $this->response;
+    }
+
+    public function getContext(): CrudAdminContext
+    {
+        return $this->context;
     }
 }

@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Routes;
 
 use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,7 @@ class DefaultRoutesProvider implements RoutesProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
         return true;
     }
@@ -31,11 +32,15 @@ class DefaultRoutesProvider implements RoutesProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideRoutes(Request $request): ?array
+    public function provideRoutes(CrudAdminContext $context): ?array
     {
-        $prefix = RequestAttributes::getRoutesPrefix($request);
+        if (!RequestAttributes::entityClassMatches($context)) {
+            return null;
+        }
+
+        $prefix = RequestAttributes::getRoutesPrefix($context->getRequest());
         if (null === $prefix) {
-            $tableizedName = ClassNameUtils::getTableizedShortName(RequestAttributes::getEntityClass($request));
+            $tableizedName = ClassNameUtils::getTableizedShortName($context->getEntityClass());
             $prefix = 'ddr_crud_admin.' . $tableizedName . '.';
         }
 

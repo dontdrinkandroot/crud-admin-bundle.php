@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
@@ -13,24 +14,22 @@ use Symfony\Contracts\Service\ServiceProviderInterface;
  */
 class TranslationDomainResolver extends AbstractProviderService
 {
-    public function resolve(string $entityClass, string $crudOperation, Request $request): ?string
+    public function resolve(CrudAdminContext $context): ?string
     {
-        if (!$request->attributes->has(RequestAttributes::TRANSLATION_DOMAIN)) {
-            $request->attributes->set(
-                RequestAttributes::TRANSLATION_DOMAIN,
-                $this->resolveFromProviders($entityClass, $crudOperation, $request)
-            );
+        if (!$context->isTranslationDomainResolved()) {
+            $context->setTranslationDomain($this->resolveFromProviders($context));
+            $context->setTranslationDomainResolved();
         }
 
-        return $request->attributes->get(RequestAttributes::TRANSLATION_DOMAIN);
+        return $context->getTranslationDomain();
     }
 
-    public function resolveFromProviders(string $entityClass, string $crudOperation, Request $request): ?string
+    public function resolveFromProviders(CrudAdminContext $context): ?string
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof TranslationDomainProviderInterface);
-            if ($provider->supports($entityClass, $crudOperation, $request)) {
-                $translationDomain = $provider->resolveTranslationDomain($entityClass, $crudOperation, $request);
+            if ($provider->supports($context)) {
+                $translationDomain = $provider->resolveTranslationDomain($context);
                 if (null !== $translationDomain) {
                     return $translationDomain;
                 }

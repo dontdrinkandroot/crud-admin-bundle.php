@@ -4,7 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Action;
 
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
@@ -38,8 +38,8 @@ class ReadAction
 
     public function __invoke(Request $request): Response
     {
-        RequestAttributes::setOperation($request, CrudOperation::READ);
-        $entity = $this->itemResolver->resolve($request);
+        $context = new CrudAdminContext(RequestAttributes::getEntityClass($request), CrudOperation::READ, $request);
+        $entity = $this->itemResolver->resolve($context);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -48,7 +48,7 @@ class ReadAction
         }
 
         $response = new Response();
-        $createResponseEvent = new CreateResponseEvent($request, $response);
+        $createResponseEvent = new CreateResponseEvent($context, $response);
         $this->eventDispatcher->dispatch($createResponseEvent);
 
         return $createResponseEvent->getResponse();

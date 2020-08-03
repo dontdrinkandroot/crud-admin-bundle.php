@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
@@ -24,31 +25,23 @@ class TemplatesResolver extends AbstractProviderService
         $this->providers[] = $provider;
     }
 
-    public function resolve(Request $request): ?array
+    public function resolve(CrudAdminContext $context): ?array
     {
-        if (!$request->attributes->has(RequestAttributes::TEMPLATES)) {
-            $request->attributes->set(RequestAttributes::TEMPLATES, $this->resolveFromProviders($request));
-        }
-
-        return $request->attributes->get(RequestAttributes::TEMPLATES);
-    }
-
-    public function resolveFromProviders(Request $request)
-    {
-        foreach ($this->getProviders() as $provider) {
-            assert($provider instanceof TemplatesProviderInterface);
-            if ($provider->supports(
-                RequestAttributes::getEntityClass($request),
-                RequestAttributes::getOperation($request),
-                $request
-            )) {
-                $result = $provider->provideTemplates($request);
-                if (null !== $result) {
-                    return $result;
+        if (!$context->isTemplatesResolved()) {
+            $templates = [];
+            foreach ($this->getProviders() as $provider) {
+                assert($provider instanceof TemplatesProviderInterface);
+                if ($provider->supports($context)) {
+                    $providerTemplates = $provider->provideTemplates($context);
+                    if (null !== $providerTemplates) {
+                        $templates = array_merge($providerTemplates, $templates);
+                    }
                 }
             }
+            $context->setTemplates($templates);
+            $context->setTemplatesResolved();
         }
 
-        return null;
+        return $context->getTemplates();
     }
 }

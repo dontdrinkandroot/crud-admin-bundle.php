@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainProviderInterface;
@@ -33,30 +34,27 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
     /**
      * {@inheritdoc}
      */
-    public function supports(string $entityClass, string $crudOperation, Request $request): bool
+    public function supports(CrudAdminContext $context): bool
     {
-        return null !== $this->managerRegistry->getManagerForClass(RequestAttributes::getEntityClass($request));
+        return null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideFieldDefinitions(Request $request): ?array
+    public function provideFieldDefinitions(CrudAdminContext $context): ?array
     {
-        $entityClass = RequestAttributes::getEntityClass($request);
-        $crudOperation = RequestAttributes::getOperation($request);
+        $entityClass = $context->getEntityClass();
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);
         $classMetadata = $entityManager->getClassMetadata($entityClass);
 
-        $className = ClassNameUtils::getShortName($entityClass);
-
-        $fields = $this->getFields($request);
+        $fields = $this->getFields($context);
         if (null === $fields) {
             $fields = array_keys($classMetadata->fieldMappings);
         }
 
-        $translationDomain = $this->translationDomainResolver->resolve($entityClass, $crudOperation, $request);
+        $translationDomain = $this->translationDomainResolver->resolve($context);
 
         $fieldDefinitions = [];
         foreach ($fields as $field) {
@@ -70,7 +68,7 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
 
             $fieldDefinitions[] = new FieldDefinition(
                 $fieldName,
-                $this->translator->trans($fieldName, [], $translationDomain),
+                $this->translator->trans(ucfirst($fieldName), [], $translationDomain),
                 $type,
                 true,
                 $filterable
@@ -80,10 +78,14 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
         return $fieldDefinitions;
     }
 
-    private function getFields(Request $request): ?array
+    private function getFields(CrudAdminContext $context): ?array
     {
-        $operation = RequestAttributes::getOperation($request);
-        $fields = RequestAttributes::getFields($request);
+        $operation = $context->getCrudOperation();
+        if (!RequestAttributes::entityClassMatches($context)) {
+            return null;
+        }
+
+        $fields = RequestAttributes::getFields($context->getRequest());
         if (null === $fields) {
             return null;
         }

@@ -3,7 +3,10 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Twig;
 
 use DateTimeInterface;
+use Doctrine\Common\Util\ClassUtils;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -101,6 +104,21 @@ class CrudAdminExtension extends AbstractExtension
 
     public function getUrl(string $crudOperation, ?object $entity = null): ?string
     {
-        return $this->urlResolver->resolve($entity, $crudOperation, $this->requestStack->getCurrentRequest());
+        $request = $this->requestStack->getCurrentRequest();
+        assert(null !== $request);
+        $entityClass = RequestAttributes::getEntityClass($request);
+        if (null !== $entity) {
+            $entityClass = get_class($entity);
+            if (class_exists('Doctrine\Common\Util\ClassUtils')) {
+                $entityClass = ClassUtils::getRealClass($entityClass);
+            }
+        }
+
+        $context = new CrudAdminContext($entityClass, $crudOperation, $request);
+        if (null !== $entity) {
+            $context->setEntity($entity);
+            $context->setEntityResolved(true);
+        }
+        return $this->urlResolver->resolve($context);
     }
 }

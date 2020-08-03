@@ -47,19 +47,20 @@ class DefaultReadResponseListener
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
+        $context = $event->getContext();
         $request = $event->getRequest();
-        $crudOperation = RequestAttributes::getOperation($request);
+        $crudOperation = $context->getCrudOperation();
         if (CrudOperation::READ !== $crudOperation) {
             return;
         }
 
-        $entity = $this->itemResolver->resolve($request);
-        $templates = $this->templateResolver->resolve($request);
+        $entity = $this->itemResolver->resolve($context);
+        $templates = $this->templateResolver->resolve($context);
         assert(null !== $templates);
         assert(isset($templates[$crudOperation]));
-        $title = $this->titleResolver->resolve($request);
-        $routes = $this->routesResolver->resolve($request);
-        $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($request);
+        $title = $this->titleResolver->resolve($context);
+        $routes = $this->routesResolver->resolve($context);
+        $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($context);
 
         $context =  [
             'title'            => $title,

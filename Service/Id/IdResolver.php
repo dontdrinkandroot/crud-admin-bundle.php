@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
@@ -9,14 +10,14 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
  */
 class IdResolver extends AbstractProviderService
 {
-    public function resolve(object $entity)
+    public function resolve(CrudAdminContext $context)
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof IdProviderInterface);
-            if ($provider->supportsEntity($entity)) {
-                $result = $provider->provideId($entity);
-                if (null !== $result) {
-                    return $result;
+            if ($provider->supports($context)) {
+                $id = $provider->provideId($context);
+                if (null !== $id) {
+                    return $id;
                 }
             }
         }

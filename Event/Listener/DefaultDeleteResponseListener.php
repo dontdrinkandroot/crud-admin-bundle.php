@@ -32,20 +32,17 @@ class DefaultDeleteResponseListener
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
-        $request = $event->getRequest();
-        $crudOperation = $request->get(RequestAttributes::OPERATION);
+        $context = $event->getContext();
+        $crudOperation = $context->getCrudOperation();
         if (CrudOperation::DELETE !== $crudOperation) {
             return;
         }
 
         $response = $event->getResponse();
-        if (true === RequestAttributes::getPersistSuccess($request)) {
+        if ($context->isItemPersisted()) {
 
-            $redirectUrl = $this->urlResolver->resolve(
-                RequestAttributes::getEntityClass($request),
-                CrudOperation::LIST,
-                $request
-            );
+            $redirectContext = $context->recreateWithOperation(CrudOperation::LIST);
+            $redirectUrl = $this->urlResolver->resolve($redirectContext);
 
             if (null !== $redirectUrl) {
                 $response->setStatusCode(302);

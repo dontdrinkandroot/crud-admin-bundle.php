@@ -2,16 +2,13 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\OperationProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminProviderInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface IdProviderInterface extends ProviderInterface
+interface IdProviderInterface extends CrudAdminProviderInterface
 {
-    public function supportsEntity(object $entity);
-
-    public function provideId(object $entity);
+    public function provideId(CrudAdminContext $context);
 }
