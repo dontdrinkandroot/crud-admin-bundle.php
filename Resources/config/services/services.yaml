@@ -195,3 +195,9 @@ services:
             - '@request_stack'
         tags:
             - { name: twig.extension }
+
+    Dontdrinkandroot\CrudAdminBundle\Routing\EntityLoader:
+        arguments:
+            - '@file_locator'
+        tags:
+            - { name: routing.loader }
