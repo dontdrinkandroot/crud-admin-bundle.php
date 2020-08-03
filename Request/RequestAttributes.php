@@ -24,6 +24,7 @@ class RequestAttributes
     public const DEFAULT_SORT_DIRECTION = 'ddr_crud_admin.default_sort_direction';
     public const FORM_TYPE = 'ddr_crud_admin.form_type';
     public const TEMPLATES_PATH = 'ddr_crud_admin.templates.path';
+    public const TRANSLATION_DOMAIN = 'ddr_crud_admin.translation_domain';
 
     public static function getId(Request $request)
     {

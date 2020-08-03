@@ -5,10 +5,12 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Request\CrudAdminRequest;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -17,9 +19,15 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
 {
     private ManagerRegistry $managerRegistry;
 
-    public function __construct(ManagerRegistry $managerRegistry)
+    private TranslatorInterface $translator;
+
+    private TranslationDomainResolver $translationDomainResolver;
+
+    public function __construct(ManagerRegistry $managerRegistry, TranslatorInterface $translator, TranslationDomainResolver $translationDomainResolver)
     {
         $this->managerRegistry = $managerRegistry;
+        $this->translator = $translator;
+        $this->translationDomainResolver = $translationDomainResolver;
     }
 
     /**
@@ -36,6 +44,7 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
     public function provideFieldDefinitions(Request $request): ?array
     {
         $entityClass = RequestAttributes::getEntityClass($request);
+        $crudOperation = RequestAttributes::getOperation($request);
         $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
         assert($entityManager instanceof EntityManagerInterface);
         $classMetadata = $entityManager->getClassMetadata($entityClass);
@@ -46,6 +55,8 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
         if (null === $fields) {
             $fields = array_keys($classMetadata->fieldMappings);
         }
+
+        $translationDomain = $this->translationDomainResolver->resolve($entityClass, $crudOperation, $request);
 
         $fieldDefinitions = [];
         foreach ($fields as $field) {
@@ -59,7 +70,7 @@ class DoctrineFieldDefinitionProvider implements FieldDefinitionProviderInterfac
 
             $fieldDefinitions[] = new FieldDefinition(
                 $fieldName,
-                $className . '.' . $fieldName,
+                $this->translator->trans($fieldName, [], $translationDomain),
                 $type,
                 true,
                 $filterable

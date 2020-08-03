@@ -17,6 +17,8 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinitions\DoctrineFieldDefinitionProvider:
         arguments:
             - '@doctrine'
+            - '@translator'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
         tags:
             -   name: 'ddr_crud_admin.field_definitions_provider'
                 priority: -200

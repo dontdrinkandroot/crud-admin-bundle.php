@@ -48,6 +48,9 @@ services:
         arguments:
             - !tagged_iterator ddr_crud_admin.url_provider
 
+    Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.translation_domain_provider
 
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultListResponseListener:
         arguments:
@@ -142,6 +145,9 @@ services:
         tags: ['controller.service_arguments']
 
     Dontdrinkandroot\CrudAdminBundle\Service\Title\DefaultTitleProvider:
+        arguments:
+            - '@translator'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
         tags:
             -   name: 'ddr_crud_admin.title_provider'
                 priority: -250
@@ -186,6 +192,10 @@ services:
             - '@security.authorization_checker'
         tags:
             - { name: 'ddr_crud_admin.url_provider', priority: -250 }
+
+    Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\DefaultTranslationDomainProvider:
+        tags:
+            - { name: 'ddr_crud_admin.translation_domain_provider', priority: -250 }
 
     Dontdrinkandroot\CrudAdminBundle\Twig\CrudAdminExtension:
         arguments:
