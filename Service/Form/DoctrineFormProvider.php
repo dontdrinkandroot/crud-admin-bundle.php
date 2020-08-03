@@ -64,7 +64,6 @@ class DoctrineFormProvider implements FormProviderInterface
         $classMetadata = $entityManager->getClassMetadata($entityClass);
         $entity = $this->itemResolver->resolve($context);
         $formBuilder = $this->formFactory->createBuilder(FormType::class, $entity);
-        $shortName = ClassNameUtils::getShortName($entityClass);
 
         $fields = $this->getFields($context);
         if (null === $fields) {
@@ -99,12 +98,10 @@ class DoctrineFormProvider implements FormProviderInterface
     private function getFields(CrudAdminContext $context): ?array
     {
         $operation = $context->getCrudOperation();
-        if (!RequestAttributes::entityClassMatches($context)) {
-            return null;
-        }
-
-        $fields = RequestAttributes::getFields($context->getRequest());
-        if (null === $fields) {
+        if (
+            !RequestAttributes::entityClassMatches($context)
+            || null === $fields = RequestAttributes::getFields($context->getRequest())
+        ) {
             return null;
         }
 

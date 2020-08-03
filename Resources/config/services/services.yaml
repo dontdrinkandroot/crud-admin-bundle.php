@@ -100,7 +100,6 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultDeleteResponseListener:
         arguments:
-            - '@router'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
         tags:
             -   name: 'kernel.event_listener'

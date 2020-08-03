@@ -15,18 +15,10 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class DefaultDeleteResponseListener
 {
-    private RoutesResolver $routesResolver;
-
-    private RouterInterface $router;
-
-    /**
-     * @var UrlResolver
-     */
     private UrlResolver $urlResolver;
 
-    public function __construct(RouterInterface $router, UrlResolver $urlResolver)
+    public function __construct(UrlResolver $urlResolver)
     {
-        $this->router = $router;
         $this->urlResolver = $urlResolver;
     }
 

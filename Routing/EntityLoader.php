@@ -21,6 +21,8 @@ use Symfony\Component\Yaml\Yaml;
  */
 class EntityLoader extends FileLoader
 {
+    const ATTRIBUTE_CONTROLLER = '_controller';
+
     /**
      * {@inheritdoc}
      */
@@ -50,8 +52,7 @@ class EntityLoader extends FileLoader
         $listRoute = new Route('/');
         $listRoute->addDefaults(
             [
-                '_controller'                   => ListAction::class,
-                RequestAttributes::OPERATION    => CrudOperation::LIST,
+                self::ATTRIBUTE_CONTROLLER      => ListAction::class,
                 RequestAttributes::ENTITY_CLASS => $entityClass
             ]
         );
@@ -60,8 +61,7 @@ class EntityLoader extends FileLoader
         $createRoute = new Route('/__NEW__/edit');
         $createRoute->addDefaults(
             [
-                '_controller'                   => CreateAction::class,
-                RequestAttributes::OPERATION    => CrudOperation::CREATE,
+                self::ATTRIBUTE_CONTROLLER      => CreateAction::class,
                 RequestAttributes::ENTITY_CLASS => $entityClass
             ]
         );
@@ -70,8 +70,7 @@ class EntityLoader extends FileLoader
         $updateRoute = new Route('/{id}/edit');
         $updateRoute->addDefaults(
             [
-                '_controller'                   => UpdateAction::class,
-                RequestAttributes::OPERATION    => CrudOperation::UPDATE,
+                self::ATTRIBUTE_CONTROLLER      => UpdateAction::class,
                 RequestAttributes::ENTITY_CLASS => $entityClass
             ]
         );
@@ -80,8 +79,7 @@ class EntityLoader extends FileLoader
         $deleteRoute = new Route('/{id}/delete');
         $deleteRoute->addDefaults(
             [
-                '_controller'                   => DeleteAction::class,
-                RequestAttributes::OPERATION    => CrudOperation::DELETE,
+                self::ATTRIBUTE_CONTROLLER      => DeleteAction::class,
                 RequestAttributes::ENTITY_CLASS => $entityClass
             ]
         );
@@ -90,8 +88,7 @@ class EntityLoader extends FileLoader
         $readRoute = new Route('/{id}/read');
         $readRoute->addDefaults(
             [
-                '_controller'                   => ReadAction::class,
-                RequestAttributes::OPERATION    => CrudOperation::READ,
+                self::ATTRIBUTE_CONTROLLER      => ReadAction::class,
                 RequestAttributes::ENTITY_CLASS => $entityClass
             ]
         );

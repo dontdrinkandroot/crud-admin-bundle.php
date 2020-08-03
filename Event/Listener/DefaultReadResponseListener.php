@@ -48,7 +48,6 @@ class DefaultReadResponseListener
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
         $context = $event->getContext();
-        $request = $event->getRequest();
         $crudOperation = $context->getCrudOperation();
         if (CrudOperation::READ !== $crudOperation) {
             return;

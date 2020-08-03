@@ -34,10 +34,6 @@ class DefaultCreateUpdateResponseListener
 
     private ItemResolver $itemResolver;
 
-    private Router $router;
-
-    private IdResolver $idResolver;
-
     private UrlResolver $urlResolver;
 
     public function __construct(
@@ -61,7 +57,6 @@ class DefaultCreateUpdateResponseListener
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
         $context = $event->getContext();
-        $request = $event->getRequest();
         $crudOperation = $context->getCrudOperation();
         if (!in_array($crudOperation, [CrudOperation::CREATE, CrudOperation::UPDATE], true)) {
             return;
