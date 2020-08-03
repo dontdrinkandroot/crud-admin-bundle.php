@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRendererProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
@@ -32,6 +33,9 @@ class DdrCrudAdminExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $container
+            ->registerForAutoconfiguration(FieldRendererProviderInterface::class)
+            ->addTag('ddr_crud_admin.field_renderer_provider');
         $container
             ->registerForAutoconfiguration(PaginationProviderInterface::class)
             ->addTag('ddr_crud_admin.pagination_provider');

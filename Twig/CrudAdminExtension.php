@@ -7,6 +7,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -23,22 +24,22 @@ class CrudAdminExtension extends AbstractExtension
 {
     private PropertyAccessor $propertyAccessor;
 
-    private IdResolver $idResolver;
-
     private UrlResolver $urlResolver;
 
     private RequestStack $requestStack;
 
+    private FieldRenderer $fieldRenderer;
+
     public function __construct(
         PropertyAccessor $propertyAccessor,
-        IdResolver $idResolver,
         UrlResolver $urlResolver,
-        RequestStack $requestStack
+        RequestStack $requestStack,
+        FieldRenderer $fieldRenderer
     ) {
         $this->propertyAccessor = $propertyAccessor;
-        $this->idResolver = $idResolver;
         $this->urlResolver = $urlResolver;
         $this->requestStack = $requestStack;
+        $this->fieldRenderer = $fieldRenderer;
     }
 
     /**
@@ -69,37 +70,10 @@ class CrudAdminExtension extends AbstractExtension
         ];
     }
 
-    public function renderFieldDefinitionValue(object $entity, FieldDefinition $fieldDefinition)
+    public function renderFieldDefinitionValue(object $entity, FieldDefinition $fieldDefinition): string
     {
         $value = $this->propertyAccessor->getValue($entity, $fieldDefinition->getPropertyPath());
-        if (null === $value) {
-            return '<i>null</i>';
-        }
-
-        switch ($fieldDefinition->getType()) {
-            case 'datetime':
-                assert(
-                    $value instanceof DateTimeInterface,
-                    $fieldDefinition->getPropertyPath() . ' was not a DateTimeInterface'
-                );
-
-                return $value->format('Y-m-d H:i:s');
-            case 'date':
-                assert(
-                    $value instanceof DateTimeInterface,
-                    $fieldDefinition->getPropertyPath() . ' was not a DateTimeInterface'
-                );
-
-                return $value->format('Y-m-d');
-            case 'boolean';
-                return $value ? '<span class="fas fa-check"></span>' : '<span class="fas fa-times"></span>';
-            case 'json':
-                return implode(',', $value);
-        }
-
-        $value = htmlspecialchars($value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
-
-        return $value;
+        return $this->fieldRenderer->render($fieldDefinition, $value);
     }
 
     public function getUrl(string $crudOperation, ?object $entity = null): ?string

@@ -1,3 +1,6 @@
+imports:
+    - { resource: field_definition_renderer.yaml }
+
 services:
 
     Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver:
@@ -209,9 +212,9 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Twig\CrudAdminExtension:
         arguments:
             - '@property_accessor'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
             - '@request_stack'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer'
         tags:
             - { name: twig.extension }
 
