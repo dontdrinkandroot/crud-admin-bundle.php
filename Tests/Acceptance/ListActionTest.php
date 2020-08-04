@@ -24,5 +24,10 @@ class ListActionTest extends AbstractIntegrationTestCase
         $this->logIn('user');
         $crawler = $this->kernelBrowser->request('GET', '/example_entities/');
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
+
+        $rows = $crawler->filter('tr');
+        $this->assertCount(11, $rows); /* Header + 10 Entities */
+        /* Test Sorting was correct */
+        $this->assertEquals('Alisha Rolfson', $rows->eq(1)->filter('td')->eq(2)->text(null, true));
     }
 }

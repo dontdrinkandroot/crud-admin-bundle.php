@@ -1,29 +1,9 @@
-ddr_crud_admin.example_entity.list:
-    path: /example_entities/
-    controller: Dontdrinkandroot\CrudAdminBundle\Action\ListAction
+ddr_crud_admin_test.example_entity:
+    prefix: /example_entities/
+    resource: '../../../Resources/config/crud_routes.yaml'
+    name_prefix: ddr_crud_admin_test.example_entity.
     defaults:
+        ddr_crud_admin.routes.prefix: ddr_crud_admin_test.example_entity.
         ddr_crud_admin.entity_class: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity'
-
-ddr_crud_admin.example_entity.create:
-    path: /example_entities/__NEW__/edit
-    controller: Dontdrinkandroot\CrudAdminBundle\Action\CreateAction
-    defaults:
-        ddr_crud_admin.entity_class: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity'
-
-ddr_crud_admin.example_entity.read:
-    path: /example_entities/{id}
-    controller: Dontdrinkandroot\CrudAdminBundle\Action\ReadAction
-    defaults:
-        ddr_crud_admin.entity_class: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity'
-
-ddr_crud_admin.example_entity.update:
-    path: /example_entities/{id}/edit
-    controller: Dontdrinkandroot\CrudAdminBundle\Action\UpdateAction
-    defaults:
-        ddr_crud_admin.entity_class: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity'
-
-ddr_crud_admin.example_entity.delete:
-    path: /example_entities/{id}/delete
-    controller: Dontdrinkandroot\CrudAdminBundle\Action\DeleteAction
-    defaults:
-        ddr_crud_admin.entity_class: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity'
+        ddr_crud_admin.default_sort_field_name: entity.requiredField
+        ddr_crud_admin.default_sort_direction: asc

@@ -7,6 +7,7 @@ use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
+use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
@@ -51,5 +52,12 @@ class AbstractIntegrationTestCase extends WebTestCase
 
         $cookie = new Cookie($session->getName(), $session->getId());
         $this->kernelBrowser->getCookieJar()->set($cookie);
+    }
+
+    public static function getFormattedHtml(Crawler $crawler): string
+    {
+        $document = $crawler->getNode(0)->parentNode;
+        $document->formatOutput = true;
+        return $document->saveHtml($document);
     }
 }
