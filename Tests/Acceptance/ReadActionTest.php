@@ -27,6 +27,11 @@ class ReadActionTest extends AbstractIntegrationTestCase
         $this->logIn('user');
         $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
         assert($exampleEntity instanceof ExampleEntity);
+
+        /* Test alternative route is callable */
+        $crawler = $this->kernelBrowser->request('GET', '/alternative_example_entities/' . $exampleEntity->getId());
+        $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
+
         $crawler = $this->kernelBrowser->request('GET', '/example_entities/' . $exampleEntity->getId());
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
 

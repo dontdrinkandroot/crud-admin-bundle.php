@@ -7,3 +7,8 @@ ddr_crud_admin_test.example_entity:
         ddr_crud_admin.entity_class: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity'
         ddr_crud_admin.default_sort_field_name: entity.requiredField
         ddr_crud_admin.default_sort_direction: asc
+
+ddr_crud_admin_test.example_entity_alternative:
+    prefix: /alternative_example_entities/
+    resource: 'ddr_crud_admin/example_entity.yaml'
+    type: ddr_crud_admin_entity

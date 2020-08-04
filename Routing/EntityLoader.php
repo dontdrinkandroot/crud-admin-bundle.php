@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Routing;
 
-use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Action\CreateAction;
 use Dontdrinkandroot\CrudAdminBundle\Action\DeleteAction;
 use Dontdrinkandroot\CrudAdminBundle\Action\ListAction;
@@ -11,7 +10,6 @@ use Dontdrinkandroot\CrudAdminBundle\Action\UpdateAction;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\Config\Loader\FileLoader;
-use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
@@ -85,7 +83,7 @@ class EntityLoader extends FileLoader
         );
         $routeCollection->add('delete', $deleteRoute);
 
-        $readRoute = new Route('/{id}/read');
+        $readRoute = new Route('/{id}');
         $readRoute->addDefaults(
             [
                 self::ATTRIBUTE_CONTROLLER      => ReadAction::class,
