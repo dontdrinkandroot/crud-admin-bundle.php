@@ -24,6 +24,6 @@ class DateTimeRendererProvider implements FieldRendererProviderInterface
     public function render(FieldDefinition $fieldDefinition, $value): string
     {
         assert($value instanceof DateTimeInterface);
-        return $value->format('Y-m-d H:i:s');
+        return FieldRenderer::escapeHtml($value->format('Y-m-d H:i:s'));
     }
 }

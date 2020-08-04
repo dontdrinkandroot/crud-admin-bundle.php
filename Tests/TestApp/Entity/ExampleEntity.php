@@ -18,6 +18,11 @@ class ExampleEntity
      */
     private ?int $id = null;
 
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private ?string $nullField = null;
+
     public function getId(): ?int
     {
         return $this->id;

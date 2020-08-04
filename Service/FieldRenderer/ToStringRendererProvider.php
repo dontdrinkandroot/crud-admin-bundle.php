@@ -22,6 +22,6 @@ class ToStringRendererProvider implements FieldRendererProviderInterface
      */
     public function render(FieldDefinition $fieldDefinition, $value): string
     {
-        return (string) $value;
+        return FieldRenderer::escapeHtml((string)$value);
     }
 }

@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": ">=7.4",
+        "ext-json": "*",
         "dontdrinkandroot/common": "dev-master",
         "knplabs/knp-paginator-bundle": "^5.3",
         "symfony/config": "^4.4",
