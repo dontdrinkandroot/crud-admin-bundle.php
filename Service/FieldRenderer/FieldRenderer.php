@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
+use Dontdrinkandroot\CrudAdminBundle\Exception\NoRendererFoundException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use RuntimeException;
@@ -20,7 +21,7 @@ class FieldRenderer extends AbstractProviderService
             }
         }
 
-        throw new RuntimeException(
+        throw new NoRendererFoundException(
             sprintf(
                 'Cannot render FieldDefinitionType "%s" with value "%s"',
                 $fieldDefinition->getType(),

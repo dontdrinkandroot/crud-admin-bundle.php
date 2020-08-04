@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
+use Dontdrinkandroot\CrudAdminBundle\Exception\EndProviderChainException;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
@@ -19,7 +20,12 @@ class UrlResolver extends AbstractProviderService
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof UrlProviderInterface);
             if ($provider->supports($context)) {
-                $url = $provider->provideUrl($context);
+                try {
+                    $url = $provider->provideUrl($context);
+                } catch (EndProviderChainException $e) {
+                    return null;
+                }
+
                 if (null !== $url) {
                     return $url;
                 }
