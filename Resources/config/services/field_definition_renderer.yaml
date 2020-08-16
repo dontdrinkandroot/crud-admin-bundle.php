@@ -12,6 +12,10 @@ services:
         tags:
             - { name: 'ddr_crud_admin.field_renderer_provider', priority: -240 }
 
+    Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\ArrayRendererProvider:
+        tags:
+            - { name: 'ddr_crud_admin.field_renderer_provider', priority: -240 }
+
     Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\JsonRendererProvider:
         tags:
             - { name: 'ddr_crud_admin.field_renderer_provider', priority: -240 }
