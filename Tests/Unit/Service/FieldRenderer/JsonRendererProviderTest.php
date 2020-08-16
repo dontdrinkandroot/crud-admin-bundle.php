@@ -14,7 +14,7 @@ class JsonRendererProviderTest extends TestCase
     public function testRendering()
     {
         $renderer = new JsonRendererProvider();
-        $fieldDefinition = new FieldDefinition('path', 'Label', 'json');
+        $fieldDefinition = new FieldDefinition('path', 'json');
 
         $value = ['a', 'b' => ['c', 1 => 'foo']];
         $this->assertTrue($renderer->supports($fieldDefinition, $value));

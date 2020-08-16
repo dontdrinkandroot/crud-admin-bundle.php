@@ -14,7 +14,7 @@ class NullRendererProviderTest extends TestCase
     public function testRendering()
     {
         $renderer = new NullRendererProvider();
-        $fieldDefinition = new FieldDefinition('path', 'Label', 'json');
+        $fieldDefinition = new FieldDefinition('path', 'json');
 
         $value = null;
         $this->assertTrue($renderer->supports($fieldDefinition, $value));
