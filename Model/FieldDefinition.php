@@ -9,8 +9,6 @@ class FieldDefinition
 {
     private string $propertyPath;
 
-    private string $label;
-
     private string $type;
 
     private bool $sortable;
@@ -19,13 +17,11 @@ class FieldDefinition
 
     public function __construct(
         string $propertyPath,
-        string $label,
         string $type,
         bool $sortable = false,
         bool $filterable = false
     ) {
         $this->propertyPath = $propertyPath;
-        $this->label = $label;
         $this->type = $type;
         $this->sortable = $sortable;
         $this->filterable = $filterable;
@@ -34,11 +30,6 @@ class FieldDefinition
     public function getPropertyPath(): string
     {
         return $this->propertyPath;
-    }
-
-    public function getLabel(): string
-    {
-        return $this->label;
     }
 
     public function getType(): string

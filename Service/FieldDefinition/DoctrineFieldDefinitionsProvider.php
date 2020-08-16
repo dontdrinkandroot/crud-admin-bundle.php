@@ -23,13 +23,10 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
 
     private TranslatorInterface $translator;
 
-    private TranslationDomainResolver $translationDomainResolver;
-
-    public function __construct(ManagerRegistry $managerRegistry, TranslatorInterface $translator, TranslationDomainResolver $translationDomainResolver)
+    public function __construct(ManagerRegistry $managerRegistry, TranslatorInterface $translator)
     {
         $this->managerRegistry = $managerRegistry;
         $this->translator = $translator;
-        $this->translationDomainResolver = $translationDomainResolver;
     }
 
     /**
@@ -55,8 +52,6 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
             $fields = array_keys($classMetadata->fieldMappings);
         }
 
-        $translationDomain = $this->translationDomainResolver->resolve($context);
-
         $fieldDefinitions = [];
         foreach ($fields as $field) {
             $fieldMapping = $classMetadata->fieldMappings[$field];
@@ -69,7 +64,6 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
 
             $fieldDefinitions[] = new FieldDefinition(
                 $fieldName,
-                $this->translator->trans(ucfirst($fieldName), [], $translationDomain),
                 $type,
                 true,
                 $filterable

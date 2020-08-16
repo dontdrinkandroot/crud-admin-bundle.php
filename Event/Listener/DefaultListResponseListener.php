@@ -10,6 +10,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsRes
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Twig\Environment;
 
 /**
@@ -29,13 +30,16 @@ class DefaultListResponseListener
 
     private Environment $twig;
 
+    private TranslationDomainResolver $translationDomainResolver;
+
     public function __construct(
         TitleResolver $titleResolver,
         PaginationResolver $paginationResolver,
         FieldDefinitionsResolver $fieldDefinitionsResolver,
         RoutesResolver $routesResolver,
         TemplatesResolver $templateResolver,
-        Environment $twig
+        Environment $twig,
+        TranslationDomainResolver $translationDomainResolver
     ) {
         $this->titleResolver = $titleResolver;
         $this->paginationResolver = $paginationResolver;
@@ -43,6 +47,7 @@ class DefaultListResponseListener
         $this->routesResolver = $routesResolver;
         $this->templateResolver = $templateResolver;
         $this->twig = $twig;
+        $this->translationDomainResolver = $translationDomainResolver;
     }
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
@@ -61,6 +66,7 @@ class DefaultListResponseListener
             'entities'         => $this->paginationResolver->resolve($context),
             'fieldDefinitions' => $this->fieldDefinitionsResolver->resolve($context),
             'routes'           => $this->routesResolver->resolve($context),
+            'translationDomain' => $this->translationDomainResolver->resolve($context)
         ];
 
         $content = $this->twig->render($templates[$crudOperation], $context);

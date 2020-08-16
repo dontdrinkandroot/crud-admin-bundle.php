@@ -63,6 +63,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
             - '@twig'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
         tags:
             -   name: 'kernel.event_listener'
                 event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent
@@ -77,6 +78,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
             - '@twig'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
         tags:
             -   name: 'kernel.event_listener'
                 event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent
@@ -92,6 +94,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
             - '@twig'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
         tags:
             -   name: 'kernel.event_listener'
                 event: Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent

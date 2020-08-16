@@ -43,7 +43,7 @@
 
     <dl>
         {% for fieldDefinition in fieldDefinitions %}
-            <dt>{{ fieldDefinition.label }}</dt>
+            <dt>{{ fieldDefinition.propertyPath|humanize|trans({}, translationDomain) }}</dt>
             <dd>{{ entity|ddrCrudAdminFieldDefinitionValue(fieldDefinition) }}</dd>
         {% endfor %}
     </dl>

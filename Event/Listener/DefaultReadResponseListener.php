@@ -10,6 +10,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Twig\Environment;
 
 /**
@@ -29,13 +30,16 @@ class DefaultReadResponseListener
 
     private TemplatesResolver $templateResolver;
 
+    private TranslationDomainResolver $translationDomainResolver;
+
     public function __construct(
         ItemResolver $itemResolver,
         TitleResolver $titleResolver,
         RoutesResolver $routesResolver,
         FieldDefinitionsResolver $fieldDefinitionsResolver,
         TemplatesResolver $templateResolver,
-        Environment $twig
+        Environment $twig,
+        TranslationDomainResolver $translationDomainResolver
     ) {
         $this->itemResolver = $itemResolver;
         $this->titleResolver = $titleResolver;
@@ -43,6 +47,7 @@ class DefaultReadResponseListener
         $this->fieldDefinitionsResolver = $fieldDefinitionsResolver;
         $this->twig = $twig;
         $this->templateResolver = $templateResolver;
+        $this->translationDomainResolver = $translationDomainResolver;
     }
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
@@ -61,11 +66,12 @@ class DefaultReadResponseListener
         $routes = $this->routesResolver->resolve($context);
         $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($context);
 
-        $context =  [
-            'title'            => $title,
-            'entity'           => $entity,
-            'routes'           => $routes,
-            'fieldDefinitions' => $fieldDefinitions,
+        $context = [
+            'title'             => $title,
+            'entity'            => $entity,
+            'routes'            => $routes,
+            'fieldDefinitions'  => $fieldDefinitions,
+            'translationDomain' => $this->translationDomainResolver->resolve($context)
         ];
 
         $content = $this->twig->render($templates[$crudOperation], $context);

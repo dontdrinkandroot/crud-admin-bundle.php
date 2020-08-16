@@ -77,9 +77,7 @@ class DoctrineFormProvider implements FormProviderInterface
                 $formBuilder->add(
                     $fieldName,
                     null,
-                    [
-                        'label' => $this->translator->trans(ucfirst($fieldName), [], $translationDomain)
-                    ]
+                    ['translation_domain' => $translationDomain]
                 );
             }
         }
