@@ -6,7 +6,6 @@ use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\Utils\ClassNameUtils;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 
 /**
@@ -24,7 +23,7 @@ class DefaultRoutesProvider implements RoutesProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsRoutes(CrudAdminContext $context): bool
     {
         return true;
     }

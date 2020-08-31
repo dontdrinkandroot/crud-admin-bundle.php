@@ -13,7 +13,7 @@ class RequestAttributeTemplateProvider implements TemplatesProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context)
+    public function supportsTemplates(CrudAdminContext $context): bool
     {
         return RequestAttributes::entityClassMatches($context)
             && null !== RequestAttributes::getTemplates($context->getRequest());

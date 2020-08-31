@@ -3,10 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -31,7 +29,7 @@ class TemplatesResolver extends AbstractProviderService
             $templates = [];
             foreach ($this->getProviders() as $provider) {
                 assert($provider instanceof TemplatesProviderInterface);
-                if ($provider->supports($context)) {
+                if ($provider->supportsTemplates($context)) {
                     $providerTemplates = $provider->provideTemplates($context);
                     if (null !== $providerTemplates) {
                         $templates = array_merge($providerTemplates, $templates);

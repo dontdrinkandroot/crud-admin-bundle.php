@@ -3,11 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
-use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -28,7 +25,7 @@ class PaginationResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof PaginationProviderInterface);
-            if ($provider->supports($context)) {
+            if ($provider->supportsPagination($context)) {
                 $paginationTarget = $provider->provideCollection($context);
                 if (null !== $paginationTarget) {
                     return $paginationTarget;

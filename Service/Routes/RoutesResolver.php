@@ -3,9 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Routes;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -26,7 +24,7 @@ class RoutesResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof RoutesProviderInterface);
-            if ($provider->supports($context)) {
+            if ($provider->supportsRoutes($context)) {
                 $routes = $provider->provideRoutes($context);
                 if (null !== $routes) {
                     return $routes;

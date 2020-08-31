@@ -6,8 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -24,7 +22,7 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsPersist(CrudAdminContext $context): bool
     {
         return
             null !== $context->getEntity()

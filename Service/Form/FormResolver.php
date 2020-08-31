@@ -3,10 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -27,7 +25,7 @@ class FormResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FormProviderInterface);
-            if ($provider->supports($context)) {
+            if ($provider->supportsForm($context)) {
                 $result = $provider->provideForm($context);
                 if (null !== $result) {
                     return $result;

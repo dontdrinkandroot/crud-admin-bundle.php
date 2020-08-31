@@ -5,11 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -20,11 +18,8 @@ class RequestAttributeFormProvider implements FormProviderInterface
 
     private ItemResolver $itemResolver;
 
-
-    public function __construct(
-        FormFactoryInterface $formFactory,
-        ItemResolver $itemResolver
-    ) {
+    public function __construct(FormFactoryInterface $formFactory, ItemResolver $itemResolver)
+    {
         $this->formFactory = $formFactory;
         $this->itemResolver = $itemResolver;
     }
@@ -32,7 +27,7 @@ class RequestAttributeFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsForm(CrudAdminContext $context): bool
     {
         $entityClass = $context->getEntityClass();
         if ($entityClass !== RequestAttributes::getEntityClass($context->getRequest())) {

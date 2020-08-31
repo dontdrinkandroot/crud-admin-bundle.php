@@ -12,7 +12,6 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -27,26 +26,22 @@ class DoctrineFormProvider implements FormProviderInterface
 
     private TranslationDomainResolver $translationDomainResolver;
 
-    private TranslatorInterface $translator;
-
     public function __construct(
         ManagerRegistry $managerRegistry,
         FormFactoryInterface $formFactory,
         ItemResolver $itemResolver,
-        TranslationDomainResolver $translationDomainResolver,
-        TranslatorInterface $translator
+        TranslationDomainResolver $translationDomainResolver
     ) {
         $this->managerRegistry = $managerRegistry;
         $this->formFactory = $formFactory;
         $this->itemResolver = $itemResolver;
         $this->translationDomainResolver = $translationDomainResolver;
-        $this->translator = $translator;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsForm(CrudAdminContext $context): bool
     {
         return null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
     }

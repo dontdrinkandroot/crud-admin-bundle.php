@@ -2,16 +2,12 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -37,7 +33,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsPagination(CrudAdminContext $context): bool
     {
         return true;
     }
