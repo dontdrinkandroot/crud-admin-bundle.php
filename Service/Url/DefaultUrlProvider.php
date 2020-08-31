@@ -6,7 +6,6 @@ use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -38,7 +37,7 @@ class DefaultUrlProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsUrl(CrudAdminContext $context): bool
     {
         $routes = $this->routesResolver->resolve($context);
 

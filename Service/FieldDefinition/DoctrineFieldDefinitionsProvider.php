@@ -7,11 +7,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
-use Dontdrinkandroot\Utils\ClassNameUtils;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -32,7 +27,7 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsFieldDefinitions(CrudAdminContext $context): bool
     {
         return null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
     }

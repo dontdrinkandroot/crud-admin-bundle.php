@@ -2,13 +2,8 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
-use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
-use Dontdrinkandroot\Utils\ClassNameUtils;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Inflector\Inflector;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
@@ -29,7 +24,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsTitle(CrudAdminContext $context): bool
     {
         return true;
     }

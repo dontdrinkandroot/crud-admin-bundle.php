@@ -3,14 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\LegacyOperationProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface ItemProviderInterface extends CrudAdminProviderInterface
+interface ItemProviderInterface extends ProviderInterface
 {
+    public function supportsItem(CrudAdminContext $context): bool;
+
     public function provideItem(CrudAdminContext $context): ?object;
 }

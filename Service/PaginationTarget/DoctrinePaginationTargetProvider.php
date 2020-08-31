@@ -7,7 +7,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Crud\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -24,7 +23,7 @@ class DoctrinePaginationTargetProvider implements PaginationTargetProvider
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context): bool
+    public function supportsPaginationTarget(CrudAdminContext $context): bool
     {
         return CrudOperation::LIST === $context->getCrudOperation()
             && null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());

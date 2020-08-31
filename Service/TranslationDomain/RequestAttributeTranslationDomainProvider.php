@@ -13,7 +13,7 @@ class RequestAttributeTranslationDomainProvider implements TranslationDomainProv
     /**
      * {@inheritdoc}
      */
-    public function supports(CrudAdminContext $context)
+    public function supportsTranslationDomain(CrudAdminContext $context): bool
     {
         return RequestAttributes::entityClassMatches($context)
             && null !== RequestAttributes::getTranslationDomain($context->getRequest());

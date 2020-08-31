@@ -4,10 +4,12 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
 use Dontdrinkandroot\CrudAdminBundle\Exception\EndProviderChainException;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
-interface UrlProviderInterface extends CrudAdminProviderInterface
+interface UrlProviderInterface extends ProviderInterface
 {
+    public function supportsUrl(CrudAdminContext $context): bool;
+
     /**
      * @param CrudAdminContext $context
      *

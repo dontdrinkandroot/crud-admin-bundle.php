@@ -3,14 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\NewInstance;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Service\CrudAdminProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\LegacyOperationProviderInterface;
-use Symfony\Component\HttpFoundation\Request;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
  */
-interface NewInstanceProviderInterface extends CrudAdminProviderInterface
+interface NewInstanceProviderInterface extends ProviderInterface
 {
+    public function supportsNewInstance(CrudAdminContext $context): bool;
+
     public function provideNewInstance(CrudAdminContext $context): ?object;
 }

@@ -4,9 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -38,9 +36,8 @@ class FieldDefinitionsResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FieldDefinitionsProviderInterface);
-            if ($provider->supports($context)) {
-                $fieldDefinitions = $provider->provideFieldDefinitions($context);
-                if (null !== $fieldDefinitions) {
+            if ($provider->supportsFieldDefinitions($context)) {
+                if (null !== $fieldDefinitions = $provider->provideFieldDefinitions($context)) {
                     return $fieldDefinitions;
                 }
             }

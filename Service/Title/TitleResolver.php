@@ -3,9 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
-use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>
@@ -26,7 +24,7 @@ class TitleResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof TitleProviderInterface);
-            if ($provider->supports($context)) {
+            if ($provider->supportsTitle($context)) {
                 $title = $provider->provideTitle($context);
                 if (null !== $title) {
                     return $title;

@@ -14,7 +14,7 @@ class IdResolver extends AbstractProviderService
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof IdProviderInterface);
-            if ($provider->supports($context)) {
+            if ($provider->supportsId($context)) {
                 $id = $provider->provideId($context);
                 if (null !== $id) {
                     return $id;
