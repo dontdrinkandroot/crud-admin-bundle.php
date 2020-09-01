@@ -2,16 +2,14 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Twig;
 
-use DateTimeInterface;
 use Doctrine\Common\Util\ClassUtils;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
-use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -30,16 +28,20 @@ class CrudAdminExtension extends AbstractExtension
 
     private FieldRenderer $fieldRenderer;
 
+    private TitleResolver $titleResolver;
+
     public function __construct(
         PropertyAccessor $propertyAccessor,
         UrlResolver $urlResolver,
         RequestStack $requestStack,
-        FieldRenderer $fieldRenderer
+        FieldRenderer $fieldRenderer,
+        TitleResolver $titleResolver
     ) {
         $this->propertyAccessor = $propertyAccessor;
         $this->urlResolver = $urlResolver;
         $this->requestStack = $requestStack;
         $this->fieldRenderer = $fieldRenderer;
+        $this->titleResolver = $titleResolver;
     }
 
     /**
@@ -49,6 +51,7 @@ class CrudAdminExtension extends AbstractExtension
     {
         return [
             new TwigFunction('ddrCrudAdminPath', [$this, 'getUrl']),
+            new TwigFunction('ddrCrudAdminTitle', [$this, 'getTitle']),
         ];
     }
 
@@ -76,7 +79,21 @@ class CrudAdminExtension extends AbstractExtension
         return $this->fieldRenderer->render($fieldDefinition, $value);
     }
 
+    public function getTitle(string $crudOperation, ?object $entity = null): ?string
+    {
+        $context = $this->buildContext($crudOperation, $entity);
+
+        return $this->titleResolver->resolve($context);
+    }
+
     public function getUrl(string $crudOperation, ?object $entity = null): ?string
+    {
+        $context = $this->buildContext($crudOperation, $entity);
+
+        return $this->urlResolver->resolve($context);
+    }
+
+    protected function buildContext(string $crudOperation, ?object $entity): CrudAdminContext
     {
         $request = $this->requestStack->getCurrentRequest();
         assert(null !== $request);
@@ -93,6 +110,6 @@ class CrudAdminExtension extends AbstractExtension
             $context->setEntity($entity);
             $context->setEntityResolved(true);
         }
-        return $this->urlResolver->resolve($context);
+        return $context;
     }
 }

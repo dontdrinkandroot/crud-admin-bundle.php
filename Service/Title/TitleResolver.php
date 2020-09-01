@@ -25,8 +25,7 @@ class TitleResolver extends AbstractProviderService
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof TitleProviderInterface);
             if ($provider->supportsTitle($context)) {
-                $title = $provider->provideTitle($context);
-                if (null !== $title) {
+                if (null !== $title = $provider->provideTitle($context)) {
                     return $title;
                 }
             }

@@ -36,6 +36,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     {
         $crudOperation = $context->getCrudOperation();
         $translationDomain = $this->translationDomainResolver->resolve($context);
+
         return $this->translator->trans($crudOperation, [], $translationDomain);
     }
 }

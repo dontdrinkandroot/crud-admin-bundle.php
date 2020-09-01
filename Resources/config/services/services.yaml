@@ -149,6 +149,11 @@ services:
             - '@event_dispatcher'
         tags: ['controller.service_arguments']
 
+    Dontdrinkandroot\CrudAdminBundle\Service\Title\ToStringTitleProvider:
+        tags:
+            -   name: 'ddr_crud_admin.title_provider'
+                priority: -240
+
     Dontdrinkandroot\CrudAdminBundle\Service\Title\DefaultTitleProvider:
         arguments:
             - '@translator'
@@ -217,6 +222,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
             - '@request_stack'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
         tags:
             - { name: twig.extension }
 

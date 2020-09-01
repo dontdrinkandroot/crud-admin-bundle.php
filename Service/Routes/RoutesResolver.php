@@ -25,8 +25,7 @@ class RoutesResolver extends AbstractProviderService
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof RoutesProviderInterface);
             if ($provider->supportsRoutes($context)) {
-                $routes = $provider->provideRoutes($context);
-                if (null !== $routes) {
+                if (null !== $routes = $provider->provideRoutes($context)) {
                     return $routes;
                 }
             }
