@@ -7,7 +7,7 @@
         <h1 class="mb-0 align-self-center flex-fill">{{ title }}</h1>
         <div class="d-inline-flex align-self-center">
             {% set createRoute = ddrCrudAdminPath('CREATE') %}
-            {% if createRoute is not null and is_granted('CREATE', app.request.attributes.get('entity_class')) %}
+            {% if createRoute is not null and is_granted('CREATE', app.request.attributes.get('ddr_crud_admin.entity_class')) %}
                 <a class="btn btn-primary btn-lg" href="{{ createRoute }}">
                     {{ 'CREATE'|trans({}, 'DdrCrudAdmin') }}
                 </a>
