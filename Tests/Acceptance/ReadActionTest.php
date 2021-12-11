@@ -43,6 +43,6 @@ class ReadActionTest extends AbstractIntegrationTestCase
         /* NullField */
         $this->assertEquals('', $dds->eq(1)->text(null, true));
         /* RequiredField */
-        $this->assertEquals('Blair Runte', $dds->eq(2)->text(null, true));
+        $this->assertEquals('00001', $dds->eq(2)->text(null, true));
     }
 }

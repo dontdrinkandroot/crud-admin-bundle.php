@@ -2,13 +2,9 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 
-use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
-use Symfony\Component\Routing\RouterInterface;
 
 /**
  * @author Philip Washington Sorst <philip@sorst.net>

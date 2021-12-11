@@ -3,6 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Tests\TestApp;
 
 use Doctrine\Common\DataFixtures\ReferenceRepository;
+use Dontdrinkandroot\Common\Asserted;
+use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Liip\TestFixturesBundle\Test\FixturesTrait;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -16,8 +18,6 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
  */
 class AbstractIntegrationTestCase extends WebTestCase
 {
-    use FixturesTrait;
-
     protected ReferenceRepository $referenceRepository;
 
     protected KernelBrowser $kernelBrowser;
@@ -25,21 +25,21 @@ class AbstractIntegrationTestCase extends WebTestCase
     protected function loadKernelAndFixtures(array $classNames = []): ReferenceRepository
     {
         $this->kernelBrowser = self::createClient();
-        $this->referenceRepository = $this->loadFixtures($classNames)->getReferenceRepository();
+        $databaseToolCollection = Asserted::instanceOf(
+            self::$container->get(DatabaseToolCollection::class),
+            DatabaseToolCollection::class
+        );
+        $this->referenceRepository = $databaseToolCollection->get()->loadFixtures($classNames)->getReferenceRepository(
+        );
 
         return $this->referenceRepository;
-    }
-
-    protected function getTestContainer()
-    {
-        return $this->getContainer();
     }
 
     protected function logIn(string $username)
     {
         $session = self::$container->get('session');
 
-        $userProvider = $this->getContainer()->get(UserProviderInterface::class);
+        $userProvider = self::$container->get(UserProviderInterface::class);
         assert($userProvider instanceof UserProviderInterface);
         $user = $userProvider->loadUserByUsername($username);
 

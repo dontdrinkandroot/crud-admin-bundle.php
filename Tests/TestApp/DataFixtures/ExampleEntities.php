@@ -15,14 +15,11 @@ class ExampleEntities extends Fixture
     /**
      * {@inheritdoc}
      */
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
-        $faker = Factory::create();
-        $faker->seed(939768);
-
         for ($i = 0; $i < 20; $i++) {
             $exampleEntity = new ExampleEntity();
-            $exampleEntity->setRequiredField($faker->name);
+            $exampleEntity->setRequiredField(str_pad($i, 5, 0, STR_PAD_LEFT));
             $manager->persist($exampleEntity);
             $this->addReference('example-entity-' . $i, $exampleEntity);
         }

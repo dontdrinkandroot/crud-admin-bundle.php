@@ -5,7 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
 /**

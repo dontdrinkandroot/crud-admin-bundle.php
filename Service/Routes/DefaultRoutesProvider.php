@@ -2,10 +2,10 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Routes;
 
-use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\Common\ClassNameUtils;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\Routing\RouterInterface;
 
 /**

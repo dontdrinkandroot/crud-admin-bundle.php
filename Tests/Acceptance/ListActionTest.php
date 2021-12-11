@@ -28,6 +28,6 @@ class ListActionTest extends AbstractIntegrationTestCase
         $rows = $crawler->filter('tr');
         $this->assertCount(11, $rows); /* Header + 10 Entities */
         /* Test Sorting was correct */
-        $this->assertEquals('Alisha Rolfson', $rows->eq(1)->filter('td')->eq(2)->text(null, true));
+        $this->assertEquals('00000', $rows->eq(1)->filter('td')->eq(2)->text(null, true));
     }
 }

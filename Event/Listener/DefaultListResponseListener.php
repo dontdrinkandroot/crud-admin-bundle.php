@@ -2,11 +2,10 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 
-use Dontdrinkandroot\Crud\CrudOperation;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
