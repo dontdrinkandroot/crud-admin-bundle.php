@@ -5,9 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class ItemResolver extends AbstractProviderService
 {
     public function resolve(CrudAdminContext $context): ?object
@@ -25,10 +22,7 @@ class ItemResolver extends AbstractProviderService
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof ItemProviderInterface);
             if ($provider->supportsItem($context)) {
-                $entity = $provider->provideItem($context);
-                if (null !== $entity) {
-                    return $entity;
-                }
+                return $provider->provideItem($context);
             }
         }
 
