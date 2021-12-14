@@ -12,7 +12,6 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - "8.0"
                     - "8.1"
                 symfony-require:
                     - "4.4.*"
@@ -38,10 +37,10 @@ jobs:
                     dependency-versions: "${{ matrix.deps }}"
             -   name: "Run PHPUnit"
                 run: "vendor/bin/phpunit --coverage-clover=coverage.clover.xml --log-junit log.junit.xml"
-                continue-on-error: "${{ matrix.php-version == '8.0' || matrix.php-version == '8.1' || matrix.symfony-require == '5.4.*' }}"
+                continue-on-error: "${{ matrix.symfony-require == '4.4.*' }}"
             -   name: "Upload coverage"
                 uses: "actions/upload-artifact@v2"
-                if: matrix.php-version == '8.0' && matrix.deps == 'highest' && matrix.symfony-require == '4.4.*'
+                if: matrix.php-version == '8.1' && matrix.deps == 'highest' && matrix.symfony-require == '5.4.*'
                 with:
                     name: "coverage"
                     path: |

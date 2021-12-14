@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": "^8.0",
+        "php": "^8.1",
         "ext-json": "*",
         "dontdrinkandroot/common": "dev-master",
         "knplabs/knp-paginator-bundle": "^5.3",
