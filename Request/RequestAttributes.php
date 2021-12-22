@@ -5,9 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Request;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class RequestAttributes
 {
     public const ROUTES_PREFIX = 'ddr_crud_admin.routes.prefix';
