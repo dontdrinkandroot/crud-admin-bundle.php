@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<psalm
+        errorLevel="4"
+        resolveFromConfigFile="true"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="https://getpsalm.org/schema/config"
+        xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
+>
+    <projectFiles>
+        <directory name="Action" />
+        <directory name="DependencyInjection" />
+        <directory name="Event" />
+        <directory name="Exception" />
+        <directory name="Model" />
+        <directory name="Request" />
+        <directory name="Routing" />
+        <directory name="Service" />
+        <directory name="Twig" />
+        <file name="DdrCrudAdminBundle.php" />
+        <ignoreFiles>
+            <directory name="vendor" />
+        </ignoreFiles>
+    </projectFiles>
+</psalm>

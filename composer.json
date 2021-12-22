@@ -32,7 +32,6 @@
         "phpunit/phpunit": "^9.0",
         "symfony/browser-kit": "^5.4",
         "symfony/css-selector": "^5.4",
-        "symfony/flex": "^2.0",
         "symfony/phpunit-bridge": "^5.4",
         "symfony/validator": "^5.4"
     },

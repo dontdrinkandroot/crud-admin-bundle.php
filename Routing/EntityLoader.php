@@ -2,21 +2,18 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Routing;
 
+use Dontdrinkandroot\Common\ClassNameUtils;
 use Dontdrinkandroot\CrudAdminBundle\Action\CreateAction;
 use Dontdrinkandroot\CrudAdminBundle\Action\DeleteAction;
 use Dontdrinkandroot\CrudAdminBundle\Action\ListAction;
 use Dontdrinkandroot\CrudAdminBundle\Action\ReadAction;
 use Dontdrinkandroot\CrudAdminBundle\Action\UpdateAction;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
-use Dontdrinkandroot\Utils\ClassNameUtils;
 use Symfony\Component\Config\Loader\FileLoader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Yaml\Yaml;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class EntityLoader extends FileLoader
 {
     const ATTRIBUTE_CONTROLLER = '_controller';

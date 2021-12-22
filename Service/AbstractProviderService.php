@@ -3,20 +3,20 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service;
 
 /**
- * @author Philip Washington Sorst <philip@sorst.net>
+ * @template T
  */
 class AbstractProviderService
 {
+    /** @var iterable<T> */
     private iterable $providers;
 
+    /** @param iterable<T> $providers */
     public function __construct(iterable $providers = [])
     {
         $this->providers = $providers;
     }
 
-    /**
-     * @return array|iterable
-     */
+    /** @return iterable<T> */
     public function getProviders()
     {
         return $this->providers;

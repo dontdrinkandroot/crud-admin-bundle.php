@@ -9,9 +9,6 @@ use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetRe
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultPaginationProvider implements PaginationProviderInterface
 {
     private PaginatorInterface $paginator;
@@ -62,12 +59,12 @@ class DefaultPaginationProvider implements PaginationProviderInterface
 
         return $this->paginator->paginate(
             $paginationTarget,
-            $context->getRequest()->get('page', 1),
-            $context->getRequest()->get('perPage', 10),
+            $context->getRequest()->query->getInt('page', 1),
+            $context->getRequest()->query->getInt('perPage', 10),
             [
-                PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
+                PaginatorInterface::SORT_FIELD_ALLOW_LIST   => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
-                PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection
+                PaginatorInterface::DEFAULT_SORT_DIRECTION  => $defaultSortDirection
             ]
         );
     }

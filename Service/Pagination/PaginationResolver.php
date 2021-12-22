@@ -5,9 +5,10 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Knp\Component\Pager\Pagination\PaginationInterface;
+use RuntimeException;
 
 /**
- * @author Philip Washington Sorst <philip@sorst.net>
+ * @extends AbstractProviderService<PaginationProviderInterface>
  */
 class PaginationResolver extends AbstractProviderService
 {
@@ -18,13 +19,16 @@ class PaginationResolver extends AbstractProviderService
             $context->setPaginationResolved();
         }
 
-        return $context->getPagination();
+        if (null === ($pagination = $context->getPagination())) {
+            throw new RuntimeException('Could not resolve pagination');
+        }
+
+        return $pagination;
     }
 
     public function resolveFromProviders(CrudAdminContext $context): ?PaginationInterface
     {
         foreach ($this->getProviders() as $provider) {
-            assert($provider instanceof PaginationProviderInterface);
             if ($provider->supportsPagination($context)) {
                 $paginationTarget = $provider->provideCollection($context);
                 if (null !== $paginationTarget) {

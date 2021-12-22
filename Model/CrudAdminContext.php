@@ -6,14 +6,11 @@ use Knp\Component\Pager\Pagination\PaginationInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class CrudAdminContext
 {
     private Request $request;
 
-    private ?string $crudOperation = null;
+    private string $crudOperation;
 
     private bool $entityResolved = false;
 
