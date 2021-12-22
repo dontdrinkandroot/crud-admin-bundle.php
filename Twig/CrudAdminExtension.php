@@ -15,9 +15,6 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class CrudAdminExtension extends AbstractExtension
 {
     private PropertyAccessor $propertyAccessor;
@@ -47,7 +44,7 @@ class CrudAdminExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFunctions()
+    public function getFunctions(): array
     {
         return [
             new TwigFunction('ddrCrudAdminPath', [$this, 'getUrl']),
@@ -58,7 +55,7 @@ class CrudAdminExtension extends AbstractExtension
     /**
      * {@inheritdoc}
      */
-    public function getFilters()
+    public function getFilters(): array
     {
         return [
             new TwigFilter(

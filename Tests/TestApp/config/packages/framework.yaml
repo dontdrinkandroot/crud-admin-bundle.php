@@ -1,5 +1,7 @@
 framework:
     secret: '%env(APP_SECRET)%'
-    test: ~
+    test: true
     session:
-        storage_id: session.storage.mock_file
+        storage_factory_id: session.storage.factory.mock_file
+    router:
+        utf8: true

@@ -21,7 +21,7 @@ class EntityLoader extends FileLoader
     /**
      * {@inheritdoc}
      */
-    public function supports($resource, $type = null)
+    public function supports($resource, $type = null): bool
     {
         return 'ddr_crud_admin_entity' === $type;
     }
@@ -29,7 +29,7 @@ class EntityLoader extends FileLoader
     /**
      * {@inheritdoc}
      */
-    public function load($resource, $type = null)
+    public function load($resource, $type = null): RouteCollection
     {
         $path = $this->locator->locate($resource);
 

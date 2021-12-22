@@ -6,9 +6,6 @@ use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\AbstractIntegrationTestCase;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\ExampleEntities;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class ListActionTest extends AbstractIntegrationTestCase
 {
     public function testUnauthorized()

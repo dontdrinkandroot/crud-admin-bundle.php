@@ -5,9 +5,6 @@ namespace Acceptance;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\AbstractIntegrationTestCase;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class CreateActionTest extends AbstractIntegrationTestCase
 {
     public function testUnauthorized()

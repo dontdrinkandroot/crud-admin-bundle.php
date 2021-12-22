@@ -7,9 +7,6 @@ use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\ExampleEntities;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity;
 use Symfony\Component\HttpFoundation\Response;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DeleteActionTest extends AbstractIntegrationTestCase
 {
     public function testUnauthorized()
