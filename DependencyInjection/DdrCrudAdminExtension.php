@@ -2,13 +2,12 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRendererProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRendererProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
@@ -18,13 +17,9 @@ use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomain
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DdrCrudAdminExtension extends Extension
 {
 
@@ -66,9 +61,6 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(IdProviderInterface::class)
             ->addTag('ddr_crud_admin.id_provider');
-        $container
-            ->registerForAutoconfiguration(NewInstanceProviderInterface::class)
-            ->addTag('ddr_crud_admin.new_instance_provider');
         $container
             ->registerForAutoconfiguration(UrlProviderInterface::class)
             ->addTag('ddr_crud_admin.url_provider');

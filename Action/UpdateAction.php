@@ -18,28 +18,13 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class UpdateAction
 {
-    private ItemResolver $itemResolver;
-
-    private FormResolver $formResolver;
-
-    private AuthorizationCheckerInterface $authorizationChecker;
-
-    private EventDispatcherInterface $eventDispatcher;
-
-    private ItemPersister $itemPersister;
-
     public function __construct(
-        ItemResolver $itemResolver,
-        FormResolver $formResolver,
-        ItemPersister $itemPersister,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher
+        private ItemResolver $itemResolver,
+        private FormResolver $formResolver,
+        private ItemPersister $itemPersister,
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private EventDispatcherInterface $eventDispatcher
     ) {
-        $this->itemResolver = $itemResolver;
-        $this->formResolver = $formResolver;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->itemPersister = $itemPersister;
     }
 
     public function __invoke(Request $request): Response
@@ -65,6 +50,6 @@ class UpdateAction
         $createResponseEvent = new CreateResponseEvent($context, $response);
         $this->eventDispatcher->dispatch($createResponseEvent);
 
-        return $createResponseEvent->getResponse();
+        return $createResponseEvent->response;
     }
 }

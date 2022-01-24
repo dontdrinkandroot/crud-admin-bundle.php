@@ -49,9 +49,9 @@ class DefaultListResponseListener
         $this->translationDomainResolver = $translationDomainResolver;
     }
 
-    public function onCreateResponseEvent(CreateResponseEvent $event)
+    public function onCreateResponseEvent(CreateResponseEvent $event): void
     {
-        $context = $event->getContext();
+        $context = $event->context;
         $crudOperation = $context->getCrudOperation();
         if (CrudOperation::LIST !== $crudOperation) {
             return;
@@ -70,6 +70,6 @@ class DefaultListResponseListener
 
         $content = $this->twig->render($templates[$crudOperation], $context);
 
-        $event->getResponse()->setContent($content);
+        $event->response->setContent($content);
     }
 }

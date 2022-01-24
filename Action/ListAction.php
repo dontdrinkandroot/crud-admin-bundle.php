@@ -40,6 +40,6 @@ class ListAction
         $createResponseEvent = new CreateResponseEvent($context, $response);
         $this->eventDispatcher->dispatch($createResponseEvent);
 
-        return $createResponseEvent->getResponse();
+        return $createResponseEvent->response;
     }
 }

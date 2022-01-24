@@ -18,18 +18,17 @@ class DefaultDeleteResponseListener
         $this->urlResolver = $urlResolver;
     }
 
-    public function onCreateResponseEvent(CreateResponseEvent $event)
+    public function onCreateResponseEvent(CreateResponseEvent $event): void
     {
-        $context = $event->getContext();
+        $context = $event->context;
         $crudOperation = $context->getCrudOperation();
         if (CrudOperation::DELETE !== $crudOperation) {
             return;
         }
 
-        $response = $event->getResponse();
+        $response = $event->response;
         if ($context->isItemPersisted()) {
-
-            $redirectContext = $context->recreateWithOperation(CrudOperation::LIST);
+            $redirectContext = $context->withOperation(CrudOperation::LIST);
             $redirectUrl = $this->urlResolver->resolve($redirectContext);
 
             if (null !== $redirectUrl) {

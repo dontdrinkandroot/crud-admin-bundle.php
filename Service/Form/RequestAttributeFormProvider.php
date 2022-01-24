@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
@@ -9,19 +10,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class RequestAttributeFormProvider implements FormProviderInterface
 {
-    private FormFactoryInterface $formFactory;
-
-    private ItemResolver $itemResolver;
-
-    public function __construct(FormFactoryInterface $formFactory, ItemResolver $itemResolver)
+    public function __construct(private FormFactoryInterface $formFactory, private ItemResolver $itemResolver)
     {
-        $this->formFactory = $formFactory;
-        $this->itemResolver = $itemResolver;
     }
 
     /**
@@ -43,7 +35,9 @@ class RequestAttributeFormProvider implements FormProviderInterface
      */
     public function provideForm(CrudAdminContext $context): ?FormInterface
     {
-        $entity = $this->itemResolver->resolve($context);
+        $entity = CrudOperation::UPDATE === $context->getCrudOperation()
+            ? $this->itemResolver->resolve($context)
+            : $context->getEntity();
 
         return $this->formFactory->create(RequestAttributes::getFormType($context->getRequest()), $entity)
             ->add(

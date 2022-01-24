@@ -22,7 +22,7 @@ class CreateActionTest extends AbstractIntegrationTestCase
         $this->assertEquals(Response::HTTP_FORBIDDEN, $this->kernelBrowser->getResponse()->getStatusCode());
     }
 
-    public function testValidationAndSubmission()
+    public function testValidationAndSubmission(): void
     {
         $this->loadKernelAndFixtures();
 

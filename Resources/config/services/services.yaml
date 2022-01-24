@@ -43,10 +43,6 @@ services:
         arguments:
             - !tagged_iterator ddr_crud_admin.id_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceResolver:
-        arguments:
-            - !tagged_iterator ddr_crud_admin.new_instance_provider
-
     Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver:
         arguments:
             - !tagged_iterator ddr_crud_admin.url_provider
@@ -118,7 +114,6 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Action\CreateAction:
         arguments:
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister'
             - '@security.authorization_checker'

@@ -51,7 +51,7 @@ class DefaultReadResponseListener
 
     public function onCreateResponseEvent(CreateResponseEvent $event)
     {
-        $context = $event->getContext();
+        $context = $event->context;
         $crudOperation = $context->getCrudOperation();
         if (CrudOperation::READ !== $crudOperation) {
             return;
@@ -75,6 +75,6 @@ class DefaultReadResponseListener
 
         $content = $this->twig->render($templates[$crudOperation], $context);
 
-        $event->getResponse()->setContent($content);
+        $event->response->setContent($content);
     }
 }

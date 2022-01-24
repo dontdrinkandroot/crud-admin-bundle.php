@@ -7,7 +7,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\Form\FormInterface;
 
 /**
- * @author Philip Washington Sorst <philip@sorst.net>
+ * @extends AbstractProviderService<FormProviderInterface>
  */
 class FormResolver extends AbstractProviderService
 {

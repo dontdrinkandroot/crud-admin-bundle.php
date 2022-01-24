@@ -4,6 +4,8 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Dontdrinkandroot\Common\Asserted;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
@@ -13,29 +15,14 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DoctrineFormProvider implements FormProviderInterface
 {
-    private ManagerRegistry $managerRegistry;
-
-    private FormFactoryInterface $formFactory;
-
-    private ItemResolver $itemResolver;
-
-    private TranslationDomainResolver $translationDomainResolver;
-
     public function __construct(
-        ManagerRegistry $managerRegistry,
-        FormFactoryInterface $formFactory,
-        ItemResolver $itemResolver,
-        TranslationDomainResolver $translationDomainResolver
+        private ManagerRegistry $managerRegistry,
+        private FormFactoryInterface $formFactory,
+        private ItemResolver $itemResolver,
+        private TranslationDomainResolver $translationDomainResolver
     ) {
-        $this->managerRegistry = $managerRegistry;
-        $this->formFactory = $formFactory;
-        $this->itemResolver = $itemResolver;
-        $this->translationDomainResolver = $translationDomainResolver;
     }
 
     /**
@@ -52,11 +39,19 @@ class DoctrineFormProvider implements FormProviderInterface
     public function provideForm(CrudAdminContext $context): ?FormInterface
     {
         $entityClass = $context->getEntityClass();
-        $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
-        assert($entityManager instanceof EntityManagerInterface);
+        $entityManager = Asserted::instanceOf(
+            $this->managerRegistry->getManagerForClass($entityClass),
+            EntityManagerInterface::class
+        );
         $classMetadata = $entityManager->getClassMetadata($entityClass);
-        $entity = $this->itemResolver->resolve($context);
-        $formBuilder = $this->formFactory->createBuilder(FormType::class, $entity);
+        $entity = CrudOperation::UPDATE === $context->getCrudOperation()
+            ? $this->itemResolver->resolve($context)
+            : $context->getEntity();
+        $formBuilder = $this->formFactory->createBuilder(
+            FormType::class,
+            $entity,
+            ['data_class' => $entityClass]
+        );
 
         $fields = $this->getFields($context);
         if (null === $fields) {

@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
@@ -39,8 +40,10 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
      */
     public function persist(CrudAdminContext $context): bool
     {
-        $entityManager = $this->managerRegistry->getManagerForClass($context->getEntityClass());
-        assert($entityManager instanceof EntityManagerInterface);
+        $entityManager = Asserted::instanceOf(
+            $this->managerRegistry->getManagerForClass($context->getEntityClass()),
+            EntityManagerInterface::class
+        );
 
         switch ($context->getCrudOperation()) {
             case CrudOperation::CREATE:

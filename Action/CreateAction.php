@@ -2,12 +2,12 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Action;
 
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\NewInstanceResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,48 +15,30 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class CreateAction
 {
-    private FormResolver $formResolver;
-
-    private AuthorizationCheckerInterface $authorizationChecker;
-
-    private EventDispatcherInterface $eventDispatcher;
-
-    private ItemPersister $itemPersister;
-
-    private NewInstanceResolver $newInstanceResolver;
 
     public function __construct(
-        NewInstanceResolver $newInstanceResolver,
-        FormResolver $formResolver,
-        ItemPersister $itemPersister,
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher
+        private FormResolver $formResolver,
+        private ItemPersister $itemPersister,
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private EventDispatcherInterface $eventDispatcher
     ) {
-        $this->formResolver = $formResolver;
-        $this->authorizationChecker = $authorizationChecker;
-        $this->eventDispatcher = $eventDispatcher;
-        $this->itemPersister = $itemPersister;
-        $this->newInstanceResolver = $newInstanceResolver;
     }
 
     public function __invoke(Request $request): Response
     {
         $context = new CrudAdminContext(RequestAttributes::getEntityClass($request), CrudOperation::CREATE, $request);
-        $entity = $this->newInstanceResolver->resolve($context);
-        if (!$this->authorizationChecker->isGranted(CrudOperation::CREATE, $entity)) {
+        if (!$this->authorizationChecker->isGranted($context->getCrudOperation(), $context->getEntityClass())) {
             throw new AccessDeniedException();
         }
 
-        $form = $this->formResolver->resolve($context);
-        assert(null !== $form);
+        $form = Asserted::notNull($this->formResolver->resolve($context));
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $entity = Asserted::instanceOf($form->getData(), $context->getEntityClass());
+            $context->setEntity($entity);
             $this->itemPersister->persistItem($context);
         }
 
@@ -64,6 +46,6 @@ class CreateAction
         $createResponseEvent = new CreateResponseEvent($context, $response);
         $this->eventDispatcher->dispatch($createResponseEvent);
 
-        return $createResponseEvent->getResponse();
+        return $createResponseEvent->response;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Event\Listener;
 
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
@@ -54,24 +55,26 @@ class DefaultCreateUpdateResponseListener
         $this->translationDomainResolver = $translationDomainResolver;
     }
 
-    public function onCreateResponseEvent(CreateResponseEvent $event)
+    public function onCreateResponseEvent(CreateResponseEvent $event): void
     {
-        $context = $event->getContext();
+        $context = $event->context;
         $crudOperation = $context->getCrudOperation();
         if (!in_array($crudOperation, [CrudOperation::CREATE, CrudOperation::UPDATE], true)) {
             return;
         }
 
-        $response = $event->getResponse();
+        $response = $event->response;
         $routes = $this->routesResolver->resolve($context);
-        $entity = $this->itemResolver->resolve($context);
+        $entity = CrudOperation::UPDATE === $context->getCrudOperation()
+            ? $this->itemResolver->resolve($context)
+            : null;
         if ($context->isItemPersisted()) {
-
-            $redirectContext = $context->recreateWithOperation(CrudOperation::READ)
+            $redirectContext = $context
+                ->withOperation(CrudOperation::READ)
                 ->setEntity($context->getEntity());
             $redirectUrl = $this->urlResolver->resolve($redirectContext);
             if (null === $redirectUrl) {
-                $redirectContext = $context->recreateWithOperation(CrudOperation::LIST);
+                $redirectContext = $context->withOperation(CrudOperation::LIST);
                 $redirectUrl = $this->urlResolver->resolve($redirectContext);
             }
 
@@ -83,12 +86,10 @@ class DefaultCreateUpdateResponseListener
             return;
         }
 
-        $templates = $this->templateResolver->resolve($context);
-        assert(null !== $templates);
+        $templates = Asserted::notNull($this->templateResolver->resolve($context));
         assert(isset($templates[$crudOperation]));
         $title = $this->titleResolver->resolve($context);
-        $form = $this->formResolver->resolve($context);
-        assert(null !== $form);
+        $form = Asserted::notNull($this->formResolver->resolve($context));
 
         $context = [
             'entity'            => $entity,

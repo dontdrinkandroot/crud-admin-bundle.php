@@ -206,7 +206,7 @@ class CrudAdminContext
         $this->titleResolved = $titleResolved;
     }
 
-    public function recreateWithOperation(string $crudOperation): CrudAdminContext
+    public function withOperation(string $crudOperation): CrudAdminContext
     {
         return new CrudAdminContext($this->getEntityClass(), $crudOperation, $this->getRequest());
     }
