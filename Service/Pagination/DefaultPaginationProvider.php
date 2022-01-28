@@ -54,6 +54,9 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         $defaultSortDirection = null;
         if (RequestAttributes::entityClassMatches($context)) {
             $defaultSortFieldName = RequestAttributes::getDefaultSortFieldName($context->getRequest());
+            if (null !== $defaultSortFieldName) {
+                $defaultSortFieldName = 'entity.' . $defaultSortFieldName;
+            }
             $defaultSortDirection = RequestAttributes::getDefaultSortDirection($context->getRequest());
         }
 
@@ -62,9 +65,9 @@ class DefaultPaginationProvider implements PaginationProviderInterface
             $context->getRequest()->query->getInt('page', 1),
             $context->getRequest()->query->getInt('perPage', 10),
             [
-                PaginatorInterface::SORT_FIELD_ALLOW_LIST   => $sortFields,
+                PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
-                PaginatorInterface::DEFAULT_SORT_DIRECTION  => $defaultSortDirection
+                PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection
             ]
         );
     }
