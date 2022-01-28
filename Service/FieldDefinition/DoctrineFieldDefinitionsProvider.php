@@ -4,24 +4,17 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
+use RuntimeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
-    private ManagerRegistry $managerRegistry;
-
-    private TranslatorInterface $translator;
-
-    public function __construct(ManagerRegistry $managerRegistry, TranslatorInterface $translator)
+    public function __construct(private ManagerRegistry $managerRegistry, private TranslatorInterface $translator)
     {
-        $this->managerRegistry = $managerRegistry;
-        $this->translator = $translator;
     }
 
     /**
@@ -38,8 +31,10 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     public function provideFieldDefinitions(CrudAdminContext $context): ?array
     {
         $entityClass = $context->getEntityClass();
-        $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
-        assert($entityManager instanceof EntityManagerInterface);
+        $entityManager = Asserted::instanceOf(
+            $this->managerRegistry->getManagerForClass($entityClass),
+            EntityManagerInterface::class
+        );
         $classMetadata = $entityManager->getClassMetadata($entityClass);
 
         $fields = $this->getFields($context);
@@ -49,20 +44,33 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
 
         $fieldDefinitions = [];
         foreach ($fields as $field) {
-            $fieldMapping = $classMetadata->fieldMappings[$field];
-            $type = $fieldMapping['type'];
-            $fieldName = $fieldMapping['fieldName'];
-            $filterable = false;
-            if (in_array($type, ['string', 'integer'])) {
-                $filterable = true;
-            }
+            if ($classMetadata->hasField($field)) {
+                $fieldMapping = $classMetadata->fieldMappings[$field];
+                $type = $fieldMapping['type'];
+                $fieldName = $fieldMapping['fieldName'];
+                $filterable = false;
+                if (in_array($type, ['string', 'integer'])) {
+                    $filterable = true;
+                }
 
-            $fieldDefinitions[] = new FieldDefinition(
-                $fieldName,
-                $type,
-                true,
-                $filterable
-            );
+                $fieldDefinitions[] = new FieldDefinition(
+                    $fieldName,
+                    $type,
+                    true,
+                    $filterable
+                );
+            } elseif ($classMetadata->hasAssociation($field)) {
+                $associationMapping = $classMetadata->associationMappings[$field];
+                $fieldName = $associationMapping['fieldName'];
+                $fieldDefinitions[] = new FieldDefinition(
+                    $fieldName,
+                    'string',
+                    false,
+                    false
+                );
+            } else {
+                throw new RuntimeException('Could not resolve field definition for ' - $field);
+            }
         }
 
         return $fieldDefinitions;
