@@ -20,6 +20,7 @@ class CrudAdminContext
 
     private ?PaginationInterface $pagination = null;
 
+    /** @var class-string $entityClass */
     private string $entityClass;
 
     private bool $translationDomainResolved = false;

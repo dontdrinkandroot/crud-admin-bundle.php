@@ -2,9 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Model;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class FieldDefinition
 {
     private string $propertyPath;
