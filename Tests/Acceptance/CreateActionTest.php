@@ -1,6 +1,6 @@
 <?php
 
-namespace Acceptance;
+namespace Dontdrinkandroot\CrudAdminBundle\Tests\Acceptance;
 
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\AbstractIntegrationTestCase;
 use Symfony\Component\HttpFoundation\Response;
