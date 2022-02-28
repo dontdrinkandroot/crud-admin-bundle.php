@@ -5,12 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class IdResolver extends AbstractProviderService
 {
-    public function resolve(CrudAdminContext $context)
+    public function resolve(CrudAdminContext $context): mixed
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof IdProviderInterface);
