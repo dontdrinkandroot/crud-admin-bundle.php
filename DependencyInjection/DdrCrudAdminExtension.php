@@ -22,7 +22,6 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class DdrCrudAdminExtension extends Extension
 {
-
     /**
      * {@inheritdoc}
      */
@@ -76,7 +75,7 @@ class DdrCrudAdminExtension extends Extension
 
         $bundles = $container->getParameter('kernel.bundles');
 
-        if (array_key_exists('DoctrineBundle', $bundles)) {
+        if (is_array($bundles) && array_key_exists('DoctrineBundle', $bundles)) {
             $loader->load('doctrine.yaml');
         }
     }

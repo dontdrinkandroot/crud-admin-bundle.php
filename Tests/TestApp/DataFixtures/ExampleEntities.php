@@ -19,7 +19,7 @@ class ExampleEntities extends Fixture
     {
         for ($i = 0; $i < 20; $i++) {
             $exampleEntity = new ExampleEntity();
-            $exampleEntity->setRequiredField(str_pad($i, 5, 0, STR_PAD_LEFT));
+            $exampleEntity->setRequiredField(str_pad((string)$i, 5, 0, STR_PAD_LEFT));
             $manager->persist($exampleEntity);
             $this->addReference('example-entity-' . $i, $exampleEntity);
         }

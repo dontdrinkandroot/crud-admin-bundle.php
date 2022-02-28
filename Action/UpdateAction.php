@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Action;
 
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
@@ -29,7 +30,11 @@ class UpdateAction
 
     public function __invoke(Request $request): Response
     {
-        $context = new CrudAdminContext(RequestAttributes::getEntityClass($request), CrudOperation::UPDATE, $request);
+        $context = new CrudAdminContext(
+            Asserted::notNull(RequestAttributes::getEntityClass($request)),
+            CrudOperation::UPDATE,
+            $request
+        );
         $entity = $this->itemResolver->resolve($context);
         if (null === $entity) {
             throw new NotFoundHttpException();

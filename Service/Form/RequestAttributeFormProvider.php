@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
@@ -39,7 +40,10 @@ class RequestAttributeFormProvider implements FormProviderInterface
             ? $this->itemResolver->resolve($context)
             : $context->getEntity();
 
-        return $this->formFactory->create(RequestAttributes::getFormType($context->getRequest()), $entity)
+        return $this->formFactory->create(
+            Asserted::notNull(RequestAttributes::getFormType($context->getRequest())),
+            $entity
+        )
             ->add(
                 'submit',
                 SubmitType::class,

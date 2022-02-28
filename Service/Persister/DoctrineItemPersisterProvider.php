@@ -8,16 +8,10 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
 {
-    private ManagerRegistry $managerRegistry;
-
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(private ManagerRegistry $managerRegistry)
     {
-        $this->managerRegistry = $managerRegistry;
     }
 
     /**
@@ -47,14 +41,14 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
 
         switch ($context->getCrudOperation()) {
             case CrudOperation::CREATE:
-                $entityManager->persist($context->getEntity());
+                $entityManager->persist(Asserted::notNull($context->getEntity()));
                 $entityManager->flush();
                 break;
             case CrudOperation::UPDATE:
                 $entityManager->flush();
                 break;
             case CrudOperation::DELETE:
-                $entityManager->remove($context->getEntity());
+                $entityManager->remove(Asserted::notNull($context->getEntity()));
                 $entityManager->flush();
                 break;
             default:

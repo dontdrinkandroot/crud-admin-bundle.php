@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
@@ -9,29 +10,14 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultUrlProvider implements UrlProviderInterface
 {
-    private RoutesResolver $routesResolver;
-
-    private RouterInterface $router;
-
-    private IdResolver $idResolver;
-
-    private AuthorizationCheckerInterface $authorizationChecker;
-
     public function __construct(
-        RoutesResolver $routesResolver,
-        RouterInterface $router,
-        IdResolver $idResolver,
-        AuthorizationCheckerInterface $authorizationChecker
+        private RoutesResolver $routesResolver,
+        private RouterInterface $router,
+        private IdResolver $idResolver,
+        private AuthorizationCheckerInterface $authorizationChecker
     ) {
-        $this->routesResolver = $routesResolver;
-        $this->router = $router;
-        $this->idResolver = $idResolver;
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     /**
@@ -57,7 +43,7 @@ class DefaultUrlProvider implements UrlProviderInterface
             return null;
         }
 
-        $routes = $this->routesResolver->resolve($context);
+        $routes = Asserted::notNull($this->routesResolver->resolve($context));
         switch ($crudOperation) {
             case CrudOperation::LIST:
             case CrudOperation::CREATE:

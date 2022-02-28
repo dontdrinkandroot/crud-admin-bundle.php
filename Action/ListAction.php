@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Action;
 
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
@@ -12,26 +13,21 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class ListAction
 {
-    private EventDispatcherInterface $eventDispatcher;
-
-    private AuthorizationCheckerInterface $authorizationChecker;
-
     public function __construct(
-        AuthorizationCheckerInterface $authorizationChecker,
-        EventDispatcherInterface $eventDispatcher
+        private AuthorizationCheckerInterface $authorizationChecker,
+        private EventDispatcherInterface $eventDispatcher
     ) {
-        $this->eventDispatcher = $eventDispatcher;
-        $this->authorizationChecker = $authorizationChecker;
     }
 
     public function __invoke(Request $request): Response
     {
-        $context = new CrudAdminContext(RequestAttributes::getEntityClass($request), CrudOperation::LIST, $request);
+        $context = new CrudAdminContext(
+            Asserted::notNull(RequestAttributes::getEntityClass($request)),
+            CrudOperation::LIST,
+            $request
+        );
         if (!$this->authorizationChecker->isGranted(CrudOperation::LIST, $context->getEntityClass())) {
             throw new AccessDeniedException();
         }

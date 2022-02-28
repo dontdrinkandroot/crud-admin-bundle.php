@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Twig;
 
 use Doctrine\Common\Util\ClassUtils;
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
@@ -17,28 +18,13 @@ use Twig\TwigFunction;
 
 class CrudAdminExtension extends AbstractExtension
 {
-    private PropertyAccessor $propertyAccessor;
-
-    private UrlResolver $urlResolver;
-
-    private RequestStack $requestStack;
-
-    private FieldRenderer $fieldRenderer;
-
-    private TitleResolver $titleResolver;
-
     public function __construct(
-        PropertyAccessor $propertyAccessor,
-        UrlResolver $urlResolver,
-        RequestStack $requestStack,
-        FieldRenderer $fieldRenderer,
-        TitleResolver $titleResolver
+        private PropertyAccessor $propertyAccessor,
+        private UrlResolver $urlResolver,
+        private RequestStack $requestStack,
+        private FieldRenderer $fieldRenderer,
+        private TitleResolver $titleResolver
     ) {
-        $this->propertyAccessor = $propertyAccessor;
-        $this->urlResolver = $urlResolver;
-        $this->requestStack = $requestStack;
-        $this->fieldRenderer = $fieldRenderer;
-        $this->titleResolver = $titleResolver;
     }
 
     /**
@@ -92,8 +78,7 @@ class CrudAdminExtension extends AbstractExtension
 
     protected function buildContext(string $crudOperation, ?object $entity): CrudAdminContext
     {
-        $request = $this->requestStack->getCurrentRequest();
-        assert(null !== $request);
+        $request = Asserted::notNull($this->requestStack->getCurrentRequest());
         $entityClass = RequestAttributes::getEntityClass($request);
         if (null !== $entity) {
             $entityClass = get_class($entity);
@@ -102,7 +87,7 @@ class CrudAdminExtension extends AbstractExtension
             }
         }
 
-        $context = new CrudAdminContext($entityClass, $crudOperation, $request);
+        $context = new CrudAdminContext(Asserted::notNull($entityClass), $crudOperation, $request);
         if (null !== $entity) {
             $context->setEntity($entity);
             $context->setEntityResolved(true);

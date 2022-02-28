@@ -4,23 +4,17 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DoctrineIdProvider implements IdProviderInterface
 {
-    private ManagerRegistry $managerRegistry;
-
-    private PropertyAccessorInterface $propertyAccessor;
-
-    public function __construct(ManagerRegistry $managerRegistry, PropertyAccessorInterface $propertyAccessor)
-    {
-        $this->managerRegistry = $managerRegistry;
-        $this->propertyAccessor = $propertyAccessor;
+    public function __construct(
+        private ManagerRegistry $managerRegistry,
+        private PropertyAccessorInterface $propertyAccessor
+    ) {
     }
 
     /**
@@ -39,10 +33,12 @@ class DoctrineIdProvider implements IdProviderInterface
      */
     public function provideId(CrudAdminContext $context)
     {
-        $entity = $context->getEntity();
+        $entity = Asserted::notNull($context->getEntity());
         $entityClass = ClassUtils::getClass($entity);
-        $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
-        assert($entityManager instanceof EntityManagerInterface);
+        $entityManager = Asserted::instanceOf(
+            $this->managerRegistry->getManagerForClass($entityClass),
+            EntityManagerInterface::class
+        );
         $classMetadata = $entityManager->getClassMetadata($entityClass);
 
         $identifiers = $classMetadata->identifier;

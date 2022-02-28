@@ -5,18 +5,10 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
-use Symfony\Component\HttpFoundation\Request;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class FieldDefinitionsResolver extends AbstractProviderService
 {
-    /**
-     * @param Request $request
-     *
-     * @return FieldDefinition[]|null
-     */
+    /** @return list<FieldDefinition>|null */
     public function resolve(CrudAdminContext $context): ?array
     {
         if (!$context->isFieldDefinitionsResolved()) {
@@ -27,11 +19,7 @@ class FieldDefinitionsResolver extends AbstractProviderService
         return $context->getFieldDefinitions();
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return FieldDefinition[]|null
-     */
+    /** @return list<FieldDefinition>|null */
     private function resolveFromProviders(CrudAdminContext $context): ?array
     {
         foreach ($this->getProviders() as $provider) {

@@ -17,7 +17,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class CreateAction
 {
-
     public function __construct(
         private FormResolver $formResolver,
         private ItemPersister $itemPersister,
@@ -28,7 +27,12 @@ class CreateAction
 
     public function __invoke(Request $request): Response
     {
-        $context = new CrudAdminContext(RequestAttributes::getEntityClass($request), CrudOperation::CREATE, $request);
+        $entityClass = Asserted::notNull(RequestAttributes::getEntityClass($request));
+        $context = new CrudAdminContext(
+            $entityClass,
+            CrudOperation::CREATE,
+            $request
+        );
         if (!$this->authorizationChecker->isGranted($context->getCrudOperation(), $context->getEntityClass())) {
             throw new AccessDeniedException();
         }
@@ -37,7 +41,7 @@ class CreateAction
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entity = Asserted::instanceOf($form->getData(), $context->getEntityClass());
+            $entity = Asserted::instanceOf($form->getData(), $entityClass);
             $context->setEntity($entity);
             $this->itemPersister->persistItem($context);
         }

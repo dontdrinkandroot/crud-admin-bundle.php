@@ -22,6 +22,7 @@ class RequestAttributes
         return $request->attributes->get('id');
     }
 
+    /** @return class-string|null */
     public static function getEntityClass(Request $request): ?string
     {
         return $request->attributes->get(self::ENTITY_CLASS);

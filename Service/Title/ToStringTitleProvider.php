@@ -5,9 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class ToStringTitleProvider implements TitleProviderInterface
 {
     /**

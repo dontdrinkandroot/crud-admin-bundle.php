@@ -49,6 +49,11 @@ class CrudAdminContext
 
     private ?array $fieldDefinitions = null;
 
+    /**
+     * @param class-string $entityClass
+     * @param string       $crudOperation
+     * @param Request      $request
+     */
     public function __construct(string $entityClass, string $crudOperation, Request $request)
     {
         $this->request = $request;
@@ -92,6 +97,7 @@ class CrudAdminContext
         return $this->crudOperation;
     }
 
+    /** @return class-string */
     public function getEntityClass(): string
     {
         return $this->entityClass;

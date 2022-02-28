@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
@@ -11,20 +12,11 @@ use Knp\Component\Pager\PaginatorInterface;
 
 class DefaultPaginationProvider implements PaginationProviderInterface
 {
-    private PaginatorInterface $paginator;
-
-    private FieldDefinitionsResolver $fieldDefinitionsResolver;
-
-    private PaginationTargetResolver $paginationTargetResolver;
-
     public function __construct(
-        PaginatorInterface $paginator,
-        PaginationTargetResolver $paginationTargetResolver,
-        FieldDefinitionsResolver $fieldDefinitionsResolver
+        private PaginatorInterface $paginator,
+        private PaginationTargetResolver $paginationTargetResolver,
+        private FieldDefinitionsResolver $fieldDefinitionsResolver
     ) {
-        $this->paginator = $paginator;
-        $this->fieldDefinitionsResolver = $fieldDefinitionsResolver;
-        $this->paginationTargetResolver = $paginationTargetResolver;
     }
 
     /**
@@ -43,7 +35,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         $paginationTarget = $this->paginationTargetResolver->resolve($context);
 
         $sortFields = [];
-        $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($context);
+        $fieldDefinitions = Asserted::notNull($this->fieldDefinitionsResolver->resolve($context));
         foreach ($fieldDefinitions as $fieldDefinition) {
             if ($fieldDefinition->isSortable()) {
                 $sortFields[] = 'entity.' . $fieldDefinition->getPropertyPath();
