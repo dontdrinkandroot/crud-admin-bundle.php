@@ -7,12 +7,9 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use RuntimeException;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class FieldRenderer extends AbstractProviderService
 {
-    public function render(FieldDefinition $fieldDefinition, $value): string
+    public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FieldRendererProviderInterface);

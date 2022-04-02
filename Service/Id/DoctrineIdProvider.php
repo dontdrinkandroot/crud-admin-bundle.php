@@ -31,7 +31,7 @@ class DoctrineIdProvider implements IdProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideId(CrudAdminContext $context)
+    public function provideId(CrudAdminContext $context): mixed
     {
         $entity = Asserted::notNull($context->getEntity());
         $entityClass = ClassUtils::getClass($entity);

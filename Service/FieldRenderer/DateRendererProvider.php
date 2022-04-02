@@ -3,6 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
 use DateTimeInterface;
+use Doctrine\DBAL\Types\Types;
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 
 /**
@@ -13,17 +15,19 @@ class DateRendererProvider implements FieldRendererProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supports(FieldDefinition $fieldDefinition, $value): bool
+    public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
-        return 'date' === $fieldDefinition->getType();
+        return Types::DATE_MUTABLE === $fieldDefinition->getType()
+            || Types::DATE_IMMUTABLE === $fieldDefinition->getType();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function render(FieldDefinition $fieldDefinition, $value): string
+    public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
-        assert($value instanceof DateTimeInterface);
-        return FieldRenderer::escapeHtml($value->format('Y-m-d'));
+        return FieldRenderer::escapeHtml(
+            Asserted::instanceOf($value, DateTimeInterface::class)->format('Y-m-d')
+        );
     }
 }

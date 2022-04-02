@@ -5,12 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 interface FieldRendererProviderInterface extends ProviderInterface
 {
-    public function supports(FieldDefinition $fieldDefinition, $value): bool;
+    public function supports(FieldDefinition $fieldDefinition, mixed $value): bool;
 
-    public function render(FieldDefinition $fieldDefinition, $value): string;
+    public function render(FieldDefinition $fieldDefinition, mixed $value): string;
 }

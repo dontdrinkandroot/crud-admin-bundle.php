@@ -4,15 +4,12 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class ToStringRendererProvider implements FieldRendererProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supports(FieldDefinition $fieldDefinition, $value): bool
+    public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
         return true;
     }
@@ -20,7 +17,7 @@ class ToStringRendererProvider implements FieldRendererProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function render(FieldDefinition $fieldDefinition, $value): string
+    public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
         return FieldRenderer::escapeHtml((string)$value);
     }

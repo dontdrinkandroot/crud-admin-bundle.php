@@ -1,0 +1,18 @@
+{% set readRoute = entity|ddrCrudAdminPath('READ') %}
+{% if readRoute is not null %}
+    <a class="dropdown-item" href="{{ readRoute }}">
+        {{ 'READ'|trans({}, 'DdrCrudAdmin') }}
+    </a>
+{% endif %}
+{% set updateRoute = entity|ddrCrudAdminPath('UPDATE') %}
+{% if updateRoute is not null %}
+    <a class="dropdown-item" href="{{ updateRoute }}">
+        {{ 'UPDATE'|trans({}, 'DdrCrudAdmin') }}
+    </a>
+{% endif %}
+{% set deleteRoute = entity|ddrCrudAdminPath('DELETE') %}
+{% if deleteRoute is not null %}
+    <a class="dropdown-item" href="{{ deleteRoute }}">
+        {{ 'DELETE'|trans({}, 'DdrCrudAdmin') }}
+    </a>
+{% endif %}
