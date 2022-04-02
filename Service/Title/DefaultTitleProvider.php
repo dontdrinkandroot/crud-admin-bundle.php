@@ -6,19 +6,10 @@ use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultTitleProvider implements TitleProviderInterface
 {
-    private TranslatorInterface $translator;
-
-    private TranslationDomainResolver $translationDomainResolver;
-
-    public function __construct(TranslatorInterface $translator, TranslationDomainResolver $translationDomainResolver)
+    public function __construct(private TranslatorInterface $translator, private TranslationDomainResolver $translationDomainResolver)
     {
-        $this->translator = $translator;
-        $this->translationDomainResolver = $translationDomainResolver;
     }
 
     /**

@@ -5,9 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class TitleResolver extends AbstractProviderService
 {
     public function resolve(CrudAdminContext $context): ?string
