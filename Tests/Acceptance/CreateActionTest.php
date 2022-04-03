@@ -7,14 +7,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CreateActionTest extends AbstractIntegrationTestCase
 {
-    public function testUnauthorized()
+    public function testUnauthorized(): void
     {
         $this->loadKernelAndFixtures();
         $crawler = $this->kernelBrowser->request('GET', '/example_entities/__NEW__/edit');
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->kernelBrowser->getResponse()->getStatusCode());
     }
 
-    public function testForbidden()
+    public function testForbidden(): void
     {
         $this->loadKernelAndFixtures();
         $this->logIn('user');

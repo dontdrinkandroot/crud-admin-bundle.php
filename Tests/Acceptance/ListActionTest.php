@@ -8,14 +8,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ListActionTest extends AbstractIntegrationTestCase
 {
-    public function testUnauthorized()
+    public function testUnauthorized(): void
     {
         $this->loadKernelAndFixtures([ExampleEntities::class]);
         $crawler = $this->kernelBrowser->request('GET', '/example_entities/');
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->kernelBrowser->getResponse()->getStatusCode());
     }
 
-    public function testStandardRequest()
+    public function testStandardRequest(): void
     {
         $this->loadKernelAndFixtures([ExampleEntities::class]);
         $this->logIn('user');

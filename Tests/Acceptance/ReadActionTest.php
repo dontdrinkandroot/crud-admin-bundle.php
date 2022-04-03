@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ReadActionTest extends AbstractIntegrationTestCase
 {
-    public function testUnauthorized()
+    public function testUnauthorized(): void
     {
         $this->loadKernelAndFixtures([ExampleEntities::class]);
         $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
@@ -18,7 +18,7 @@ class ReadActionTest extends AbstractIntegrationTestCase
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->kernelBrowser->getResponse()->getStatusCode());
     }
 
-    public function testStandardRequest()
+    public function testStandardRequest(): void
     {
         $this->loadKernelAndFixtures([ExampleEntities::class]);
         $this->logIn('user');
