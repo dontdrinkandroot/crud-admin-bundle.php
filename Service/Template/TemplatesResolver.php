@@ -7,13 +7,10 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 /**
- * @author Philip Washington Sorst <philip@sorst.net>
+ * @extends AbstractProviderService<TemplatesProviderInterface>
  */
 class TemplatesResolver extends AbstractProviderService
 {
-    /** @var TemplatesProviderInterface[] */
-    private $providers = [];
-
     /**
      * {@inheritdoc}
      */

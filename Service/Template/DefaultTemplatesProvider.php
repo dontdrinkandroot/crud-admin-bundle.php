@@ -6,9 +6,6 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultTemplatesProvider implements TemplatesProviderInterface
 {
     /**

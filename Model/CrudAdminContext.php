@@ -61,11 +61,6 @@ class CrudAdminContext
         $this->crudOperation = $crudOperation;
     }
 
-    public function setCrudOperation(string $crudOperation): void
-    {
-        $this->crudOperation = $crudOperation;
-    }
-
     public function getRequest(): Request
     {
         return $this->request;

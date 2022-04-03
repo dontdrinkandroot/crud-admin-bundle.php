@@ -6,9 +6,6 @@ use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 interface FieldDefinitionsProviderInterface extends ProviderInterface
 {
     public function supportsFieldDefinitions(CrudAdminContext $context): bool;

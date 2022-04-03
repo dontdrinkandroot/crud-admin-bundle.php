@@ -12,41 +12,17 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Twig\Environment;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultReadResponseListener
 {
-    private ItemResolver $itemResolver;
-
-    private TitleResolver $titleResolver;
-
-    private RoutesResolver $routesResolver;
-
-    private FieldDefinitionsResolver $fieldDefinitionsResolver;
-
-    private Environment $twig;
-
-    private TemplatesResolver $templateResolver;
-
-    private TranslationDomainResolver $translationDomainResolver;
-
     public function __construct(
-        ItemResolver $itemResolver,
-        TitleResolver $titleResolver,
-        RoutesResolver $routesResolver,
-        FieldDefinitionsResolver $fieldDefinitionsResolver,
-        TemplatesResolver $templateResolver,
-        Environment $twig,
-        TranslationDomainResolver $translationDomainResolver
+        private ItemResolver $itemResolver,
+        private TitleResolver $titleResolver,
+        private RoutesResolver $routesResolver,
+        private FieldDefinitionsResolver $fieldDefinitionsResolver,
+        private TemplatesResolver $templateResolver,
+        private Environment $twig,
+        private TranslationDomainResolver $translationDomainResolver
     ) {
-        $this->itemResolver = $itemResolver;
-        $this->titleResolver = $titleResolver;
-        $this->routesResolver = $routesResolver;
-        $this->fieldDefinitionsResolver = $fieldDefinitionsResolver;
-        $this->twig = $twig;
-        $this->templateResolver = $templateResolver;
-        $this->translationDomainResolver = $translationDomainResolver;
     }
 
     public function onCreateResponseEvent(CreateResponseEvent $event)

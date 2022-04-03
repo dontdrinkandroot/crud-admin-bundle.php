@@ -5,9 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class PaginationTargetResolver extends AbstractProviderService
 {
     public function resolve(CrudAdminContext $context)

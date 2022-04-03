@@ -8,16 +8,10 @@ use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Symfony\Component\Routing\RouterInterface;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultRoutesProvider implements RoutesProviderInterface
 {
-    private RouterInterface $router;
-
-    public function __construct(RouterInterface $router)
+    public function __construct(private RouterInterface $router)
     {
-        $this->router = $router;
     }
 
     /**

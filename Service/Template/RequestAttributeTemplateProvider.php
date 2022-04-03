@@ -5,9 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class RequestAttributeTemplateProvider implements TemplatesProviderInterface
 {
     /**

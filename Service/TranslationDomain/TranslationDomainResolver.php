@@ -5,9 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class TranslationDomainResolver extends AbstractProviderService
 {
     public function resolve(CrudAdminContext $context): ?string

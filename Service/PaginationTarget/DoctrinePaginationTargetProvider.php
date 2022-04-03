@@ -8,9 +8,6 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DoctrinePaginationTargetProvider implements PaginationTargetProvider
 {
     private ManagerRegistry $managerRegistry;

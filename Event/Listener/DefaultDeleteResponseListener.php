@@ -6,16 +6,10 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultDeleteResponseListener
 {
-    private UrlResolver $urlResolver;
-
-    public function __construct(UrlResolver $urlResolver)
+    public function __construct(private UrlResolver $urlResolver)
     {
-        $this->urlResolver = $urlResolver;
     }
 
     public function onCreateResponseEvent(CreateResponseEvent $event): void

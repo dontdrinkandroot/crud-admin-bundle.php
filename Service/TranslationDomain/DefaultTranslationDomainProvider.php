@@ -4,9 +4,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DefaultTranslationDomainProvider implements TranslationDomainProviderInterface
 {
     /**

@@ -5,9 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class RequestAttributeTranslationDomainProvider implements TranslationDomainProviderInterface
 {
     /**
