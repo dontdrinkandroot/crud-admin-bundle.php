@@ -1,6 +1,6 @@
 ddr_crud_admin_test.example_entity:
     prefix: /example_entities/
-    resource: '../../../Resources/config/crud_routes.yaml'
+    resource: '../../../config/crud_routes.yaml'
     name_prefix: ddr_crud_admin_test.example_entity.
     defaults:
         ddr_crud_admin.routes.prefix: ddr_crud_admin_test.example_entity.

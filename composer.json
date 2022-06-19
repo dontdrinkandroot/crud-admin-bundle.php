@@ -39,17 +39,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Dontdrinkandroot\\CrudAdminBundle\\": ""
-        },
-        "exclude-from-classmap": [
-            "/Tests/"
-        ]
+            "Dontdrinkandroot\\CrudAdminBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dontdrinkandroot\\CrudAdminBundle\\Tests\\": "tests/"
+        }
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "symfony/flex": false
-        }
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {

@@ -70,7 +70,7 @@ class DdrCrudAdminExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config/services'));
+        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
         $loader->load('services.yaml');
 
         $bundles = $container->getParameter('kernel.bundles');

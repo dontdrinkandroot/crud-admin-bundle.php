@@ -24,8 +24,9 @@ class AbstractIntegrationTestCase extends WebTestCase
             self::getContainer()->get(DatabaseToolCollection::class),
             DatabaseToolCollection::class
         );
-        $this->referenceRepository = $databaseToolCollection->get()->loadFixtures($classNames)->getReferenceRepository(
-        );
+        $this->referenceRepository = $databaseToolCollection->get()
+            ->loadFixtures($classNames)
+            ->getReferenceRepository();
 
         return $this->referenceRepository;
     }

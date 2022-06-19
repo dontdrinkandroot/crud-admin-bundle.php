@@ -7,21 +7,18 @@
         xsi:schemaLocation="https://getpsalm.org/schema/config vendor/vimeo/psalm/config.xsd"
 >
     <projectFiles>
-        <directory name="." />
-        <ignoreFiles>
-            <directory name="vendor" />
-        </ignoreFiles>
+        <directory name="src" />
     </projectFiles>
 
     <issueHandlers>
         <PossiblyUndefinedMethod>
             <errorLevel type="suppress">
-                <file name="DependencyInjection/Configuration.php" />
+                <file name="src/DependencyInjection/Configuration.php" />
             </errorLevel>
         </PossiblyUndefinedMethod>
         <PossiblyInvalidCast>
             <errorLevel type="suppress">
-                <file name="Service/Title/ToStringTitleProvider.php" />
+                <file name="src/Service/Title/ToStringTitleProvider.php" />
             </errorLevel>
         </PossiblyInvalidCast>
     </issueHandlers>

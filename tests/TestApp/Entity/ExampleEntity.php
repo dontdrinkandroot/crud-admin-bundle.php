@@ -7,8 +7,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- *
- * @author Philip Washington Sorst <philip@sorst.net>
  */
 class ExampleEntity
 {

@@ -77,4 +77,3 @@ class DefaultCreateUpdateResponseListener
         $response->setContent($content);
     }
 }
-

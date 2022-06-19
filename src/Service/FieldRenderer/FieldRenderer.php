@@ -5,7 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Exception\NoRendererFoundException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
-use RuntimeException;
 
 class FieldRenderer extends AbstractProviderService
 {
