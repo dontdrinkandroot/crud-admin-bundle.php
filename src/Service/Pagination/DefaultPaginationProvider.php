@@ -52,10 +52,14 @@ class DefaultPaginationProvider implements PaginationProviderInterface
             $defaultSortDirection = RequestAttributes::getDefaultSortDirection($context->getRequest());
         }
 
+        $limit = null;
+        if ($context->getRequest()->query->has('perPage')) {
+            $limit = $context->getRequest()->query->getInt('perPage');
+        }
         return $this->paginator->paginate(
             $paginationTarget,
             $context->getRequest()->query->getInt('page', 1),
-            $context->getRequest()->query->getInt('perPage', 10),
+            $limit,
             [
                 PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
