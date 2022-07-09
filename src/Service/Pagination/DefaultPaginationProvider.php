@@ -45,10 +45,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         $defaultSortFieldName = null;
         $defaultSortDirection = null;
         if (RequestAttributes::entityClassMatches($context)) {
-            $defaultSortFieldName = RequestAttributes::getDefaultSortFieldName($context->getRequest());
-            if (null !== $defaultSortFieldName) {
-                $defaultSortFieldName = 'entity.' . $defaultSortFieldName;
-            }
+            $defaultSortFieldName = $this->getDefaultSortFieldName($context);
             $defaultSortDirection = RequestAttributes::getDefaultSortDirection($context->getRequest());
         }
 
@@ -56,6 +53,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         if ($context->getRequest()->query->has('perPage')) {
             $limit = $context->getRequest()->query->getInt('perPage');
         }
+
         return $this->paginator->paginate(
             $paginationTarget,
             $context->getRequest()->query->getInt('page', 1),
@@ -66,5 +64,28 @@ class DefaultPaginationProvider implements PaginationProviderInterface
                 PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection
             ]
         );
+    }
+
+    /**
+     * @param CrudAdminContext $context
+     *
+     * @return list<string>|string|null
+     */
+    public function getDefaultSortFieldName(CrudAdminContext $context): null|array|string
+    {
+        $defaultSortFieldName = RequestAttributes::getDefaultSortFieldName($context->getRequest());
+        if (null === $defaultSortFieldName) {
+            return null;
+        }
+
+        if (is_array($defaultSortFieldName)) {
+            $mappedFieldNames = [];
+            foreach ($defaultSortFieldName as $name) {
+                $mappedFieldNames[] = 'entity.' . $name;
+            }
+            return $mappedFieldNames;
+        }
+
+        return 'entity.' . $defaultSortFieldName;
     }
 }
