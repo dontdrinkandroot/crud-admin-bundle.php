@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Action;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
+use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
@@ -49,6 +50,7 @@ class UpdateAction
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $this->itemPersister->persistItem($context);
+            $this->eventDispatcher->dispatch(new PostProcessFormEvent($context, $form));
         }
 
         $response = new Response();
