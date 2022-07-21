@@ -27,9 +27,9 @@ services:
         arguments:
             - !tagged_iterator ddr_crud_admin.routes_provider
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver:
+    Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver:
         arguments:
-            - !tagged_iterator ddr_crud_admin.templates_provider
+            - !tagged_iterator ddr_crud_admin.template_provider
 
     Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver:
         arguments:
@@ -57,7 +57,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver'
             - '@twig'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
         tags:
@@ -72,7 +72,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver'
             - '@twig'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
         tags:
@@ -84,7 +84,7 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultCreateUpdateResponseListener:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver'
@@ -110,7 +110,7 @@ services:
         arguments:
             - '@security.authorization_checker'
             - '@event_dispatcher'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
 
     Dontdrinkandroot\CrudAdminBundle\Action\CreateAction:
         arguments:
@@ -118,14 +118,14 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister'
             - '@security.authorization_checker'
             - '@event_dispatcher'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
 
     Dontdrinkandroot\CrudAdminBundle\Action\ReadAction:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
             - '@security.authorization_checker'
             - '@event_dispatcher'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
 
     Dontdrinkandroot\CrudAdminBundle\Action\UpdateAction:
         arguments:
@@ -134,7 +134,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister'
             - '@security.authorization_checker'
             - '@event_dispatcher'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
 
     Dontdrinkandroot\CrudAdminBundle\Action\DeleteAction:
         arguments:
@@ -142,7 +142,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister'
             - '@security.authorization_checker'
             - '@event_dispatcher'
-        tags: ['controller.service_arguments']
+        tags: [ 'controller.service_arguments' ]
 
     Dontdrinkandroot\CrudAdminBundle\Service\Title\ToStringTitleProvider:
         tags:
@@ -173,9 +173,9 @@ services:
             -   name: 'ddr_crud_admin.routes_provider'
                 priority: -250
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Template\DefaultTemplatesProvider:
+    Dontdrinkandroot\CrudAdminBundle\Service\Template\DefaultTemplateProvider:
         tags:
-            -   name: 'ddr_crud_admin.templates_provider'
+            -   name: 'ddr_crud_admin.template_provider'
                 priority: -250
 
     Dontdrinkandroot\CrudAdminBundle\Service\Template\RequestAttributeTemplateProvider:
@@ -218,6 +218,7 @@ services:
             - '@request_stack'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry'
         tags:
             - { name: twig.extension }
 
@@ -226,3 +227,12 @@ services:
             - '@file_locator'
         tags:
             - { name: routing.loader }
+
+    Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.controller
+
+    Dontdrinkandroot\CrudAdminBundle\Routing\CrudRoutesLoader:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.controller
+        tags: [ 'routing.loader' ]

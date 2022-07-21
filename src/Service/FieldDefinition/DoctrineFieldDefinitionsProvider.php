@@ -20,27 +20,23 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     /**
      * {@inheritdoc}
      */
-    public function supportsFieldDefinitions(CrudAdminContext $context): bool
+    public function supportsFieldDefinitions(string $crudOperation, string $entityClass): bool
     {
-        return null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
+        return null !== $this->managerRegistry->getManagerForClass($entityClass);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideFieldDefinitions(CrudAdminContext $context): ?array
+    public function provideFieldDefinitions(string $crudOperation, string $entityClass): array
     {
-        $entityClass = $context->getEntityClass();
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
         $classMetadata = $entityManager->getClassMetadata($entityClass);
 
-        $fields = $this->getFields($context);
-        if (null === $fields) {
-            $fields = array_keys($classMetadata->fieldMappings);
-        }
+        $fields = array_keys($classMetadata->fieldMappings);
 
         $fieldDefinitions = [];
         foreach ($fields as $field) {
@@ -53,7 +49,7 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
                     $filterable = true;
                 }
 
-                $fieldDefinitions[] = new FieldDefinition(
+                $fieldDefinitions[$fieldName] = new FieldDefinition(
                     $fieldName,
                     $type,
                     true,
@@ -62,36 +58,17 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
             } elseif ($classMetadata->hasAssociation($field)) {
                 $associationMapping = $classMetadata->associationMappings[$field];
                 $fieldName = $associationMapping['fieldName'];
-                $fieldDefinitions[] = new FieldDefinition(
+                $fieldDefinitions[$fieldName] = new FieldDefinition(
                     $fieldName,
                     'string',
                     false,
                     false
                 );
             } else {
-                throw new RuntimeException('Could not resolve field definition for ' - $field);
+                throw new RuntimeException('Could not resolve field definition for ' . $field);
             }
         }
 
         return $fieldDefinitions;
-    }
-
-    private function getFields(CrudAdminContext $context): ?array
-    {
-        $operation = $context->getCrudOperation();
-        if (!RequestAttributes::entityClassMatches($context)) {
-            return null;
-        }
-
-        $fields = RequestAttributes::getFields($context->getRequest());
-        if (null === $fields) {
-            return null;
-        }
-
-        if (array_key_exists($operation, $fields)) {
-            return $fields[$operation];
-        }
-
-        return null;
     }
 }

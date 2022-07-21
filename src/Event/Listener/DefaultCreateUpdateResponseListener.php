@@ -8,7 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
@@ -18,7 +18,7 @@ class DefaultCreateUpdateResponseListener
 {
     public function __construct(
         private ItemResolver $itemResolver,
-        private TemplatesResolver $templateResolver,
+        private TemplateResolver $templateResolver,
         private TitleResolver $titleResolver,
         private RoutesResolver $routesResolver,
         private FormResolver $formResolver,

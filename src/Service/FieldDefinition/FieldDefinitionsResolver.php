@@ -8,26 +8,20 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class FieldDefinitionsResolver extends AbstractProviderService
 {
-    /** @return list<FieldDefinition>|null */
-    public function resolve(CrudAdminContext $context): ?array
-    {
-        if (!$context->isFieldDefinitionsResolved()) {
-            $context->setFieldDefinitions($this->resolveFromProviders($context));
-            $context->setFieldDefinitionsResolved();
-        }
-
-        return $context->getFieldDefinitions();
-    }
-
-    /** @return list<FieldDefinition>|null */
-    private function resolveFromProviders(CrudAdminContext $context): ?array
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return array<array-key, FieldDefinition>|null
+     */
+    public function resolve(string $crudOperation, string $entityClass): ?array
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FieldDefinitionsProviderInterface);
-            if ($provider->supportsFieldDefinitions($context)) {
-                if (null !== $fieldDefinitions = $provider->provideFieldDefinitions($context)) {
-                    return $fieldDefinitions;
-                }
+            if ($provider->supportsFieldDefinitions($crudOperation, $entityClass)) {
+                return $provider->provideFieldDefinitions($crudOperation, $entityClass);
             }
         }
 

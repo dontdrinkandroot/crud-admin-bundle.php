@@ -7,7 +7,7 @@ use Dontdrinkandroot\CrudAdminBundle\Event\CreateResponseEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Twig\Environment;
@@ -19,7 +19,7 @@ class DefaultReadResponseListener
         private TitleResolver $titleResolver,
         private RoutesResolver $routesResolver,
         private FieldDefinitionsResolver $fieldDefinitionsResolver,
-        private TemplatesResolver $templateResolver,
+        private TemplateResolver $templateResolver,
         private Environment $twig,
         private TranslationDomainResolver $translationDomainResolver
     ) {

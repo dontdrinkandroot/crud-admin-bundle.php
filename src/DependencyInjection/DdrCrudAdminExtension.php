@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
+use Dontdrinkandroot\CrudAdminBundle\Controller\CrudControllerInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRendererProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
@@ -11,7 +12,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterf
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplatesProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlProviderInterface;
@@ -52,8 +53,8 @@ class DdrCrudAdminExtension extends Extension
             ->registerForAutoconfiguration(TitleProviderInterface::class)
             ->addTag('ddr_crud_admin.title_provider');
         $container
-            ->registerForAutoconfiguration(TemplatesProviderInterface::class)
-            ->addTag('ddr_crud_admin.templates_provider');
+            ->registerForAutoconfiguration(TemplateProviderInterface::class)
+            ->addTag('ddr_crud_admin.template_provider');
         $container
             ->registerForAutoconfiguration(ItemPersisterProviderInterface::class)
             ->addTag('ddr_crud_admin.item_persister_provider');
@@ -66,6 +67,11 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(TranslationDomainProviderInterface::class)
             ->addTag('ddr_crud_admin.translation_domain_provider');
+        $container
+            ->registerForAutoconfiguration(CrudControllerInterface::class)
+            ->addTag('ddr_crud_admin.controller')
+            ->addTag('controller.service_arguments')
+            ->setPublic(true);
 
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);

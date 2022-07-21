@@ -7,6 +7,7 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
+use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
@@ -23,7 +24,8 @@ class CrudAdminExtension extends AbstractExtension
         private UrlResolver $urlResolver,
         private RequestStack $requestStack,
         private FieldRenderer $fieldRenderer,
-        private TitleResolver $titleResolver
+        private TitleResolver $titleResolver,
+        private readonly CrudControllerRegistry $crudControllerRegistry
     ) {
     }
 
@@ -52,7 +54,8 @@ class CrudAdminExtension extends AbstractExtension
             new TwigFilter(
                 'ddrCrudAdminPath',
                 fn(object $entity, string $crudOperation) => $this->getUrl($crudOperation, $entity)
-            )
+            ),
+            new TwigFilter('ddrCrudPath', [$this, 'getPath'])
         ];
     }
 
@@ -76,6 +79,21 @@ class CrudAdminExtension extends AbstractExtension
         return $this->urlResolver->resolve($context);
     }
 
+    /**
+     * @template T
+     *
+     * @param string            $crudOperation
+     * @param class-string<T>|T $entityOrClass
+     *
+     * @return string|null
+     */
+    public function getPath(string $crudOperation, string|object $entityOrClass): ?string
+    {
+        $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
+        return $this->crudControllerRegistry->getControllerByEntityClass($entityClass)
+            ->getUrl($crudOperation, is_object($entityOrClass) ? $entityOrClass : null);
+    }
+
     protected function buildContext(string $crudOperation, ?object $entity): CrudAdminContext
     {
         $request = Asserted::notNull($this->requestStack->getCurrentRequest());
@@ -93,5 +111,21 @@ class CrudAdminExtension extends AbstractExtension
             $context->setEntityResolved(true);
         }
         return $context;
+    }
+
+    /**
+     * @template T
+     *
+     * @param T $entity
+     *
+     * @return class-string<T>
+     */
+    private function getClass(object $entity): string
+    {
+        if (class_exists('Doctrine\Common\Util\ClassUtils')) {
+            return ClassUtils::getRealClass(get_class($entity));
+        }
+
+        return get_class($entity);
     }
 }

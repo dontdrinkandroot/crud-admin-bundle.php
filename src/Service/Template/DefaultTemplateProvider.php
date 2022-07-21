@@ -6,12 +6,12 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 
-class DefaultTemplatesProvider implements TemplatesProviderInterface
+class DefaultTemplateProvider implements TemplateProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supportsTemplates(CrudAdminContext $context): bool
+    public function supportsTemplate(string $crudOperation, string $entityClass): bool
     {
         return true;
     }
@@ -19,21 +19,15 @@ class DefaultTemplatesProvider implements TemplatesProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTemplates(CrudAdminContext $context): ?array
+    public function provideTemplate(string $crudOperation, string $entityClass): string
     {
         $prefix = '@DdrCrudAdmin/';
-        if (RequestAttributes::entityClassMatches($context)) {
-            $requestAttributesPrefix = RequestAttributes::getTemplatesPath($context->getRequest());
-            if (null !== $requestAttributesPrefix) {
-                $prefix = $requestAttributesPrefix;
-            }
-        }
 
-        return [
+        return match($crudOperation) {
             CrudOperation::LIST => $prefix . 'list.html.twig',
             CrudOperation::READ => $prefix . 'read.html.twig',
             CrudOperation::CREATE => $prefix . 'update.html.twig',
             CrudOperation::UPDATE => $prefix . 'update.html.twig',
-        ];
+        };
     }
 }
