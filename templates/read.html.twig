@@ -7,8 +7,8 @@
         <h1 class="mb-0 align-self-center flex-fill">{{ title }}</h1>
         <div class="d-inline-flex align-self-center">
             {% block ddr_crud_admin_read_actions %}
-                {% set updateRoute = entity|ddrCrudAdminPath('UPDATE') %}
-                {% set deleteRoute = entity|ddrCrudAdminPath('DELETE') %}
+                {% set updateRoute = 'UPDATE'|ddrCrudPath(entity) %}
+                {% set deleteRoute = 'DELETE'|ddrCrudPath(entity) %}
                 {% if (updateRoute is not null or deleteRoute is not null) %}
                     <div class="dropdown">
                         <button class="dropdown-toggle btn btn-lg btn-primary"
@@ -21,12 +21,12 @@
                             {{ 'ACTIONS'|trans({}, 'DdrCrudAdmin') }}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            {% if routes.UPDATE is defined and is_granted('UPDATE', entity) %}
+                            {% if updateRoute is not null and is_granted('UPDATE', entity) %}
                                 <a class="dropdown-item" href="{{ updateRoute }}">
                                     {{ 'UPDATE'|trans({}, 'DdrCrudAdmin') }}
                                 </a>
                             {% endif %}
-                            {% if routes.DELETE is defined and is_granted('DELETE', entity) %}
+                            {% if deleteRoute is not null and is_granted('DELETE', entity) %}
                                 <a class="dropdown-item" href="{{ deleteRoute }}">
                                     {{ 'DELETE'|trans({}, 'DdrCrudAdmin') }}
                                 </a>
