@@ -7,7 +7,24 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface ItemPersisterProviderInterface extends ProviderInterface
 {
-    public function supportsPersist(CrudAdminContext $context);
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T $entity
+     *
+     * @return bool
+     */
 
-    public function persist(CrudAdminContext $context);
+    public function supportsPersist(string $crudOperation, string $entityClass, object $entity): bool;
+
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T $entity
+     */
+    public function persist(string $crudOperation, string $entityClass, object $entity): void;
 }

@@ -7,24 +7,21 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class TitleResolver extends AbstractProviderService
 {
-    public function resolve(CrudAdminContext $context): ?string
-    {
-        if (!$context->isTitleResolved()) {
-            $context->setTitle($this->resolveFromProviders($context));
-            $context->setTitleResolved();
-        }
-
-        return $context->getTitle();
-    }
-
-    public function resolveFromProviders(CrudAdminContext $context): ?string
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T|null $entity
+     *
+     * @return ?string
+     */
+    public function resolve(string $crudOperation, string $entityClass, ?object $entity): ?string
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof TitleProviderInterface);
-            if ($provider->supportsTitle($context)) {
-                if (null !== $title = $provider->provideTitle($context)) {
-                    return $title;
-                }
+            if ($provider->supportsTitle($crudOperation, $entityClass, $entity)) {
+                return $provider->provideTitle($crudOperation, $entityClass, $entity);
             }
         }
 

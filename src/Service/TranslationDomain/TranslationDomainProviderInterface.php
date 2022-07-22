@@ -7,7 +7,23 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface TranslationDomainProviderInterface extends ProviderInterface
 {
-    public function supportsTranslationDomain(CrudAdminContext $context): bool;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return bool
+     */
+    public function supportsTranslationDomain(string $crudOperation, string $entityClass): bool;
 
-    public function resolveTranslationDomain(CrudAdminContext $context): ?string;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return ?string
+     */
+    public function resolveTranslationDomain(string $crudOperation, string $entityClass): ?string;
 }

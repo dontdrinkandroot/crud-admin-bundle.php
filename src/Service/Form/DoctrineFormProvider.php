@@ -28,37 +28,28 @@ class DoctrineFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsForm(CrudAdminContext $context): bool
+    public function supportsForm(string $crudOperation, string $entityClass, ?object $entity): bool
     {
-        return null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
+        return null !== $this->managerRegistry->getManagerForClass($entityClass);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideForm(CrudAdminContext $context): ?FormInterface
+    public function provideForm(string $crudOperation, string $entityClass, ?object $entity): ?FormInterface
     {
-        $entityClass = $context->getEntityClass();
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
         $classMetadata = $entityManager->getClassMetadata($entityClass);
-        $entity = CrudOperation::UPDATE === $context->getCrudOperation()
-            ? $this->itemResolver->resolve($context)
-            : $context->getEntity();
         $formBuilder = $this->formFactory->createBuilder(
             FormType::class,
             $entity,
             ['data_class' => $entityClass]
         );
 
-        $fields = $this->getFields($context);
-        if (null === $fields) {
-            $fields = array_keys($classMetadata->fieldMappings);
-        }
-
-        $translationDomain = $this->translationDomainResolver->resolve($context);
+        $fields = array_keys($classMetadata->fieldMappings);
 
         foreach ($fields as $field) {
             $fieldMapping = $classMetadata->fieldMappings[$field];
@@ -67,7 +58,6 @@ class DoctrineFormProvider implements FormProviderInterface
                 $formBuilder->add(
                     $fieldName,
                     null,
-                    ['translation_domain' => $translationDomain]
                 );
             }
         }
@@ -79,22 +69,5 @@ class DoctrineFormProvider implements FormProviderInterface
         );
 
         return $formBuilder->getForm();
-    }
-
-    private function getFields(CrudAdminContext $context): ?array
-    {
-        $operation = $context->getCrudOperation();
-        if (
-            !RequestAttributes::entityClassMatches($context)
-            || null === $fields = RequestAttributes::getFields($context->getRequest())
-        ) {
-            return null;
-        }
-
-        if (array_key_exists($operation, $fields)) {
-            return $fields[$operation];
-        }
-
-        return null;
     }
 }

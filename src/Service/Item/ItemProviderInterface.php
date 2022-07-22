@@ -7,7 +7,25 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface ItemProviderInterface extends ProviderInterface
 {
-    public function supportsItem(CrudAdminContext $context): bool;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param mixed           $id
+     *
+     * @return bool
+     */
+    public function supportsItem(string $crudOperation, string $entityClass, mixed $id): bool;
 
-    public function provideItem(CrudAdminContext $context): ?object;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param mixed           $id
+     *
+     * @return T|null
+     */
+    public function provideItem(string $crudOperation, string $entityClass, mixed $id): ?object;
 }

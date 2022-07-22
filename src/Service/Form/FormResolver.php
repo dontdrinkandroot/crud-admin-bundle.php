@@ -11,25 +11,21 @@ use Symfony\Component\Form\FormInterface;
  */
 class FormResolver extends AbstractProviderService
 {
-    public function resolve(CrudAdminContext $context): ?FormInterface
-    {
-        if (!$context->isFormResolved()) {
-            $context->setForm($this->resolveFromProviders($context));
-            $context->setFormResolved();
-        }
-
-       return $context->getForm();
-    }
-
-    public function resolveFromProviders(CrudAdminContext $context)
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T|null          $entity
+     *
+     * @return ?FormInterface
+     */
+    public function resolve(string $crudOperation, string $entityClass, ?object $entity): ?FormInterface
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof FormProviderInterface);
-            if ($provider->supportsForm($context)) {
-                $result = $provider->provideForm($context);
-                if (null !== $result) {
-                    return $result;
-                }
+            if ($provider->supportsForm($crudOperation, $entityClass, $entity)) {
+                return $provider->provideForm($crudOperation, $entityClass, $entity);
             }
         }
 

@@ -7,22 +7,21 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class ItemResolver extends AbstractProviderService
 {
-    public function resolve(CrudAdminContext $context): ?object
-    {
-        if (!$context->isEntityResolved()) {
-            $context->setEntity($this->resolveFromProviders($context));
-            $context->setEntityResolved();
-        }
-
-        return $context->getEntity();
-    }
-
-    private function resolveFromProviders(CrudAdminContext $context): ?object
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param mixed           $id
+     *
+     * @return T|null
+     */
+    public function resolve(string $crudOperation, string $entityClass, mixed $id): ?object
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof ItemProviderInterface);
-            if ($provider->supportsItem($context)) {
-                return $provider->provideItem($context);
+            if ($provider->supportsItem($crudOperation, $entityClass, $id)) {
+                return $provider->provideItem($crudOperation, $entityClass, $id);
             }
         }
 

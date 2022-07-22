@@ -7,19 +7,21 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class ItemPersister extends AbstractProviderService
 {
-    public function persistItem(CrudAdminContext $context): bool
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T $entity
+     */
+    public function persistItem(string $crudOperation, string $entityClass, object $entity): void
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof ItemPersisterProviderInterface);
-            if ($provider->supportsPersist($context)) {
-                $result = $provider->persist($context);
-                if (true === $result) {
-                    $context->setItemPersisted();
-                    return true;
-                }
+            if ($provider->supportsPersist($crudOperation, $entityClass, $entity)) {
+                $provider->persist($crudOperation, $entityClass, $entity);
+                return;
             }
         }
-
-        return false;
     }
 }

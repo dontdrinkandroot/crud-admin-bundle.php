@@ -4,24 +4,25 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Stringable;
 
 class ToStringTitleProvider implements TitleProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supportsTitle(CrudAdminContext $context): bool
+    public function supportsTitle(string $crudOperation, string $entityClass, ?object $entity): bool
     {
-        return in_array($context->getCrudOperation(), [CrudOperation::READ, CrudOperation::UPDATE], true)
-            && (null !== $entity = $context->getEntity())
-            && method_exists($entity, '__toString');
+        return in_array($crudOperation, [CrudOperation::READ, CrudOperation::UPDATE], true)
+            && null !== $entity
+            && ($entity instanceof Stringable || method_exists($entity, '__toString'));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideTitle(CrudAdminContext $context): ?string
+    public function provideTitle(string $crudOperation, string $entityClass, ?object $entity): ?string
     {
-        return (string)$context->getEntity();
+        return (string)$entity;
     }
 }

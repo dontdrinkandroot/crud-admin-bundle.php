@@ -10,29 +10,28 @@ use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 
 class DoctrineItemProvider implements ItemProviderInterface
 {
-    public function __construct(private ManagerRegistry $managerRegistry)
+    public function __construct(private readonly ManagerRegistry $managerRegistry)
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsItem(CrudAdminContext $context): bool
+    public function supportsItem(string $crudOperation, string $entityClass, mixed $id): bool
     {
-        return null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
+        return null !== $this->managerRegistry->getManagerForClass($entityClass);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideItem(CrudAdminContext $context): ?object
+    public function provideItem(string $crudOperation, string $entityClass, mixed $id): ?object
     {
-        $entityClass = $context->getEntityClass();
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
 
-        return $entityManager->find($entityClass, RequestAttributes::getId($context->getRequest()));
+        return $entityManager->find($entityClass, $id);
     }
 }

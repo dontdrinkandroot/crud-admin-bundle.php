@@ -7,12 +7,20 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class PaginationTargetResolver extends AbstractProviderService
 {
-    public function resolve(CrudAdminContext $context)
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return mixed
+     */
+    public function resolve(string $crudOperation, string $entityClass): mixed
     {
         foreach ($this->getProviders() as $provider) {
             assert($provider instanceof PaginationTargetProvider);
-            if ($provider->supportsPaginationTarget($context)) {
-                $paginationTarget = $provider->providePaginationTarget($context);
+            if ($provider->supportsPaginationTarget($crudOperation, $entityClass)) {
+                $paginationTarget = $provider->providePaginationTarget($crudOperation, $entityClass);
                 if (null !== $paginationTarget) {
                     return $paginationTarget;
                 }

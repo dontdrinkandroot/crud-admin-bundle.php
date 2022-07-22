@@ -10,20 +10,19 @@ use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
 class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
 {
-    public function __construct(private ManagerRegistry $managerRegistry)
+    public function __construct(private readonly ManagerRegistry $managerRegistry)
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsPersist(CrudAdminContext $context): bool
+    public function supportsPersist(string $crudOperation, string $entityClass, object $entity): bool
     {
         return
-            null !== $context->getEntity()
-            && null !== $this->managerRegistry->getManagerForClass($context->getEntityClass())
+            null !== $this->managerRegistry->getManagerForClass($entityClass)
             && in_array(
-                $context->getCrudOperation(),
+                $crudOperation,
                 [CrudOperation::CREATE, CrudOperation::UPDATE, CrudOperation::DELETE],
                 true
             );
@@ -32,29 +31,27 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function persist(CrudAdminContext $context): bool
+    public function persist(string $crudOperation, string $entityClass, object $entity): void
     {
         $entityManager = Asserted::instanceOf(
-            $this->managerRegistry->getManagerForClass($context->getEntityClass()),
+            $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
 
-        switch ($context->getCrudOperation()) {
+        switch ($crudOperation) {
             case CrudOperation::CREATE:
-                $entityManager->persist(Asserted::notNull($context->getEntity()));
+                $entityManager->persist($entity);
                 $entityManager->flush();
                 break;
             case CrudOperation::UPDATE:
                 $entityManager->flush();
                 break;
             case CrudOperation::DELETE:
-                $entityManager->remove(Asserted::notNull($context->getEntity()));
+                $entityManager->remove($entity);
                 $entityManager->flush();
                 break;
             default:
                 /* Noop */
         }
-
-        return true;
     }
 }

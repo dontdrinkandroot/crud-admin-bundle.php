@@ -20,26 +20,22 @@ class DoctrineIdProvider implements IdProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsId(CrudAdminContext $context): bool
+    public function supportsId(string $crudOperation, string $entityClass, object $entity): bool
     {
-        $entity = $context->getEntity();
-
-        return null !== $entity
-            && null !== $this->managerRegistry->getManagerForClass(ClassUtils::getClass($entity));
+        return null !== $this->managerRegistry->getManagerForClass(ClassUtils::getClass($entity));
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideId(CrudAdminContext $context): mixed
+    public function provideId(string $crudOperation, string $entityClass, object $entity): mixed
     {
-        $entity = Asserted::notNull($context->getEntity());
-        $entityClass = ClassUtils::getClass($entity);
+        $realEntityClass = ClassUtils::getClass($entity);
         $entityManager = Asserted::instanceOf(
-            $this->managerRegistry->getManagerForClass($entityClass),
+            $this->managerRegistry->getManagerForClass($realEntityClass),
             EntityManagerInterface::class
         );
-        $classMetadata = $entityManager->getClassMetadata($entityClass);
+        $classMetadata = $entityManager->getClassMetadata($realEntityClass);
 
         $identifiers = $classMetadata->identifier;
         if (1 === count($identifiers)) {

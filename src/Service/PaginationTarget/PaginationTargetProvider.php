@@ -7,7 +7,23 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface PaginationTargetProvider extends ProviderInterface
 {
-    public function supportsPaginationTarget(CrudAdminContext $context);
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return bool
+     */
+    public function supportsPaginationTarget(string $crudOperation, string $entityClass): bool;
 
-    public function providePaginationTarget(CrudAdminContext $context);
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return ?string
+     */
+    public function providePaginationTarget(string $crudOperation, string $entityClass);
 }

@@ -67,7 +67,7 @@ class CrudRoutesLoader extends Loader
                     path: $routeInfo->path,
                     defaults: $defaults,
                     requirements: $requirements,
-                    methods: ['GET']
+                    methods: ['GET', 'POST']
                 );
                 $routes->add($routeInfo->name, $route);
             }
@@ -97,7 +97,7 @@ class CrudRoutesLoader extends Loader
                     path: $routeInfo->path,
                     defaults: $defaults,
                     requirements: $requirements,
-                    methods: ['GET']
+                    methods: ['GET', 'POST']
                 );
                 $routes->add($routeInfo->name, $route);
             }

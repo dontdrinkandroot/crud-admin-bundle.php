@@ -150,9 +150,7 @@ services:
                 priority: -240
 
     Dontdrinkandroot\CrudAdminBundle\Service\Title\DefaultTitleProvider:
-        arguments:
-            - '@translator'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
+        autowire: true
         tags:
             -   name: 'ddr_crud_admin.title_provider'
                 priority: -250
@@ -178,18 +176,6 @@ services:
             -   name: 'ddr_crud_admin.template_provider'
                 priority: -250
 
-    Dontdrinkandroot\CrudAdminBundle\Service\Template\RequestAttributeTemplateProvider:
-        tags:
-            -   name: 'ddr_crud_admin.templates_provider'
-                priority: -50
-
-    Dontdrinkandroot\CrudAdminBundle\Service\Form\RequestAttributeFormProvider:
-        arguments:
-            - '@form.factory'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
-        tags:
-            - { name: 'ddr_crud_admin.form_provider', priority: -50 }
-
     Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\DefaultNewInstanceProvider:
         tags:
             - { name: 'ddr_crud_admin.new_instance_provider', priority: -250 }
@@ -202,10 +188,6 @@ services:
             - '@security.authorization_checker'
         tags:
             - { name: 'ddr_crud_admin.url_provider', priority: -250 }
-
-    Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\RequestAttributeTranslationDomainProvider:
-        tags:
-            - { name: 'ddr_crud_admin.translation_domain_provider', priority: -200 }
 
     Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\DefaultTranslationDomainProvider:
         tags:

@@ -8,14 +8,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DefaultTitleProvider implements TitleProviderInterface
 {
-    public function __construct(private TranslatorInterface $translator, private TranslationDomainResolver $translationDomainResolver)
-    {
+    public function __construct(
+        private readonly TranslationDomainResolver $translationDomainResolver,
+        private readonly TranslatorInterface $translator
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsTitle(CrudAdminContext $context): bool
+    public function supportsTitle(string $crudOperation, string $entityClass, ?object $entity): bool
     {
         return true;
     }
@@ -23,11 +25,11 @@ class DefaultTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTitle(CrudAdminContext $context): string
+    public function provideTitle(string $crudOperation, string $entityClass, ?object $entity): string
     {
-        $crudOperation = $context->getCrudOperation();
-        $translationDomain = $this->translationDomainResolver->resolve($context);
-
-        return $this->translator->trans($crudOperation, [], $translationDomain);
+        return $this->translator->trans(
+            id: $crudOperation,
+            domain: $this->translationDomainResolver->resolve($crudOperation, $entityClass)
+        );
     }
 }

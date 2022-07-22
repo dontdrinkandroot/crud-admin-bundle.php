@@ -3,37 +3,38 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
 class DoctrinePaginationTargetProvider implements PaginationTargetProvider
 {
-    private ManagerRegistry $managerRegistry;
 
-    public function __construct(ManagerRegistry $managerRegistry)
+    public function __construct(private readonly ManagerRegistry $managerRegistry)
     {
-        $this->managerRegistry = $managerRegistry;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsPaginationTarget(CrudAdminContext $context): bool
+    public function supportsPaginationTarget(string $crudOperation, string $entityClass): bool
     {
-        return CrudOperation::LIST === $context->getCrudOperation()
-            && null !== $this->managerRegistry->getManagerForClass($context->getEntityClass());
+        return CrudOperation::LIST === $crudOperation
+            && null !== $this->managerRegistry->getManagerForClass($entityClass);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function providePaginationTarget(CrudAdminContext $context): ?QueryBuilder
+    public function providePaginationTarget(string $crudOperation, string $entityClass): ?QueryBuilder
     {
-        $entityClass = $context->getEntityClass();
-        $entityManager = $this->managerRegistry->getManagerForClass($entityClass);
-        assert($entityManager instanceof EntityManagerInterface);
+        $entityManager = Asserted::instanceOf(
+            $this->managerRegistry->getManagerForClass($entityClass),
+            EntityManagerInterface::class
+        );
 
         return $entityManager->createQueryBuilder()
             ->select('entity')

@@ -9,7 +9,7 @@ class DefaultTranslationDomainProvider implements TranslationDomainProviderInter
     /**
      * {@inheritdoc}
      */
-    public function supportsTranslationDomain(CrudAdminContext $context): bool
+    public function supportsTranslationDomain(string $crudOperation, string $entityClass): bool
     {
         return true;
     }
@@ -17,7 +17,7 @@ class DefaultTranslationDomainProvider implements TranslationDomainProviderInter
     /**
      * {@inheritdoc}
      */
-    public function resolveTranslationDomain(CrudAdminContext $context): ?string
+    public function resolveTranslationDomain(string $crudOperation, string $entityClass): ?string
     {
         return 'DdrCrudAdmin';
     }

@@ -8,7 +8,25 @@ use Symfony\Component\Form\FormInterface;
 
 interface FormProviderInterface extends ProviderInterface
 {
-    public function supportsForm(CrudAdminContext $context): bool;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T|null          $entity
+     *
+     * @return bool
+     */
+    public function supportsForm(string $crudOperation, string $entityClass, ?object $entity): bool;
 
-    public function provideForm(CrudAdminContext $context): ?FormInterface;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T|null          $entity
+     *
+     * @return ?FormInterface
+     */
+    public function provideForm(string $crudOperation, string $entityClass, ?object $entity): ?FormInterface;
 }
