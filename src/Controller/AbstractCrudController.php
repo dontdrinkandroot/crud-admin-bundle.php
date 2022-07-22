@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\ClassNameUtils;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
@@ -13,11 +14,14 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Knp\Component\Pager\PaginatorInterface;
 use Psr\Container\ContainerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use RuntimeException;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -45,41 +49,13 @@ use function PHPUnit\Framework\matches;
  */
 abstract class AbstractCrudController implements CrudControllerInterface, ServiceSubscriberInterface
 {
-    const NEW_ID = '__NEW__';
+    public const NEW_ID = '__NEW__';
 
     protected ?ContainerInterface $container = null;
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getNamePrefix(): string
-    {
-        return sprintf("ddr_crud_admin.%s.", ClassNameUtils::getTableizedShortName($this->getEntityClass()));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getPathPrefix(): string
-    {
-        $shortName = ClassNameUtils::getShortName($this->getEntityClass());
-        return '/' . mb_strtolower((new EnglishInflector())->pluralize($shortName)[0]);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getRouteInfo(string $crudOperation): ?RouteInfo
     {
-        $namePrefix = $this->getNamePrefix();
-        $pathPrefix = $this->getPathPrefix();
-        return match ($crudOperation) {
-            CrudOperation::LIST => new RouteInfo($namePrefix . 'list', $pathPrefix),
-            CrudOperation::CREATE => new RouteInfo($namePrefix . 'create', $pathPrefix . '/__NEW__/edit'),
-            CrudOperation::READ => new RouteInfo($namePrefix . 'read', $pathPrefix . '/{id}'),
-            CrudOperation::UPDATE => new RouteInfo($namePrefix . 'update', $pathPrefix . '/{id}/edit'),
-            CrudOperation::DELETE => new RouteInfo($namePrefix . 'delete', $pathPrefix . '/{id}/delete',),
-        };
+        return $this->getRouteInfoResolver()->resolve($crudOperation, $this->getEntityClass());
     }
 
     public function listAction(Request $request): Response
@@ -160,6 +136,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         if ($form->isSubmitted() && $form->isValid()) {
             $entity = Asserted::instanceOf($form->getData(), $this->getEntityClass());
             $this->getItemPersister()->persistItem($crudOperation, $this->getEntityClass(), $entity);
+            $this->getEventDispatcher()->dispatch(
+                new PostProcessFormEvent($crudOperation, $this->getEntityClass(), $form, $entity)
+            );
             $redirectUrl = $this->getUrl(CrudOperation::LIST);
             if (null !== $redirectUrl) {
                 return new RedirectResponse($redirectUrl);
@@ -203,19 +182,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
      */
     public function getUrl(string $crudOperation, ?object $entity = null): ?string
     {
-        $route = $this->getRouteInfo($crudOperation)?->name;
-        if (null === $route) {
-            return null;
-        }
-
-        $id = null !== $entity ? $this->getId($crudOperation, $entity) : null;
-        return match ($crudOperation) {
-            CrudOperation::LIST,
-            CrudOperation::CREATE => $this->getUrlGenerator()->generate($route),
-            CrudOperation::READ,
-            CrudOperation::DELETE,
-            CrudOperation::UPDATE => $this->getUrlGenerator()->generate($route, ['id' => $id]),
-        };
+        return $this->getUrlResolver()->resolve($crudOperation, $this->getEntityClass(), $entity);
     }
 
     #[Required]
@@ -247,7 +214,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             TranslatorInterface::class,
             FormFactoryInterface::class,
             PaginationTargetResolver::class,
-            ItemPersister::class
+            ItemPersister::class,
+            RouteInfoResolver::class,
+            UrlResolver::class,
+            EventDispatcherInterface::class
         ];
     }
 
@@ -286,9 +256,19 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->getContainer()->get(ItemPersister::class);
     }
 
+    protected function getRouteInfoResolver(): RouteInfoResolver
+    {
+        return $this->getContainer()->get(RouteInfoResolver::class);
+    }
+
     protected function getIdResolver(): IdResolver
     {
         return $this->getContainer()->get(IdResolver::class);
+    }
+
+    protected function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->getContainer()->get(EventDispatcherInterface::class);
     }
 
     protected function getTitleResolver(): TitleResolver
@@ -309,6 +289,11 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     protected function getItemResolver(): ItemResolver
     {
         return $this->getContainer()->get(ItemResolver::class);
+    }
+
+    protected function getUrlResolver(): UrlResolver
+    {
+        return $this->getContainer()->get(UrlResolver::class);
     }
 
     protected function getFormResolver(): FormResolver

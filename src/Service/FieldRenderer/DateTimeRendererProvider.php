@@ -14,8 +14,8 @@ class DateTimeRendererProvider implements FieldRendererProviderInterface
      */
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
-        return Types::DATETIME_MUTABLE === $fieldDefinition->getType()
-            || Types::DATE_IMMUTABLE === $fieldDefinition->getType();
+        return Types::DATETIME_MUTABLE === $fieldDefinition->type
+            || Types::DATE_IMMUTABLE === $fieldDefinition->type;
     }
 
     /**

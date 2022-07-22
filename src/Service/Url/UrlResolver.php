@@ -8,20 +8,21 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class UrlResolver extends AbstractProviderService
 {
-    public function resolve(CrudAdminContext $context): ?string
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T|null          $entity
+     *
+     * @return string|null
+     */
+    public function resolve(string $crudOperation, string $entityClass, ?object $entity): ?string
     {
-        foreach ($this->getProviders() as $provider) {
+        foreach ($this->providers as $provider) {
             assert($provider instanceof UrlProviderInterface);
-            if ($provider->supportsUrl($context)) {
-                try {
-                    $url = $provider->provideUrl($context);
-                } catch (EndProviderChainException $e) {
-                    return null;
-                }
-
-                if (null !== $url) {
-                    return $url;
-                }
+            if ($provider->supportsUrl($crudOperation, $entityClass, $entity)) {
+                return $provider->provideUrl($crudOperation, $entityClass, $entity);
             }
         }
 

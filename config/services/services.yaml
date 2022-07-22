@@ -27,6 +27,10 @@ services:
         arguments:
             - !tagged_iterator ddr_crud_admin.routes_provider
 
+    Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver:
+        arguments:
+            - !tagged_iterator ddr_crud_admin.route_info_provider
+
     Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver:
         arguments:
             - !tagged_iterator ddr_crud_admin.template_provider
@@ -176,16 +180,20 @@ services:
             -   name: 'ddr_crud_admin.template_provider'
                 priority: -250
 
+    Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\DefaultRouteInfoProvider:
+        tags:
+            -   name: 'ddr_crud_admin.route_info_provider'
+                priority: -250
+
     Dontdrinkandroot\CrudAdminBundle\Service\NewInstance\DefaultNewInstanceProvider:
         tags:
             - { name: 'ddr_crud_admin.new_instance_provider', priority: -250 }
 
     Dontdrinkandroot\CrudAdminBundle\Service\Url\DefaultUrlProvider:
         arguments:
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver'
             - '@router'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver'
-            - '@security.authorization_checker'
         tags:
             - { name: 'ddr_crud_admin.url_provider', priority: -250 }
 
@@ -217,4 +225,5 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Routing\CrudRoutesLoader:
         arguments:
             - !tagged_iterator ddr_crud_admin.controller
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver'
         tags: [ 'routing.loader' ]

@@ -50,6 +50,7 @@ class DoctrineFormProvider implements FormProviderInterface
         );
 
         $fields = array_keys($classMetadata->fieldMappings);
+        $translationDomain = $this->translationDomainResolver->resolve($crudOperation, $entityClass);
 
         foreach ($fields as $field) {
             $fieldMapping = $classMetadata->fieldMappings[$field];
@@ -58,6 +59,7 @@ class DoctrineFormProvider implements FormProviderInterface
                 $formBuilder->add(
                     $fieldName,
                     null,
+                    ['translation_domain' => $translationDomain]
                 );
             }
         }

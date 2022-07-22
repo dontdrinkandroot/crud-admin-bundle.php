@@ -37,8 +37,8 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         $sortFields = [];
         $fieldDefinitions = Asserted::notNull($this->fieldDefinitionsResolver->resolve($context));
         foreach ($fieldDefinitions as $fieldDefinition) {
-            if ($fieldDefinition->isSortable()) {
-                $sortFields[] = 'entity.' . $fieldDefinition->getPropertyPath();
+            if ($fieldDefinition->sortable) {
+                $sortFields[] = 'entity.' . $fieldDefinition->propertyPath;
             }
         }
 

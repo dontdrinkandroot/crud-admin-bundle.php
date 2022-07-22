@@ -7,16 +7,15 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service;
  */
 class AbstractProviderService
 {
-    /** @var iterable<T> */
-    private iterable $providers;
-
     /** @param iterable<T> $providers */
-    public function __construct(iterable $providers = [])
+    public function __construct(protected iterable $providers = [])
     {
-        $this->providers = $providers;
     }
 
-    /** @return iterable<T> */
+    /**
+     * @deprecated
+     * @return iterable<T>
+     */
     public function getProviders()
     {
         return $this->providers;

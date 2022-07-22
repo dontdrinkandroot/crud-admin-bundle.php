@@ -20,7 +20,7 @@ class TemplateResolver extends AbstractProviderService
      */
     public function resolve(string $crudOperation, string $entityClass): ?string
     {
-        foreach ($this->getProviders() as $provider) {
+        foreach ($this->providers as $provider) {
             assert($provider instanceof TemplateProviderInterface);
             if ($provider->supportsTemplate($crudOperation, $entityClass)) {
                 return $provider->provideTemplate($crudOperation, $entityClass);

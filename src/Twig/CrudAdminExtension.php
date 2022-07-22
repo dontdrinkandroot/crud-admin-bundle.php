@@ -61,7 +61,7 @@ class CrudAdminExtension extends AbstractExtension
 
     public function renderFieldDefinitionValue(object $entity, FieldDefinition $fieldDefinition): string
     {
-        $value = $this->propertyAccessor->getValue($entity, $fieldDefinition->getPropertyPath());
+        $value = $this->propertyAccessor->getValue($entity, $fieldDefinition->propertyPath);
         return $this->fieldRenderer->render($fieldDefinition, $value);
     }
 

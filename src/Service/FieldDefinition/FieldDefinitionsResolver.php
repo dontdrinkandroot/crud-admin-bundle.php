@@ -18,7 +18,7 @@ class FieldDefinitionsResolver extends AbstractProviderService
      */
     public function resolve(string $crudOperation, string $entityClass): ?array
     {
-        foreach ($this->getProviders() as $provider) {
+        foreach ($this->providers as $provider) {
             assert($provider instanceof FieldDefinitionsProviderInterface);
             if ($provider->supportsFieldDefinitions($crudOperation, $entityClass)) {
                 return $provider->provideFieldDefinitions($crudOperation, $entityClass);

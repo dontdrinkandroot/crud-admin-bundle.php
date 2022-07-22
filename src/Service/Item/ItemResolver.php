@@ -18,7 +18,7 @@ class ItemResolver extends AbstractProviderService
      */
     public function resolve(string $crudOperation, string $entityClass, mixed $id): ?object
     {
-        foreach ($this->getProviders() as $provider) {
+        foreach ($this->providers as $provider) {
             assert($provider instanceof ItemProviderInterface);
             if ($provider->supportsItem($crudOperation, $entityClass, $id)) {
                 return $provider->provideItem($crudOperation, $entityClass, $id);

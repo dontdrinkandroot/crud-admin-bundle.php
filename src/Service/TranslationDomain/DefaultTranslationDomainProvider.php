@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
+use Dontdrinkandroot\Common\ClassNameUtils;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 
 class DefaultTranslationDomainProvider implements TranslationDomainProviderInterface
@@ -19,6 +20,6 @@ class DefaultTranslationDomainProvider implements TranslationDomainProviderInter
      */
     public function resolveTranslationDomain(string $crudOperation, string $entityClass): ?string
     {
-        return 'DdrCrudAdmin';
+        return ClassNameUtils::getShortName($entityClass);
     }
 }

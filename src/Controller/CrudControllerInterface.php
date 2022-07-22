@@ -14,12 +14,6 @@ interface CrudControllerInterface
      */
     public function getEntityClass(): string;
 
-    public function getRouteInfo(string $crudOperation): ?RouteInfo;
-
-    public function getNamePrefix(): string;
-
-    public function getPathPrefix(): string;
-
     /**
      * @param string $crudOperation
      * @param T|null $entity

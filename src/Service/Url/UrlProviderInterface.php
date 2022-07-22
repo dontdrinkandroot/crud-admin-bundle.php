@@ -8,13 +8,25 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface UrlProviderInterface extends ProviderInterface
 {
-    public function supportsUrl(CrudAdminContext $context): bool;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T|null          $entity
+     *
+     * @return bool
+     */
+    public function supportsUrl(string $crudOperation, string $entityClass, ?object $entity): bool;
 
     /**
-     * @param CrudAdminContext $context
+     * @template T of object
      *
-     * @return string|null
-     * @throws EndProviderChainException
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     * @param T|null          $entity
+     *
+     * @return string
      */
-    public function provideUrl(CrudAdminContext $context): ?string;
+    public function provideUrl(string $crudOperation, string $entityClass, ?object $entity): string;
 }
