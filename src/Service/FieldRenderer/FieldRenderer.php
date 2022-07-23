@@ -10,7 +10,7 @@ class FieldRenderer extends AbstractProviderService
 {
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
-        foreach ($this->getProviders() as $provider) {
+        foreach ($this->providers as $provider) {
             assert($provider instanceof FieldRendererProviderInterface);
             if ($provider->supports($fieldDefinition, $value)) {
                 return $provider->render($fieldDefinition, $value);

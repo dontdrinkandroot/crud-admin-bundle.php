@@ -16,7 +16,7 @@ class ItemPersister extends AbstractProviderService
      */
     public function persistItem(string $crudOperation, string $entityClass, object $entity): void
     {
-        foreach ($this->getProviders() as $provider) {
+        foreach ($this->providers as $provider) {
             assert($provider instanceof ItemPersisterProviderInterface);
             if ($provider->supportsPersist($crudOperation, $entityClass, $entity)) {
                 $provider->persist($crudOperation, $entityClass, $entity);

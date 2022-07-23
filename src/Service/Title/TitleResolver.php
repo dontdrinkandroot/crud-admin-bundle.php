@@ -18,7 +18,7 @@ class TitleResolver extends AbstractProviderService
      */
     public function resolve(string $crudOperation, string $entityClass, ?object $entity): ?string
     {
-        foreach ($this->getProviders() as $provider) {
+        foreach ($this->providers as $provider) {
             assert($provider instanceof TitleProviderInterface);
             if ($provider->supportsTitle($crudOperation, $entityClass, $entity)) {
                 return $provider->provideTitle($crudOperation, $entityClass, $entity);

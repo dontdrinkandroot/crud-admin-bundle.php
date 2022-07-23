@@ -11,13 +11,4 @@ class AbstractProviderService
     public function __construct(protected iterable $providers = [])
     {
     }
-
-    /**
-     * @deprecated
-     * @return iterable<T>
-     */
-    public function getProviders()
-    {
-        return $this->providers;
-    }
 }
