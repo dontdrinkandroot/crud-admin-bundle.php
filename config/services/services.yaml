@@ -117,12 +117,6 @@ services:
         tags:
             - { name: twig.extension }
 
-    Dontdrinkandroot\CrudAdminBundle\Routing\EntityLoader:
-        arguments:
-            - '@file_locator'
-        tags:
-            - { name: routing.loader }
-
     Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry:
         arguments:
             - !tagged_iterator ddr_crud_admin.controller
