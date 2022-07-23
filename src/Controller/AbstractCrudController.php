@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 
 use Dontdrinkandroot\Common\Asserted;
-use Dontdrinkandroot\Common\ClassNameUtils;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
@@ -12,6 +11,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsRes
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
@@ -22,8 +22,6 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Knp\Component\Pager\PaginatorInterface;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use RuntimeException;
-use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -31,16 +29,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Routing\Route;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\String\Inflector\EnglishInflector;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
-
-use function PHPUnit\Framework\matches;
 
 /**
  * @template T of object
@@ -65,16 +59,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
-        $limit = null;
-        if ($request->query->has('perPage')) {
-            $limit = $request->query->getInt('perPage');
-        }
-
-        $pagination = $this->getPaginator()->paginate(
-            $this->getPaginationTarget($crudOperation),
-            $request->query->getInt('page', 1),
-            $limit
-        );
+        $pagination = $this->getPaginationResolver()->resolve($crudOperation, $this->getEntityClass());
 
         $context = [
             'entityClass'       => $this->getEntityClass(),
@@ -217,7 +202,8 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             ItemPersister::class,
             RouteInfoResolver::class,
             UrlResolver::class,
-            EventDispatcherInterface::class
+            EventDispatcherInterface::class,
+            PaginationResolver::class
         ];
     }
 
@@ -309,6 +295,11 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     protected function getPaginationTargetResolver(): PaginationTargetResolver
     {
         return $this->getContainer()->get(PaginationTargetResolver::class);
+    }
+
+    protected function getPaginationResolver(): PaginationResolver
+    {
+        return $this->getContainer()->get(PaginationResolver::class);
     }
 
     protected function getContainer(): ContainerInterface

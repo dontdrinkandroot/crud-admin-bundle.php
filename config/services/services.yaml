@@ -164,6 +164,7 @@ services:
             - '@knp_paginator'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver'
+            - '@request_stack'
         tags:
             -   name: 'ddr_crud_admin.pagination_provider'
                 priority: -250

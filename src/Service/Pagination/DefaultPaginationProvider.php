@@ -3,26 +3,26 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
 use Dontdrinkandroot\Common\Asserted;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class DefaultPaginationProvider implements PaginationProviderInterface
 {
     public function __construct(
-        private PaginatorInterface $paginator,
-        private PaginationTargetResolver $paginationTargetResolver,
-        private FieldDefinitionsResolver $fieldDefinitionsResolver
+        private readonly PaginatorInterface $paginator,
+        private readonly PaginationTargetResolver $paginationTargetResolver,
+        private readonly FieldDefinitionsResolver $fieldDefinitionsResolver,
+        private readonly RequestStack $requestStack
     ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function supportsPagination(CrudAdminContext $context): bool
+    public function supportsPagination(string $crudOperation, string $entityClass): bool
     {
         return true;
     }
@@ -30,12 +30,12 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideCollection(CrudAdminContext $context): PaginationInterface
+    public function providePagination(string $crudOperation, string $entityClass): ?PaginationInterface
     {
-        $paginationTarget = $this->paginationTargetResolver->resolve($context);
+        $paginationTarget = $this->paginationTargetResolver->resolve($crudOperation, $entityClass);
 
         $sortFields = [];
-        $fieldDefinitions = Asserted::notNull($this->fieldDefinitionsResolver->resolve($context));
+        $fieldDefinitions = Asserted::notNull($this->fieldDefinitionsResolver->resolve($crudOperation, $entityClass));
         foreach ($fieldDefinitions as $fieldDefinition) {
             if ($fieldDefinition->sortable) {
                 $sortFields[] = 'entity.' . $fieldDefinition->propertyPath;
@@ -44,48 +44,22 @@ class DefaultPaginationProvider implements PaginationProviderInterface
 
         $defaultSortFieldName = null;
         $defaultSortDirection = null;
-        if (RequestAttributes::entityClassMatches($context)) {
-            $defaultSortFieldName = $this->getDefaultSortFieldName($context);
-            $defaultSortDirection = RequestAttributes::getDefaultSortDirection($context->getRequest());
-        }
 
+        $request = Asserted::notNull($this->requestStack->getMainRequest());
         $limit = null;
-        if ($context->getRequest()->query->has('perPage')) {
-            $limit = $context->getRequest()->query->getInt('perPage');
+        if ($request->query->has('perPage')) {
+            $limit = $request->query->getInt('perPage');
         }
 
         return $this->paginator->paginate(
             $paginationTarget,
-            $context->getRequest()->query->getInt('page', 1),
+            $request->query->getInt('page', 1),
             $limit,
             [
-                PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
+                PaginatorInterface::SORT_FIELD_ALLOW_LIST   => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
-                PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection
+                PaginatorInterface::DEFAULT_SORT_DIRECTION  => $defaultSortDirection
             ]
         );
-    }
-
-    /**
-     * @param CrudAdminContext $context
-     *
-     * @return list<string>|string|null
-     */
-    public function getDefaultSortFieldName(CrudAdminContext $context): null|array|string
-    {
-        $defaultSortFieldName = RequestAttributes::getDefaultSortFieldName($context->getRequest());
-        if (null === $defaultSortFieldName) {
-            return null;
-        }
-
-        if (is_array($defaultSortFieldName)) {
-            $mappedFieldNames = [];
-            foreach ($defaultSortFieldName as $name) {
-                $mappedFieldNames[] = 'entity.' . $name;
-            }
-            return $mappedFieldNames;
-        }
-
-        return 'entity.' . $defaultSortFieldName;
     }
 }

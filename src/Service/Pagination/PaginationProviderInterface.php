@@ -2,13 +2,28 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 interface PaginationProviderInterface extends ProviderInterface
 {
-    public function supportsPagination(CrudAdminContext $context): bool;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return bool
+     */
+    public function supportsPagination(string $crudOperation, string $entityClass): bool;
 
-    public function provideCollection(CrudAdminContext $context): ?PaginationInterface;
+    /**
+     * @template T of object
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return PaginationInterface|null
+     */
+    public function providePagination(string $crudOperation, string $entityClass): ?PaginationInterface;
 }
