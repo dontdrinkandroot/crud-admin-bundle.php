@@ -46,4 +46,9 @@ class CrudControllerRegistry
         return $this->findControllerByEntityClass($entityClass)
             ?? throw new RuntimeException('No controller found for entityClass ' . $entityClass);
     }
+
+    public function getControllersByEntityClass(): array
+    {
+        return $this->controllersByEntityClass;
+    }
 }

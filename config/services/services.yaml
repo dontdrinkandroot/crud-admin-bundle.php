@@ -115,3 +115,7 @@ services:
             - !tagged_iterator ddr_crud_admin.controller
             - '@Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver'
         tags: [ 'routing.loader' ]
+
+    Dontdrinkandroot\CrudAdminBundle\Command\InfoCommand:
+        autoconfigure: true
+        autowire: true

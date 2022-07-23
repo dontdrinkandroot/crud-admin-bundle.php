@@ -3,8 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 
 class DefaultTemplateProvider implements TemplateProviderInterface
 {
@@ -13,7 +11,11 @@ class DefaultTemplateProvider implements TemplateProviderInterface
      */
     public function supportsTemplate(string $crudOperation, string $entityClass): bool
     {
-        return true;
+        return in_array(
+            $crudOperation,
+            [CrudOperation::LIST, CrudOperation::READ, CrudOperation::CREATE, CrudOperation::UPDATE],
+            true
+        );
     }
 
     /**
