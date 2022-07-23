@@ -343,7 +343,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
      */
     protected function getTitle(string $crudOperation, ?object $entity = null): string
     {
-        return $this->getTitleResolver()->resolve($crudOperation, $this->getEntityClass(), $entity);
+        return Asserted::notNull($this->getTitleResolver()->resolve($crudOperation, $this->getEntityClass(), $entity));
     }
 
     /**
@@ -353,7 +353,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
      */
     protected function getFieldDefinitions(string $crudOperation): array
     {
-        return $this->getFieldDefinitionsResolver()->resolve($crudOperation, $this->getEntityClass());
+        return Asserted::notNull(
+            $this->getFieldDefinitionsResolver()->resolve($crudOperation, $this->getEntityClass())
+        );
     }
 
     protected function getPaginationTarget(string $crudOperation): mixed
