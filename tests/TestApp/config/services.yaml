@@ -9,3 +9,9 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Security\:
         resource: '../Security'
+
+    Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Controller\:
+        resource: '../Controller'
+
+    Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Repository\:
+        resource: '../Repository'

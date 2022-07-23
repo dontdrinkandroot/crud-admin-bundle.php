@@ -2,30 +2,23 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
-/**
- * @ORM\Entity()
- */
+#[ORM\Entity]
 class ExampleEntity
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer", nullable=false)
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private ?int $id = null;
 
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $nullField = null;
 
-    /**
-     * @Assert\NotBlank()
-     * @ORM\Column(type="string")
-     */
+    #[Assert\NotBlank]
+    #[ORM\Column(type: Types::STRING, nullable: false)]
     private ?string $requiredField = null;
 
     public function getId(): ?int

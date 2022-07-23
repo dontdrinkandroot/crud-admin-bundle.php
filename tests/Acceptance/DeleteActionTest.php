@@ -36,7 +36,7 @@ class DeleteActionTest extends AbstractIntegrationTestCase
         assert($exampleEntity instanceof ExampleEntity);
         $crawler = $this->kernelBrowser->request('GET', '/example_entities/' . $exampleEntity->getId() . '/delete');
         $this->assertEquals(Response::HTTP_FOUND, $this->kernelBrowser->getResponse()->getStatusCode());
-        $this->assertTrue($this->kernelBrowser->getResponse()->isRedirect('/example_entities/'));
+        self::assertResponseRedirects('/example_entities/');
 
         /* Test READ throws 404 */
         $crawler = $this->kernelBrowser->request('GET', '/example_entities/' . $exampleEntity->getId());

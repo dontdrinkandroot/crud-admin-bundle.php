@@ -50,19 +50,21 @@ class UpdateActionTest extends AbstractIntegrationTestCase
         /* Test submission is working */
         $crawler = $this->kernelBrowser->submitForm('Submit', ['form[requiredField]' => 'ChangedValue']);
         $this->assertEquals(Response::HTTP_FOUND, $this->kernelBrowser->getResponse()->getStatusCode());
-        $this->assertTrue(
-            $this->kernelBrowser->getResponse()->isRedirect('/example_entities/' . $exampleEntity->getId())
-        );
+        self::assertResponseRedirects('/example_entities/');
 
-        /* Test redirect to READ page after submission */
+        /* Test redirect to LIST page after submission */
         $crawler = $this->kernelBrowser->followRedirect();
-        $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
+        $trs = $crawler->filter('tbody tr');
+        $this->assertCount(10, $trs);
 
         /* Test values are set as expected */
+        $crawler = $this->kernelBrowser->request('GET', '/example_entities/' . $exampleEntity->getId());
+        self::assertResponseStatusCodeSame(200);
         $dds = $crawler->filter('dd');
         $this->assertCount(3, $dds);
         /* Id */
-        $this->assertEquals('2', $dds->eq(0)->text(null, true));
+        $this->assertEquals($exampleEntity->getId(), $dds->eq(0)->text(null, true));
         /* NullField */
         $this->assertEquals('', $dds->eq(1)->text(null, true));
         /* RequiredField */

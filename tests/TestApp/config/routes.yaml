@@ -1,14 +1,3 @@
-ddr_crud_admin_test.example_entity:
-    prefix: /example_entities/
-    resource: '../../../config/crud_routes.yaml'
-    name_prefix: ddr_crud_admin_test.example_entity.
-    defaults:
-        ddr_crud_admin.routes.prefix: ddr_crud_admin_test.example_entity.
-        ddr_crud_admin.entity_class: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity'
-        ddr_crud_admin.default_sort_field_name: requiredField
-        ddr_crud_admin.default_sort_direction: asc
-
-ddr_crud_admin_test.example_entity_alternative:
-    prefix: /alternative_example_entities/
-    resource: 'ddr_crud_admin/example_entity.yaml'
-    type: ddr_crud_admin_entity
+ddr_crud:
+    resource: .
+    type: ddr_crud
