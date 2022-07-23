@@ -48,9 +48,6 @@ class DdrCrudAdminExtension extends Extension
             ->registerForAutoconfiguration(ItemProviderInterface::class)
             ->addTag('ddr_crud_admin.item_provider');
         $container
-            ->registerForAutoconfiguration(RoutesProviderInterface::class)
-            ->addTag('ddr_crud_admin.routes_provider');
-        $container
             ->registerForAutoconfiguration(RouteInfoProviderInterface::class)
             ->addTag('ddr_crud_admin.route_info_provider');
         $container
