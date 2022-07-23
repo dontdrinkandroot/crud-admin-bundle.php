@@ -34,7 +34,7 @@ jobs:
             -   name: "Globally install symfony/flex"
                 run: "composer global require --no-progress --no-scripts --no-plugins symfony/flex"
             -   name: "Install dependencies with Composer"
-                uses: "ramsey/composer-install@v1"
+                uses: "ramsey/composer-install@v2"
                 with:
                     dependency-versions: "${{ matrix.deps }}"
             -   name: "Run PHPUnit"
@@ -64,7 +64,7 @@ jobs:
             -   name: "Globally install symfony/flex"
                 run: "composer global require --no-progress --no-scripts --no-plugins symfony/flex"
             -   name: "Install dependencies with Composer"
-                uses: "ramsey/composer-install@v1"
+                uses: "ramsey/composer-install@v2"
             -   name: "Install psalm"
                 run: |
                     wget https://github.com/vimeo/psalm/releases/latest/download/psalm.phar -O /usr/local/bin/psalm \
