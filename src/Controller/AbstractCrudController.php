@@ -124,8 +124,12 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             $this->getEventDispatcher()->dispatch(
                 new PostProcessFormEvent($crudOperation, $this->getEntityClass(), $form, $entity)
             );
+
             $redirectUrl = $this->getUrl(CrudOperation::LIST);
-            if (null !== $redirectUrl) {
+            if (null !== $redirectUrl && $this->getAuthorizationChecker()->isGranted(
+                    CrudOperation::LIST,
+                    $this->getEntityClass()
+                )) {
                 return new RedirectResponse($redirectUrl);
             }
         }
