@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
 use Dontdrinkandroot\Common\Asserted;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Knp\Component\Pager\Pagination\PaginationInterface;
@@ -22,7 +23,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsPagination(string $crudOperation, string $entityClass): bool
+    public function supportsPagination(string $entityClass): bool
     {
         return true;
     }
@@ -30,12 +31,14 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function providePagination(string $crudOperation, string $entityClass): ?PaginationInterface
+    public function providePagination(string $entityClass): ?PaginationInterface
     {
-        $paginationTarget = $this->paginationTargetResolver->resolve($crudOperation, $entityClass);
+        $paginationTarget = $this->paginationTargetResolver->resolve($entityClass);
 
         $sortFields = [];
-        $fieldDefinitions = Asserted::notNull($this->fieldDefinitionsResolver->resolve($crudOperation, $entityClass));
+        $fieldDefinitions = Asserted::notNull(
+            $this->fieldDefinitionsResolver->resolve(CrudOperation::LIST, $entityClass)
+        );
         foreach ($fieldDefinitions as $fieldDefinition) {
             if ($fieldDefinition->sortable) {
                 $sortFields[] = 'entity.' . $fieldDefinition->propertyPath;
@@ -56,9 +59,9 @@ class DefaultPaginationProvider implements PaginationProviderInterface
             $request->query->getInt('page', 1),
             $limit,
             [
-                PaginatorInterface::SORT_FIELD_ALLOW_LIST   => $sortFields,
+                PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
-                PaginatorInterface::DEFAULT_SORT_DIRECTION  => $defaultSortDirection
+                PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection
             ]
         );
     }

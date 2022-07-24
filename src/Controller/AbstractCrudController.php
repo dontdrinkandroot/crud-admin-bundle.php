@@ -59,7 +59,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
-        $pagination = $this->getPaginationResolver()->resolve($crudOperation, $this->getEntityClass());
+        $pagination = $this->getPaginationResolver()->resolve($this->getEntityClass());
 
         $context = [
             'entityClass'       => $this->getEntityClass(),
@@ -358,9 +358,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         );
     }
 
-    protected function getPaginationTarget(string $crudOperation): mixed
+    protected function getPaginationTarget(): mixed
     {
-        return $this->getPaginationTargetResolver()->resolve($crudOperation, $this->getEntityClass());
+        return $this->getPaginationTargetResolver()->resolve($this->getEntityClass());
     }
 
     /**

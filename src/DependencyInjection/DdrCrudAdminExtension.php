@@ -11,6 +11,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
@@ -68,6 +69,9 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(TranslationDomainProviderInterface::class)
             ->addTag('ddr_crud_admin.translation_domain_provider');
+        $container
+            ->registerForAutoconfiguration(QueryBuilderExtensionProviderInterface::class)
+            ->addTag('ddr_crud_admin.query_builder_extension_provider');
         $container
             ->registerForAutoconfiguration(CrudControllerInterface::class)
             ->addTag('ddr_crud_admin.controller')
