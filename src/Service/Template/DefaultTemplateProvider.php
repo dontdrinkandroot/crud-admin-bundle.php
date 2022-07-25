@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use RuntimeException;
 
 class DefaultTemplateProvider implements TemplateProviderInterface
 {
@@ -25,11 +26,12 @@ class DefaultTemplateProvider implements TemplateProviderInterface
     {
         $prefix = '@DdrCrudAdmin/';
 
-        return match($crudOperation) {
+        return match ($crudOperation) {
             CrudOperation::LIST => $prefix . 'list.html.twig',
             CrudOperation::READ => $prefix . 'read.html.twig',
             CrudOperation::CREATE => $prefix . 'update.html.twig',
             CrudOperation::UPDATE => $prefix . 'update.html.twig',
+            default => throw new RuntimeException('Unsupported CrudOperation: ' . $crudOperation->value)
         };
     }
 }

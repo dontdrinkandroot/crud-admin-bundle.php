@@ -60,7 +60,7 @@ class InfoCommand extends Command
             $output->writeln("\t" . 'routes:');
             foreach (CrudOperation::all() as $crudOperation) {
                 $routeInfo = $this->routeInfoResolver->resolve($crudOperation, $entityClass);
-                $output->write("\t\t" . $crudOperation . ":");
+                $output->write("\t\t" . $crudOperation->value . ":");
                 if (null === $routeInfo) {
                     $output->writeln(' null');
                 } else {
@@ -72,17 +72,17 @@ class InfoCommand extends Command
             $output->writeln("\t" . 'templates:');
             foreach (CrudOperation::all() as $crudOperation) {
                 $template = $this->templateResolver->resolve($crudOperation, $entityClass);
-                $output->writeln(sprintf("\t\t%s: %s", $crudOperation, $template ?? 'null'));
+                $output->writeln(sprintf("\t\t%s: %s", $crudOperation->value, $template ?? 'null'));
             }
             $output->writeln("\t" . 'translation_domains:');
             foreach (CrudOperation::all() as $crudOperation) {
                 $translationDomain = $this->translationDomainResolver->resolve($crudOperation, $entityClass);
-                $output->writeln(sprintf("\t\t%s: %s", $crudOperation, $translationDomain ?? 'null'));
+                $output->writeln(sprintf("\t\t%s: %s", $crudOperation->value, $translationDomain ?? 'null'));
             }
             $output->writeln("\t" . 'field_definitions:');
             foreach (CrudOperation::all() as $crudOperation) {
                 $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($crudOperation, $entityClass);
-                $output->write("\t\t" . $crudOperation . ":");
+                $output->write("\t\t" . $crudOperation->value . ":");
                 if (null === $fieldDefinitions) {
                     $output->writeln(' null');
                 } else {

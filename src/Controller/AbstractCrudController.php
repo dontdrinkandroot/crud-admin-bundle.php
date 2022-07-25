@@ -129,7 +129,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             if (
                 null !== $redirectUrl
                 && $this->getAuthorizationChecker()->isGranted(
-                    CrudOperation::LIST,
+                    CrudOperation::LIST->value,
                     $this->getEntityClass()
                 )
             ) {
