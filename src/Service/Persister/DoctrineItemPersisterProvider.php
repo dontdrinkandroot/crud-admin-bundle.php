@@ -16,7 +16,7 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsPersist(string $crudOperation, string $entityClass, object $entity): bool
+    public function supportsPersist(CrudOperation $crudOperation, string $entityClass, object $entity): bool
     {
         return
             null !== $this->managerRegistry->getManagerForClass($entityClass)
@@ -30,7 +30,7 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function persist(string $crudOperation, string $entityClass, object $entity): void
+    public function persist(CrudOperation $crudOperation, string $entityClass, object $entity): void
     {
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),

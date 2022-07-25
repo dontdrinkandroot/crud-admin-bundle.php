@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\Form\FormInterface;
 
@@ -14,13 +14,13 @@ class FormResolver extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      * @param T|null          $entity
      *
      * @return ?FormInterface
      */
-    public function resolve(string $crudOperation, string $entityClass, ?object $entity): ?FormInterface
+    public function resolve(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?FormInterface
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof FormProviderInterface);

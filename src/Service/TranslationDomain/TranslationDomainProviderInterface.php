@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface TranslationDomainProviderInterface extends ProviderInterface
@@ -10,20 +10,20 @@ interface TranslationDomainProviderInterface extends ProviderInterface
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      *
      * @return bool
      */
-    public function supportsTranslationDomain(string $crudOperation, string $entityClass): bool;
+    public function supportsTranslationDomain(CrudOperation $crudOperation, string $entityClass): bool;
 
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      *
      * @return ?string
      */
-    public function resolveTranslationDomain(string $crudOperation, string $entityClass): ?string;
+    public function resolveTranslationDomain(CrudOperation $crudOperation, string $entityClass): ?string;
 }

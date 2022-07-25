@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Stringable;
 
 class ToStringTitleProvider implements TitleProviderInterface
@@ -11,7 +10,7 @@ class ToStringTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsTitle(string $crudOperation, string $entityClass, ?object $entity): bool
+    public function supportsTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool
     {
         return in_array($crudOperation, [CrudOperation::READ, CrudOperation::UPDATE], true)
             && null !== $entity
@@ -21,7 +20,7 @@ class ToStringTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTitle(string $crudOperation, string $entityClass, ?object $entity): ?string
+    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?string
     {
         return (string)$entity;
     }

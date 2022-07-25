@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
@@ -13,12 +14,12 @@ class TemplateResolver extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      *
      * @return ?string
      */
-    public function resolve(string $crudOperation, string $entityClass): ?string
+    public function resolve(CrudOperation $crudOperation, string $entityClass): ?string
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof TemplateProviderInterface);

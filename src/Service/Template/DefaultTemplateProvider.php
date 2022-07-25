@@ -9,7 +9,7 @@ class DefaultTemplateProvider implements TemplateProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsTemplate(string $crudOperation, string $entityClass): bool
+    public function supportsTemplate(CrudOperation $crudOperation, string $entityClass): bool
     {
         return in_array(
             $crudOperation,
@@ -21,7 +21,7 @@ class DefaultTemplateProvider implements TemplateProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTemplate(string $crudOperation, string $entityClass): string
+    public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string
     {
         $prefix = '@DdrCrudAdmin/';
 

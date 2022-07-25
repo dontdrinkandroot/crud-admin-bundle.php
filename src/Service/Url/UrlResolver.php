@@ -2,8 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
-use Dontdrinkandroot\CrudAdminBundle\Exception\EndProviderChainException;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class UrlResolver extends AbstractProviderService
@@ -11,13 +10,13 @@ class UrlResolver extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      * @param T|null          $entity
      *
      * @return string|null
      */
-    public function resolve(string $crudOperation, string $entityClass, ?object $entity): ?string
+    public function resolve(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?string
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof UrlProviderInterface);

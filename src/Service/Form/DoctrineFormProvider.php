@@ -6,8 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -28,7 +26,7 @@ class DoctrineFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsForm(string $crudOperation, string $entityClass, ?object $entity): bool
+    public function supportsForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool
     {
         return null !== $this->managerRegistry->getManagerForClass($entityClass);
     }
@@ -36,7 +34,7 @@ class DoctrineFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideForm(string $crudOperation, string $entityClass, ?object $entity): ?FormInterface
+    public function provideForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?FormInterface
     {
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),

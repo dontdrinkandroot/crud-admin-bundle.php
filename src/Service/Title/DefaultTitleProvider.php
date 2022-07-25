@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -17,7 +18,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsTitle(string $crudOperation, string $entityClass, ?object $entity): bool
+    public function supportsTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool
     {
         return true;
     }
@@ -25,10 +26,10 @@ class DefaultTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTitle(string $crudOperation, string $entityClass, ?object $entity): string
+    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
     {
         return $this->translator->trans(
-            id: $crudOperation,
+            id: $crudOperation->value,
             domain: $this->translationDomainResolver->resolve($crudOperation, $entityClass)
         );
     }

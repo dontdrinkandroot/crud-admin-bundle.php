@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
@@ -10,11 +11,11 @@ class ItemPersister extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      * @param T $entity
      */
-    public function persistItem(string $crudOperation, string $entityClass, object $entity): void
+    public function persistItem(CrudOperation $crudOperation, string $entityClass, object $entity): void
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof ItemPersisterProviderInterface);

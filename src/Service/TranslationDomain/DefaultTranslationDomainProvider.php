@@ -3,14 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
 use Dontdrinkandroot\Common\ClassNameUtils;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\Common\CrudOperation;
 
 class DefaultTranslationDomainProvider implements TranslationDomainProviderInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supportsTranslationDomain(string $crudOperation, string $entityClass): bool
+    public function supportsTranslationDomain(CrudOperation $crudOperation, string $entityClass): bool
     {
         return true;
     }
@@ -18,7 +18,7 @@ class DefaultTranslationDomainProvider implements TranslationDomainProviderInter
     /**
      * {@inheritdoc}
      */
-    public function resolveTranslationDomain(string $crudOperation, string $entityClass): ?string
+    public function resolveTranslationDomain(CrudOperation $crudOperation, string $entityClass): ?string
     {
         return ClassNameUtils::getShortName($entityClass);
     }

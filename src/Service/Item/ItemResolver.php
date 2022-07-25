@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class ItemResolver extends AbstractProviderService
@@ -10,13 +10,13 @@ class ItemResolver extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      * @param mixed           $id
      *
      * @return T|null
      */
-    public function resolve(string $crudOperation, string $entityClass, mixed $id): ?object
+    public function resolve(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof ItemProviderInterface);

@@ -10,34 +10,32 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 class ExampleEntityVoter extends Voter
 {
-    public function __construct(private AuthorizationCheckerInterface $authorizationChecker)
+    public function __construct(private readonly AuthorizationCheckerInterface $authorizationChecker)
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function supports($attribute, $subject): bool
+    protected function supports(string $attribute, $subject): bool
     {
         return is_a($subject, ExampleEntity::class, true)
-            && in_array($attribute, CrudOperation::all());
+            && in_array(CrudOperation::tryFrom($attribute), CrudOperation::all());
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function voteOnAttribute($attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             return true;
         }
 
-        switch ($attribute) {
-            case CrudOperation::LIST:
-            case CrudOperation::READ:
-                return $this->authorizationChecker->isGranted('ROLE_USER');
-        }
-
-        return false;
+        $crudOperation = CrudOperation::from($attribute);
+        return match ($crudOperation) {
+            CrudOperation::LIST, CrudOperation::READ => $this->authorizationChecker->isGranted('ROLE_USER'),
+            default => false,
+        };
     }
 }

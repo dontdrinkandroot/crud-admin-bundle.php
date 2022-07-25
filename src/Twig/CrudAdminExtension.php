@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Twig;
 
 use Doctrine\Common\Util\ClassUtils;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
@@ -52,7 +53,7 @@ class CrudAdminExtension extends AbstractExtension
     {
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
-        return $this->urlResolver->resolve($crudOperation, $entityClass, $entity);
+        return $this->urlResolver->resolve(CrudOperation::from($crudOperation), $entityClass, $entity);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo;
 
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
@@ -14,12 +15,12 @@ class RouteInfoResolver extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      *
      * @return ?RouteInfo
      */
-    public function resolve(string $crudOperation, string $entityClass): ?RouteInfo
+    public function resolve(CrudOperation $crudOperation, string $entityClass): ?RouteInfo
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof RouteInfoProviderInterface);

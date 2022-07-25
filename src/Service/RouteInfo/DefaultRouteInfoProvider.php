@@ -12,7 +12,7 @@ class DefaultRouteInfoProvider implements RouteInfoProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportRouteInfo(string $crudOperation, string $entityClass): bool
+    public function supportRouteInfo(CrudOperation $crudOperation, string $entityClass): bool
     {
         return true;
     }
@@ -20,7 +20,7 @@ class DefaultRouteInfoProvider implements RouteInfoProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideRouteInfo(string $crudOperation, string $entityClass): RouteInfo
+    public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo
     {
         $tableizedShortName = ClassNameUtils::getTableizedShortName($entityClass);
         $namePrefix = sprintf("ddr_crud_admin.%s.", $tableizedShortName);
@@ -29,7 +29,7 @@ class DefaultRouteInfoProvider implements RouteInfoProviderInterface
         return self::getRouteInfo($crudOperation, $namePrefix, $pathPrefix);
     }
 
-    public static function getRouteInfo(string $crudOperation, string $namePrefix, string $pathPrefix): RouteInfo
+    public static function getRouteInfo(CrudOperation $crudOperation, string $namePrefix, string $pathPrefix): RouteInfo
     {
         return match ($crudOperation) {
             CrudOperation::LIST => new RouteInfo($namePrefix . 'list', $pathPrefix . '/'),

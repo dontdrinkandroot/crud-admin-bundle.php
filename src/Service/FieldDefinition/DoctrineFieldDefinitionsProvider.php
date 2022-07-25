@@ -5,9 +5,8 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 use RuntimeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -20,7 +19,7 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     /**
      * {@inheritdoc}
      */
-    public function supportsFieldDefinitions(string $crudOperation, string $entityClass): bool
+    public function supportsFieldDefinitions(CrudOperation $crudOperation, string $entityClass): bool
     {
         return null !== $this->managerRegistry->getManagerForClass($entityClass);
     }
@@ -28,7 +27,7 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     /**
      * {@inheritdoc}
      */
-    public function provideFieldDefinitions(string $crudOperation, string $entityClass): array
+    public function provideFieldDefinitions(CrudOperation $crudOperation, string $entityClass): array
     {
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),

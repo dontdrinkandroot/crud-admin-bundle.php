@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Dontdrinkandroot\Common\Asserted;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -20,7 +21,7 @@ class DoctrineIdProvider implements IdProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsId(string $crudOperation, string $entityClass, object $entity): bool
+    public function supportsId(CrudOperation $crudOperation, string $entityClass, object $entity): bool
     {
         return null !== $this->managerRegistry->getManagerForClass(ClassUtils::getClass($entity));
     }
@@ -28,7 +29,7 @@ class DoctrineIdProvider implements IdProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideId(string $crudOperation, string $entityClass, object $entity): mixed
+    public function provideId(CrudOperation $crudOperation, string $entityClass, object $entity): mixed
     {
         $realEntityClass = ClassUtils::getClass($entity);
         $entityManager = Asserted::instanceOf(

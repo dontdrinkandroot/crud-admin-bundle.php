@@ -2,7 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class TranslationDomainResolver extends AbstractProviderService
@@ -10,12 +10,12 @@ class TranslationDomainResolver extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param string          $crudOperation
+     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      *
      * @return ?string
      */
-    public function resolve(string $crudOperation, string $entityClass): ?string
+    public function resolve(CrudOperation $crudOperation, string $entityClass): ?string
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof TranslationDomainProviderInterface);

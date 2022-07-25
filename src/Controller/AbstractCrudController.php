@@ -47,7 +47,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     protected ?ContainerInterface $container = null;
 
-    public function getRouteInfo(string $crudOperation): ?RouteInfo
+    public function getRouteInfo(CrudOperation $crudOperation): ?RouteInfo
     {
         return $this->getRouteInfoResolver()->resolve($crudOperation, $this->getEntityClass());
     }
@@ -55,7 +55,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     public function listAction(Request $request): Response
     {
         $crudOperation = CrudOperation::LIST;
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation, $this->getEntityClass())) {
+        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $this->getEntityClass())) {
             throw new AccessDeniedException();
         }
 
@@ -84,7 +84,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation, $entity)) {
+        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity)) {
             throw new AccessDeniedException();
         }
         $title = $this->getTitle($crudOperation, $entity);
@@ -110,7 +110,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         if (CrudOperation::UPDATE === $crudOperation && null === $entity) {
             throw new NotFoundHttpException();
         }
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation, $entity ?? $this->getEntityClass())) {
+        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity ?? $this->getEntityClass())) {
             throw new AccessDeniedException();
         }
 
@@ -156,7 +156,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new NotFoundHttpException();
         }
 
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation, $entity)) {
+        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity)) {
             throw new AccessDeniedException();
         }
 
@@ -172,7 +172,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     /**
      * {@inheritdoc}
      */
-    public function getUrl(string $crudOperation, ?object $entity = null): ?string
+    public function getUrl(CrudOperation $crudOperation, ?object $entity = null): ?string
     {
         return $this->getUrlResolver()->resolve($crudOperation, $this->getEntityClass(), $entity);
     }
@@ -332,33 +332,33 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $response;
     }
 
-    protected function getTemplate(string $crudOperation): string
+    protected function getTemplate(CrudOperation $crudOperation): string
     {
         return Asserted::notNull($this->getTemplateResolver()->resolve($crudOperation, $this->getEntityClass()));
     }
 
-    protected function getTranslationDomain(string $crudOperation): ?string
+    protected function getTranslationDomain(CrudOperation $crudOperation): ?string
     {
         return $this->getTranslationDomainResolver()->resolve($crudOperation, $this->getEntityClass());
     }
 
     /**
-     * @param string $crudOperation
+     * @param CrudOperation $crudOperation
      * @param T|null $entity
      *
      * @return string
      */
-    protected function getTitle(string $crudOperation, ?object $entity = null): string
+    protected function getTitle(CrudOperation $crudOperation, ?object $entity = null): string
     {
         return Asserted::notNull($this->getTitleResolver()->resolve($crudOperation, $this->getEntityClass(), $entity));
     }
 
     /**
-     * @param string $crudOperation
+     * @param CrudOperation $crudOperation
      *
      * @return array<array-key,FieldDefinition>
      */
-    protected function getFieldDefinitions(string $crudOperation): array
+    protected function getFieldDefinitions(CrudOperation $crudOperation): array
     {
         return Asserted::notNull(
             $this->getFieldDefinitionsResolver()->resolve($crudOperation, $this->getEntityClass())
@@ -371,34 +371,34 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     }
 
     /**
-     * @param string $crudOperation
+     * @param CrudOperation $crudOperation
      * @param T      $entity
      *
      * @return mixed
      */
-    protected function getId(string $crudOperation, object $entity): mixed
+    protected function getId(CrudOperation $crudOperation, object $entity): mixed
     {
         return $this->getIdResolver()->resolve($crudOperation, $this->getEntityClass(), $entity);
     }
 
     /**
-     * @param string $crudOperation
+     * @param CrudOperation $crudOperation
      * @param mixed  $id
      *
      * @return T|null
      */
-    protected function findItem(string $crudOperation, mixed $id): ?object
+    protected function findItem(CrudOperation $crudOperation, mixed $id): ?object
     {
         return $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id);
     }
 
     /**
-     * @param string $crudOperation
+     * @param CrudOperation $crudOperation
      * @param T|null $entity
      *
      * @return FormInterface
      */
-    protected function getForm(string $crudOperation, ?object $entity): FormInterface
+    protected function getForm(CrudOperation $crudOperation, ?object $entity): FormInterface
     {
         return Asserted::notNull($this->getFormResolver()->resolve($crudOperation, $this->getEntityClass(), $entity));
     }

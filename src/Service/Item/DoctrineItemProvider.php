@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
 
@@ -17,7 +18,7 @@ class DoctrineItemProvider implements ItemProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsItem(string $crudOperation, string $entityClass, mixed $id): bool
+    public function supportsItem(CrudOperation $crudOperation, string $entityClass, mixed $id): bool
     {
         return null !== $this->managerRegistry->getManagerForClass($entityClass);
     }
@@ -25,7 +26,7 @@ class DoctrineItemProvider implements ItemProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideItem(string $crudOperation, string $entityClass, mixed $id): ?object
+    public function provideItem(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
     {
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),

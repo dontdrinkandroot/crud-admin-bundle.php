@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 
+use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 
 /**
@@ -15,10 +16,10 @@ interface CrudControllerInterface
     public function getEntityClass(): string;
 
     /**
-     * @param string $crudOperation
+     * @param CrudOperation $crudOperation
      * @param T|null $entity
      *
      * @return ?string
      */
-    public function getUrl(string $crudOperation, ?object $entity): ?string;
+    public function getUrl(CrudOperation $crudOperation, ?object $entity): ?string;
 }
