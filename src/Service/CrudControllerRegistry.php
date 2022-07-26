@@ -8,7 +8,7 @@ use RuntimeException;
 class CrudControllerRegistry
 {
     /**
-     * @var array<string, CrudControllerInterface>
+     * @var array<class-string, CrudControllerInterface>
      */
     private array $controllersByEntityClass = [];
 
@@ -23,10 +23,12 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template T
+     * @template       T
      *
      * @param class-string<T> $entityClass
      *
+     * @psalm-suppress InvalidReturnType
+     * @psalm-suppress InvalidReturnStatement
      * @return CrudControllerInterface<T>|null
      */
     public function findControllerByEntityClass(string $entityClass): ?CrudControllerInterface
@@ -35,10 +37,11 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template T
+     * @template       T
      *
      * @param class-string<T> $entityClass
      *
+     * @psalm-suppress InvalidReturnType
      * @return CrudControllerInterface<T>
      */
     public function getControllerByEntityClass(string $entityClass): CrudControllerInterface
