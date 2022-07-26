@@ -43,7 +43,7 @@ jobs:
                     dependency-versions: "${{ matrix.deps }}"
             -   name: "Run PHPUnit"
                 run: "vendor/bin/phpunit --coverage-clover=coverage.clover.xml --log-junit log.junit.xml"
-                continue-on-error: "${{ matrix.symfony-require == '4.4.*' }}"
+                continue-on-error: "${{ matrix.deps == 'lowest' }}"
             -   name: "Upload coverage"
                 uses: "actions/upload-artifact@v2"
                 if: matrix.php-version == '8.1' && matrix.deps == 'highest' && matrix.symfony-require == '5.4.*'
