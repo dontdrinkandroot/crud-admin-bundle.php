@@ -16,10 +16,9 @@ use Symfony\Component\Form\FormInterface;
 class DoctrineFormProvider implements FormProviderInterface
 {
     public function __construct(
-        private ManagerRegistry $managerRegistry,
-        private FormFactoryInterface $formFactory,
-        private ItemResolver $itemResolver,
-        private TranslationDomainResolver $translationDomainResolver
+        private readonly ManagerRegistry $managerRegistry,
+        private readonly FormFactoryInterface $formFactory,
+        private readonly TranslationDomainResolver $translationDomainResolver
     ) {
     }
 
@@ -34,7 +33,7 @@ class DoctrineFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?FormInterface
+    public function provideForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): FormInterface
     {
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),

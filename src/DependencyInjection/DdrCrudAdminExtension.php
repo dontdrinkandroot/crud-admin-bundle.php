@@ -6,6 +6,7 @@ use Dontdrinkandroot\CrudAdminBundle\Controller\CrudControllerInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRendererProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
@@ -13,7 +14,6 @@ use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetPr
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainProviderInterface;
@@ -33,6 +33,9 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(FieldRendererProviderInterface::class)
             ->addTag('ddr_crud_admin.field_renderer_provider');
+        $container
+            ->registerForAutoconfiguration(FormTypeProviderInterface::class)
+            ->addTag('ddr_crud_admin.form_type_provider');
         $container
             ->registerForAutoconfiguration(PaginationProviderInterface::class)
             ->addTag('ddr_crud_admin.pagination_provider');

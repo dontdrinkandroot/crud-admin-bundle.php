@@ -28,10 +28,9 @@ services:
         arguments:
             - '@doctrine'
             - '@form.factory'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
         tags:
-            - { name: 'ddr_crud_admin.form_provider', priority: -200 }
+            - { name: 'ddr_crud_admin.form_provider', priority: -250 }
 
     Dontdrinkandroot\CrudAdminBundle\Service\Persister\DoctrineItemPersisterProvider:
         arguments:

@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Symfony\Component\Form\FormInterface;
 
@@ -27,7 +26,7 @@ interface FormProviderInterface extends ProviderInterface
      * @param class-string<T> $entityClass
      * @param T|null          $entity
      *
-     * @return ?FormInterface
+     * @return FormInterface
      */
-    public function provideForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?FormInterface;
+    public function provideForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): FormInterface;
 }
