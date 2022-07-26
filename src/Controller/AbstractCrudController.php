@@ -408,7 +408,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         ?CrudOperation $crudOperation = null,
         array $validCrudOperations = []
     ): bool {
-        if (!$entityClass === $this->getEntityClass()) {
+        if ($entityClass !== $this->getEntityClass()) {
             return false;
         }
 
