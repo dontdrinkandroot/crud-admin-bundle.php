@@ -33,6 +33,8 @@ jobs:
                     ini-values: "zend.assertions=1"
             -   name: "Globally install symfony/flex"
                 run: "composer global require --no-progress --no-scripts --no-plugins symfony/flex"
+            -   name: "Validate composer"
+                run: "composer validate"
             -   name: "Install dependencies with Composer"
                 uses: "ramsey/composer-install@v2"
                 with:
