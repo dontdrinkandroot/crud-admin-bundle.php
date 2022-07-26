@@ -6,6 +6,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
+use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
@@ -16,7 +17,8 @@ class CrudAdminExtension extends AbstractExtension
     public function __construct(
         private readonly PropertyAccessor $propertyAccessor,
         private readonly FieldRenderer $fieldRenderer,
-        private readonly UrlResolver $urlResolver
+        private readonly UrlResolver $urlResolver,
+        private readonly TitleResolver $titleResolver
     ) {
     }
 
@@ -31,7 +33,8 @@ class CrudAdminExtension extends AbstractExtension
                 [$this, 'renderFieldDefinitionValue'],
                 ['is_safe' => ['html']]
             ),
-            new TwigFilter('ddrCrudPath', [$this, 'getPath'])
+            new TwigFilter('ddrCrudPath', [$this, 'getPath']),
+            new TwigFilter('ddrCrudTitle', [$this, 'getTitle'])
         ];
     }
 
@@ -54,6 +57,21 @@ class CrudAdminExtension extends AbstractExtension
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
         return $this->urlResolver->resolve(CrudOperation::from($crudOperation), $entityClass, $entity);
+    }
+
+    /**
+     * @template T
+     *
+     * @param string            $crudOperation
+     * @param class-string<T>|T $entityOrClass
+     *
+     * @return string|null
+     */
+    public function getTitle(string $crudOperation, string|object $entityOrClass): ?string
+    {
+        $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
+        $entity = is_object($entityOrClass) ? $entityOrClass : null;
+        return $this->titleResolver->resolve(CrudOperation::from($crudOperation), $entityClass, $entity);
     }
 
     /**
