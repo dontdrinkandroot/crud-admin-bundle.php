@@ -394,12 +394,32 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     /**
      * @param CrudOperation $crudOperation
-     * @param T|null $entity
+     * @param T|null        $entity
      *
      * @return FormInterface
      */
     protected function getForm(CrudOperation $crudOperation, ?object $entity): FormInterface
     {
         return Asserted::notNull($this->getFormResolver()->resolve($crudOperation, $this->getEntityClass(), $entity));
+    }
+
+    protected function matches(
+        string $entityClass,
+        ?CrudOperation $crudOperation = null,
+        array $validCrudOperations = []
+    ): bool {
+        if (!$entityClass === $this->getEntityClass()) {
+            return false;
+        }
+
+        if (null === $crudOperation) {
+            return true;
+        }
+
+        if (count($validCrudOperations) === 0) {
+            return true;
+        }
+
+        return in_array($crudOperation, $validCrudOperations, true);
     }
 }
