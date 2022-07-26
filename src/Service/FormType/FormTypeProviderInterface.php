@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FormType;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Symfony\Component\Form\FormTypeInterface;
 
 interface FormTypeProviderInterface
@@ -10,22 +11,12 @@ interface FormTypeProviderInterface
     /**
      * @template T of object
      *
-     * @param CrudOperation          $crudOperation
-     * @param class-string<T> $entityClass
-     * @param T|null          $entity
-     *
-     * @return bool
-     */
-    public function supportsFormType(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool;
-
-    /**
-     * @template T of object
-     *
-     * @param CrudOperation          $crudOperation
-     * @param class-string<T> $entityClass
-     * @param T|null          $entity
+     * @param CrudOperation $crudOperation
+     * @param class-string  $entityClass
+     * @param T|null        $entity
      *
      * @return class-string<FormTypeInterface>
+     * @throws UnsupportedByProviderException
      */
     public function provideFormType(CrudOperation $crudOperation, string $entityClass, ?object $entity): string;
 }

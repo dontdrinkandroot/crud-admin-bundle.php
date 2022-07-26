@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class ItemResolver extends AbstractProviderService
@@ -10,7 +11,7 @@ class ItemResolver extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param CrudOperation          $crudOperation
+     * @param CrudOperation   $crudOperation
      * @param class-string<T> $entityClass
      * @param mixed           $id
      *
@@ -20,8 +21,10 @@ class ItemResolver extends AbstractProviderService
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof ItemProviderInterface);
-            if ($provider->supportsItem($crudOperation, $entityClass, $id)) {
+            try {
                 return $provider->provideItem($crudOperation, $entityClass, $id);
+            } catch (UnsupportedByProviderException $e) {
+                /* Continue */
             }
         }
 

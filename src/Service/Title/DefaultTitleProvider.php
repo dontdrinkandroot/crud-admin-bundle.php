@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -13,14 +12,6 @@ class DefaultTitleProvider implements TitleProviderInterface
         private readonly TranslationDomainResolver $translationDomainResolver,
         private readonly TranslatorInterface $translator
     ) {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool
-    {
-        return true;
     }
 
     /**

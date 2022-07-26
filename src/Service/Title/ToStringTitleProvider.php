@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Stringable;
 
 class ToStringTitleProvider implements TitleProviderInterface
@@ -10,18 +11,16 @@ class ToStringTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool
+    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
     {
-        return in_array($crudOperation, [CrudOperation::READ, CrudOperation::UPDATE], true)
-            && null !== $entity
-            && ($entity instanceof Stringable || method_exists($entity, '__toString'));
-    }
+        if (
+            !in_array($crudOperation, [CrudOperation::READ, CrudOperation::UPDATE], true)
+            || null === $entity
+            || (!($entity instanceof Stringable) && !method_exists($entity, '__toString'))
+        ) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?string
-    {
         return (string)$entity;
     }
 }

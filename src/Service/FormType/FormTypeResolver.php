@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FormType;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlProviderInterface;
 use Symfony\Component\Form\FormTypeInterface;
@@ -25,8 +26,10 @@ class FormTypeResolver extends AbstractProviderService
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof FormTypeProviderInterface);
-            if ($provider->supportsFormType($crudOperation, $entityClass, $entity)) {
+            try {
                 return $provider->provideFormType($crudOperation, $entityClass, $entity);
+            } catch (UnsupportedByProviderException $e) {
+                /* Continue */
             }
         }
 

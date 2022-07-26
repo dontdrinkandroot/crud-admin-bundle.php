@@ -6,6 +6,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -13,17 +14,9 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 class DoctrineIdProvider implements IdProviderInterface
 {
     public function __construct(
-        private ManagerRegistry $managerRegistry,
-        private PropertyAccessorInterface $propertyAccessor
+        private readonly ManagerRegistry $managerRegistry,
+        private readonly PropertyAccessorInterface $propertyAccessor
     ) {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function supportsId(CrudOperation $crudOperation, string $entityClass, object $entity): bool
-    {
-        return null !== $this->managerRegistry->getManagerForClass(ClassUtils::getClass($entity));
     }
 
     /**
@@ -32,10 +25,13 @@ class DoctrineIdProvider implements IdProviderInterface
     public function provideId(CrudOperation $crudOperation, string $entityClass, object $entity): mixed
     {
         $realEntityClass = ClassUtils::getClass($entity);
-        $entityManager = Asserted::instanceOf(
+        $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($realEntityClass),
             EntityManagerInterface::class
         );
+        if (null === $entityManager) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+        }
         $classMetadata = $entityManager->getClassMetadata($realEntityClass);
 
         $identifiers = $classMetadata->identifier;

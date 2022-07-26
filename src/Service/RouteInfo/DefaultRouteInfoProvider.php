@@ -12,14 +12,6 @@ class DefaultRouteInfoProvider implements RouteInfoProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportRouteInfo(CrudOperation $crudOperation, string $entityClass): bool
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo
     {
         $tableizedShortName = ClassNameUtils::getTableizedShortName($entityClass);

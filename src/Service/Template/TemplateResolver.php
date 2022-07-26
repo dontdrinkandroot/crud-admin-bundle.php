@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
@@ -23,8 +24,10 @@ class TemplateResolver extends AbstractProviderService
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof TemplateProviderInterface);
-            if ($provider->supportsTemplate($crudOperation, $entityClass)) {
+            try {
                 return $provider->provideTemplate($crudOperation, $entityClass);
+            } catch (UnsupportedByProviderException $e) {
+                /* Continue */
             }
         }
 

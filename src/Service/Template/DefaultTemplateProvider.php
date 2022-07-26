@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use RuntimeException;
 
 class DefaultTemplateProvider implements TemplateProviderInterface
@@ -10,20 +11,16 @@ class DefaultTemplateProvider implements TemplateProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsTemplate(CrudOperation $crudOperation, string $entityClass): bool
+    public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string
     {
-        return in_array(
+        if (!in_array(
             $crudOperation,
             [CrudOperation::LIST, CrudOperation::READ, CrudOperation::CREATE, CrudOperation::UPDATE],
             true
-        );
-    }
+        )) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+        }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string
-    {
         $prefix = '@DdrCrudAdmin/';
 
         return match ($crudOperation) {

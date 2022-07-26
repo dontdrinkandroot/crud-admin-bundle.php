@@ -3,6 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\CouldNotResolveException;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 class TitleResolver extends AbstractProviderService
@@ -10,9 +12,9 @@ class TitleResolver extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param CrudOperation          $crudOperation
+     * @param CrudOperation   $crudOperation
      * @param class-string<T> $entityClass
-     * @param T|null $entity
+     * @param T|null          $entity
      *
      * @return ?string
      */
@@ -20,8 +22,10 @@ class TitleResolver extends AbstractProviderService
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof TitleProviderInterface);
-            if ($provider->supportsTitle($crudOperation, $entityClass, $entity)) {
+            try {
                 return $provider->provideTitle($crudOperation, $entityClass, $entity);
+            } catch (UnsupportedByProviderException $e) {
+                /* Continue */
             }
         }
 

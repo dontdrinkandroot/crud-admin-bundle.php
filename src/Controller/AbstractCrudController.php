@@ -5,25 +5,27 @@ namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
-use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
-use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
-use Knp\Component\Pager\PaginatorInterface;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,16 +43,13 @@ use Twig\Environment;
  *
  * @implements CrudControllerInterface<T>
  */
-abstract class AbstractCrudController implements CrudControllerInterface, ServiceSubscriberInterface
+abstract class AbstractCrudController
+    implements CrudControllerInterface, ServiceSubscriberInterface, TitleProviderInterface, RouteInfoProviderInterface,
+               FormTypeProviderInterface, IdProviderInterface, ItemProviderInterface, TemplateProviderInterface
 {
     public const NEW_ID = '__NEW__';
 
     protected ?ContainerInterface $container = null;
-
-    public function getRouteInfo(CrudOperation $crudOperation): ?RouteInfo
-    {
-        return $this->getRouteInfoResolver()->resolve($crudOperation, $this->getEntityClass());
-    }
 
     public function listAction(Request $request): Response
     {
@@ -60,15 +59,18 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         $pagination = $this->getPaginationResolver()->resolve($this->getEntityClass());
+        $template = Asserted::notNull(
+            $this->getTemplateResolver()->resolve($crudOperation, $this->getEntityClass()),
+            sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
+        );
 
         $context = [
             'crudOperation' => $crudOperation->value,
             'entityClass'   => $this->getEntityClass(),
-            'title'         => $this->getTitle($crudOperation),
             'entities'      => $pagination,
         ];
 
-        return $this->render($this->getTemplate($crudOperation), $context);
+        return $this->render($template, $context);
     }
 
     public function createAction(Request $request): Response
@@ -80,7 +82,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     {
         $crudOperation = CrudOperation::READ;
 
-        $entity = $this->findItem($crudOperation, $id);
+        $entity = $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -89,20 +91,25 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
+        $template = Asserted::notNull(
+            $this->getTemplateResolver()->resolve($crudOperation, $this->getEntityClass()),
+            sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
+        );
+
         $context = [
             'crudOperation' => $crudOperation->value,
             'entityClass'   => $this->getEntityClass(),
             'entity'        => $entity,
         ];
 
-        return $this->render($this->getTemplate($crudOperation), $context);
+        return $this->render($template, $context);
     }
 
     public function updateAction(Request $request, mixed $id): Response
     {
         $crudOperation = self::NEW_ID === $id ? CrudOperation::CREATE : CrudOperation::UPDATE;
         $entity = CrudOperation::UPDATE === $crudOperation
-            ? $this->findItem($crudOperation, $id)
+            ? $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id)
             : null;
         if (CrudOperation::UPDATE === $crudOperation && null === $entity) {
             throw new NotFoundHttpException();
@@ -111,7 +118,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
-        $form = $this->getForm($crudOperation, $entity);
+        $form = Asserted::notNull(
+            $this->getFormResolver()->resolve($crudOperation, $this->getEntityClass(), $entity),
+            sprintf('Form not found for %s::%s', $crudOperation->value, $this->getEntityClass())
+        );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entity = Asserted::instanceOf($form->getData(), $this->getEntityClass());
@@ -126,6 +136,11 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             }
         }
 
+        $template = Asserted::notNull(
+            $this->getTemplateResolver()->resolve($crudOperation, $this->getEntityClass()),
+            sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
+        );
+
         $context = [
             'crudOperation' => $crudOperation,
             'entityClass'   => $this->getEntityClass(),
@@ -133,13 +148,13 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             'form'          => $form->createView(),
         ];
 
-        return $this->render($this->getTemplate($crudOperation), $context);
+        return $this->render($template, $context);
     }
 
     public function deleteAction(Request $request, mixed $id): Response
     {
         $crudOperation = CrudOperation::DELETE;
-        $entity = $this->findItem($crudOperation, $id);
+        $entity = $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id);
 
         if (null === $entity) {
             throw new NotFoundHttpException();
@@ -174,17 +189,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             Environment::class,
             UrlGeneratorInterface::class,
             TemplateResolver::class,
-            FieldDefinitionsResolver::class,
-            IdResolver::class,
             ItemResolver::class,
             FormResolver::class,
-            TitleResolver::class,
-            TranslationDomainResolver::class,
-            TranslatorInterface::class,
-            FormFactoryInterface::class,
-            PaginationTargetResolver::class,
             ItemPersister::class,
-            RouteInfoResolver::class,
             UrlResolver::class,
             EventDispatcherInterface::class,
             PaginationResolver::class
@@ -211,44 +218,14 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->getContainer()->get(TemplateResolver::class);
     }
 
-    protected function getFieldDefinitionsResolver(): FieldDefinitionsResolver
-    {
-        return $this->getContainer()->get(FieldDefinitionsResolver::class);
-    }
-
     protected function getItemPersister(): ItemPersister
     {
         return $this->getContainer()->get(ItemPersister::class);
     }
 
-    protected function getRouteInfoResolver(): RouteInfoResolver
-    {
-        return $this->getContainer()->get(RouteInfoResolver::class);
-    }
-
-    protected function getIdResolver(): IdResolver
-    {
-        return $this->getContainer()->get(IdResolver::class);
-    }
-
     protected function getEventDispatcher(): EventDispatcherInterface
     {
         return $this->getContainer()->get(EventDispatcherInterface::class);
-    }
-
-    protected function getTitleResolver(): TitleResolver
-    {
-        return $this->getContainer()->get(TitleResolver::class);
-    }
-
-    protected function getTranslator(): TranslatorInterface
-    {
-        return $this->getContainer()->get(TranslatorInterface::class);
-    }
-
-    protected function getTranslationDomainResolver(): TranslationDomainResolver
-    {
-        return $this->getContainer()->get(TranslationDomainResolver::class);
     }
 
     protected function getItemResolver(): ItemResolver
@@ -261,24 +238,14 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->getContainer()->get(UrlResolver::class);
     }
 
-    protected function getFormResolver(): FormResolver
-    {
-        return $this->getContainer()->get(FormResolver::class);
-    }
-
-    protected function getFormFactory(): FormFactoryInterface
-    {
-        return $this->getContainer()->get(FormFactoryInterface::class);
-    }
-
-    protected function getPaginationTargetResolver(): PaginationTargetResolver
-    {
-        return $this->getContainer()->get(PaginationTargetResolver::class);
-    }
-
     protected function getPaginationResolver(): PaginationResolver
     {
         return $this->getContainer()->get(PaginationResolver::class);
+    }
+
+    protected function getFormResolver(): FormResolver
+    {
+        return $this->getContainer()->get(FormResolver::class);
     }
 
     protected function getContainer(): ContainerInterface
@@ -304,77 +271,6 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $response;
     }
 
-    protected function getTemplate(CrudOperation $crudOperation): string
-    {
-        return Asserted::notNull($this->getTemplateResolver()->resolve($crudOperation, $this->getEntityClass()));
-    }
-
-    protected function getTranslationDomain(CrudOperation $crudOperation): ?string
-    {
-        return $this->getTranslationDomainResolver()->resolve($crudOperation, $this->getEntityClass());
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     * @param T|null        $entity
-     *
-     * @return string
-     */
-    protected function getTitle(CrudOperation $crudOperation, ?object $entity = null): string
-    {
-        return Asserted::notNull($this->getTitleResolver()->resolve($crudOperation, $this->getEntityClass(), $entity));
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     *
-     * @return array<array-key,FieldDefinition>
-     */
-    protected function getFieldDefinitions(CrudOperation $crudOperation): array
-    {
-        return Asserted::notNull(
-            $this->getFieldDefinitionsResolver()->resolve($crudOperation, $this->getEntityClass())
-        );
-    }
-
-    protected function getPaginationTarget(): mixed
-    {
-        return $this->getPaginationTargetResolver()->resolve($this->getEntityClass());
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     * @param T             $entity
-     *
-     * @return mixed
-     */
-    protected function getId(CrudOperation $crudOperation, object $entity): mixed
-    {
-        return $this->getIdResolver()->resolve($crudOperation, $this->getEntityClass(), $entity);
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     * @param mixed         $id
-     *
-     * @return T|null
-     */
-    protected function findItem(CrudOperation $crudOperation, mixed $id): ?object
-    {
-        return $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id);
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     * @param T|null        $entity
-     *
-     * @return FormInterface
-     */
-    protected function getForm(CrudOperation $crudOperation, ?object $entity): FormInterface
-    {
-        return Asserted::notNull($this->getFormResolver()->resolve($crudOperation, $this->getEntityClass(), $entity));
-    }
-
     protected function matches(
         string $entityClass,
         ?CrudOperation $crudOperation = null,
@@ -395,7 +291,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return in_array($crudOperation, $validCrudOperations, true);
     }
 
-    protected function findRedirect(CrudOperation $crudOperation, ?object $entity = null)
+    protected function findRedirect(CrudOperation $crudOperation, ?object $entity = null): ?RedirectResponse
     {
         $redirectUrl = $this->getUrlResolver()->resolve(CrudOperation::LIST, $this->getEntityClass(), $entity);
         if (
@@ -409,5 +305,147 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         return null;
+    }
+
+    /**
+     * {@inheritdoc}
+     * @final
+     */
+    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
+    {
+        if (!$this->matches($entityClass)) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+        }
+
+        return $this->getTitle($crudOperation, $entity);
+    }
+
+    /**
+     * @param CrudOperation $crudOperation
+     * @param T|null        $entity
+     *
+     * @return string
+     * @throws UnsupportedByProviderException
+     */
+    protected function getTitle(CrudOperation $crudOperation, ?object $entity): string
+    {
+        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @final
+     */
+    public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo
+    {
+        if ($this->matches($entityClass)) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+        }
+
+        return $this->getRouteInfo($crudOperation);
+    }
+
+    protected function getRouteInfo(CrudOperation $crudOperation): RouteInfo
+    {
+        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+    }
+
+    /**
+     * {@inheritdoc}
+     * @final
+     */
+    public function provideFormType(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
+    {
+        if ($this->matches($entityClass)) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+        }
+
+        return $this->getFormType($crudOperation, $entity);
+    }
+
+    /**
+     * @param CrudOperation $crudOperation
+     * @param T|null        $entity
+     *
+     * @return class-string<FormTypeInterface>
+     * @throws UnsupportedByProviderException
+     */
+    protected function getFormType(CrudOperation $crudOperation, ?object $entity): string
+    {
+        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @final
+     */
+    public function provideId(CrudOperation $crudOperation, string $entityClass, object $entity): mixed
+    {
+        if ($this->matches($entityClass)) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+        }
+
+        return $this->getId($crudOperation, $entity);
+    }
+
+    /**
+     * @param CrudOperation $crudOperation
+     * @param T             $entity
+     *
+     * @return mixed
+     * @throws UnsupportedByProviderException
+     */
+    protected function getId(CrudOperation $crudOperation, object $entity): mixed
+    {
+        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
+    }
+
+    /**
+     * {@inheritdoc}
+     * @final
+     */
+    public function provideItem(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
+    {
+        if ($this->matches($entityClass)) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+        }
+
+        return $this->getItem($crudOperation, $id);
+    }
+
+    /**
+     * @param CrudOperation $crudOperation
+     * @param mixed         $id
+     *
+     * @return T|null
+     * @throws UnsupportedByProviderException
+     */
+    public function getItem(CrudOperation $crudOperation, mixed $id): ?object
+    {
+        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+    }
+
+    /**
+     * {@inheritdoc}
+     * @final
+     */
+    public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string
+    {
+        if ($this->matches($entityClass)) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+        }
+
+        return $this->getTemplate($crudOperation);
+    }
+
+    /**
+     * @param CrudOperation $crudOperation
+     *
+     * @return string
+     * @throws UnsupportedByProviderException
+     */
+    public function getTemplate(CrudOperation $crudOperation): string
+    {
+        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
     }
 }
