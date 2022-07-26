@@ -62,11 +62,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         $pagination = $this->getPaginationResolver()->resolve($this->getEntityClass());
 
         $context = [
-            'entityClass'       => $this->getEntityClass(),
-            'title'             => $this->getTitle($crudOperation),
-            'entities'          => $pagination,
-            'fieldDefinitions'  => $this->getFieldDefinitions($crudOperation),
-            'translationDomain' => $this->getTranslationDomain($crudOperation)
+            'crudOperation' => $crudOperation->value,
+            'entityClass'   => $this->getEntityClass(),
+            'title'         => $this->getTitle($crudOperation),
+            'entities'      => $pagination,
         ];
 
         return $this->render($this->getTemplate($crudOperation), $context);
@@ -80,22 +79,20 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     public function readAction(Request $request, string $id): Response
     {
         $crudOperation = CrudOperation::READ;
+
         $entity = $this->findItem($crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
+
         if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity)) {
             throw new AccessDeniedException();
         }
-        $title = $this->getTitle($crudOperation, $entity);
-        $translationDomain = $this->getTranslationDomain($crudOperation);
-        $fieldDefinitions = $this->getFieldDefinitions($crudOperation);
 
         $context = [
-            'title'             => $title,
-            'entity'            => $entity,
-            'fieldDefinitions'  => $fieldDefinitions,
-            'translationDomain' => $translationDomain
+            'crudOperation' => $crudOperation->value,
+            'entityClass'   => $this->getEntityClass(),
+            'entity'        => $entity,
         ];
 
         return $this->render($this->getTemplate($crudOperation), $context);
@@ -114,8 +111,6 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
-        $title = $this->getTitle($crudOperation, $entity);
-        $translationDomain = $this->getTranslationDomain($crudOperation);
         $form = $this->getForm($crudOperation, $entity);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -125,23 +120,17 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
                 new PostProcessFormEvent($crudOperation, $this->getEntityClass(), $form, $entity)
             );
 
-            $redirectUrl = $this->getUrl(CrudOperation::LIST);
-            if (
-                null !== $redirectUrl
-                && $this->getAuthorizationChecker()->isGranted(
-                    CrudOperation::LIST->value,
-                    $this->getEntityClass()
-                )
-            ) {
-                return new RedirectResponse($redirectUrl);
+            $redirectResponse = $this->findRedirect($crudOperation, $entity);
+            if (null !== $redirectResponse) {
+                return $redirectResponse;
             }
         }
 
         $context = [
-            'entity'            => $entity,
-            'title'             => $title,
-            'form'              => $form->createView(),
-            'translationDomain' => $translationDomain
+            'crudOperation' => $crudOperation,
+            'entityClass'   => $this->getEntityClass(),
+            'entity'        => $entity,
+            'form'          => $form->createView(),
         ];
 
         return $this->render($this->getTemplate($crudOperation), $context);
@@ -161,20 +150,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         $this->getItemPersister()->persistItem($crudOperation, $this->getEntityClass(), $entity);
-        $redirectUrl = $this->getUrl(CrudOperation::LIST);
-        if (null !== $redirectUrl) {
-            return new RedirectResponse($redirectUrl);
-        }
 
-        return new Response('OK');
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getUrl(CrudOperation $crudOperation, ?object $entity = null): ?string
-    {
-        return $this->getUrlResolver()->resolve($crudOperation, $this->getEntityClass(), $entity);
+        $redirectResponse = $this->findRedirect($crudOperation, $entity);
+        return $redirectResponse ?? new Response('OK');
     }
 
     #[Required]
@@ -194,7 +172,6 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return [
             AuthorizationCheckerInterface::class,
             Environment::class,
-            PaginatorInterface::class,
             UrlGeneratorInterface::class,
             TemplateResolver::class,
             FieldDefinitionsResolver::class,
@@ -227,11 +204,6 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     protected function getUrlGenerator(): UrlGeneratorInterface
     {
         return $this->getContainer()->get(UrlGeneratorInterface::class);
-    }
-
-    protected function getPaginator(): PaginatorInterface
-    {
-        return $this->getContainer()->get(PaginatorInterface::class);
     }
 
     protected function getTemplateResolver(): TemplateResolver
@@ -344,7 +316,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     /**
      * @param CrudOperation $crudOperation
-     * @param T|null $entity
+     * @param T|null        $entity
      *
      * @return string
      */
@@ -372,7 +344,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     /**
      * @param CrudOperation $crudOperation
-     * @param T      $entity
+     * @param T             $entity
      *
      * @return mixed
      */
@@ -383,7 +355,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     /**
      * @param CrudOperation $crudOperation
-     * @param mixed  $id
+     * @param mixed         $id
      *
      * @return T|null
      */
@@ -421,5 +393,21 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         return in_array($crudOperation, $validCrudOperations, true);
+    }
+
+    protected function findRedirect(CrudOperation $crudOperation, ?object $entity = null)
+    {
+        $redirectUrl = $this->getUrlResolver()->resolve(CrudOperation::LIST, $this->getEntityClass(), $entity);
+        if (
+            null !== $redirectUrl
+            && $this->getAuthorizationChecker()->isGranted(
+                CrudOperation::LIST->value,
+                $this->getEntityClass()
+            )
+        ) {
+            return new RedirectResponse($redirectUrl);
+        }
+
+        return null;
     }
 }

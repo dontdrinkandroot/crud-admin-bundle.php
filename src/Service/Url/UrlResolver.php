@@ -16,7 +16,7 @@ class UrlResolver extends AbstractProviderService
      *
      * @return string|null
      */
-    public function resolve(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?string
+    public function resolve(CrudOperation $crudOperation, string $entityClass, ?object $entity = null): ?string
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof UrlProviderInterface);

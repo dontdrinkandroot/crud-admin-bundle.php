@@ -115,6 +115,8 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver'
         tags:
             - { name: twig.extension }
 

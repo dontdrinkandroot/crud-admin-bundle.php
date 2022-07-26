@@ -3,10 +3,13 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Twig;
 
 use Doctrine\Common\Util\ClassUtils;
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
@@ -18,7 +21,9 @@ class CrudAdminExtension extends AbstractExtension
         private readonly PropertyAccessor $propertyAccessor,
         private readonly FieldRenderer $fieldRenderer,
         private readonly UrlResolver $urlResolver,
-        private readonly TitleResolver $titleResolver
+        private readonly TitleResolver $titleResolver,
+        private readonly TranslationDomainResolver $translationDomainResolver,
+        private readonly FieldDefinitionsResolver $fieldDefinitionsResolver
     ) {
     }
 
@@ -34,7 +39,9 @@ class CrudAdminExtension extends AbstractExtension
                 ['is_safe' => ['html']]
             ),
             new TwigFilter('ddrCrudPath', [$this, 'getPath']),
-            new TwigFilter('ddrCrudTitle', [$this, 'getTitle'])
+            new TwigFilter('ddrCrudTitle', [$this, 'getTitle']),
+            new TwigFilter('ddrCrudTranslationDomain', [$this, 'getTranslationDomain']),
+            new TwigFilter('ddrCrudFieldDefinitions', [$this, 'getFieldDefinitions'])
         ];
     }
 
@@ -65,13 +72,48 @@ class CrudAdminExtension extends AbstractExtension
      * @param string            $crudOperation
      * @param class-string<T>|T $entityOrClass
      *
-     * @return string|null
+     * @return string
      */
-    public function getTitle(string $crudOperation, string|object $entityOrClass): ?string
+    public function getTitle(string $crudOperation, string|object $entityOrClass): string
     {
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
-        return $this->titleResolver->resolve(CrudOperation::from($crudOperation), $entityClass, $entity);
+        return Asserted::notNull(
+            $this->titleResolver->resolve(CrudOperation::from($crudOperation), $entityClass, $entity),
+            sprintf("No title provided for %s::%s", $crudOperation, $entityClass)
+        );
+    }
+
+    /**
+     * @template T
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return string
+     */
+    public function getTranslationDomain(string $crudOperation, string $entityClass): string
+    {
+        return Asserted::notNull(
+            $this->translationDomainResolver->resolve(CrudOperation::from($crudOperation), $entityClass),
+            sprintf("No translationDomain provided for %s::%s", $crudOperation, $entityClass)
+        );
+    }
+
+    /**
+     * @template T
+     *
+     * @param string          $crudOperation
+     * @param class-string<T> $entityClass
+     *
+     * @return list<FieldDefinition>
+     */
+    public function getFieldDefinitions(string $crudOperation, string $entityClass): array
+    {
+        return Asserted::notNull(
+            $this->fieldDefinitionsResolver->resolve(CrudOperation::from($crudOperation), $entityClass),
+            sprintf("No fieldDefinitions provided for %s::%s", $crudOperation, $entityClass)
+        );
     }
 
     /**
