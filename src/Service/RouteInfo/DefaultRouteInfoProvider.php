@@ -23,7 +23,7 @@ class DefaultRouteInfoProvider implements RouteInfoProviderInterface
     public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo
     {
         $tableizedShortName = ClassNameUtils::getTableizedShortName($entityClass);
-        $namePrefix = sprintf("ddr_crud_admin.%s.", $tableizedShortName);
+        $namePrefix = sprintf("ddr_crud.%s.", $tableizedShortName);
         $pathPrefix = '/' . mb_strtolower((new EnglishInflector())->pluralize($tableizedShortName)[0]);
 
         return self::getRouteInfo($crudOperation, $namePrefix, $pathPrefix);
