@@ -9,13 +9,11 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 class ItemResolver extends AbstractProviderService
 {
     /**
-     * @template T of object
+     * @param CrudOperation $crudOperation
+     * @param class-string  $entityClass
+     * @param mixed         $id
      *
-     * @param CrudOperation   $crudOperation
-     * @param class-string<T> $entityClass
-     * @param mixed           $id
-     *
-     * @return T|null
+     * @return object|null
      */
     public function resolve(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
     {

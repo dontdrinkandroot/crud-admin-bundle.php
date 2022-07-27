@@ -5,7 +5,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Controller\ConfigurableCrudController;
 use Dontdrinkandroot\CrudAdminBundle\Controller\ConfigurableCrudControllerFactory;
-use RuntimeException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
@@ -17,7 +16,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
     {
         $projectDir = Asserted::string($container->getParameter('kernel.project_dir'));
         if (!is_dir($dir = sprintf("%s/config/ddr_crud", $projectDir))) {
-            throw new RuntimeException('Not a dir');
+            return;
         }
 
         $factory = $container

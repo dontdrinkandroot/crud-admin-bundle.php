@@ -2,11 +2,12 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Model\Config;
 
+use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\Serializer\Annotation\SerializedName;
-use Symfony\Config\KnpPaginator\TemplateConfig;
 
 class CrudConfig
 {
+    /** @var class-string<FormTypeInterface>|null */
     #[SerializedName('form_type')]
     private ?string $formType = null;
 
@@ -29,11 +30,13 @@ class CrudConfig
         $this->fieldDefinitionsConfig = null;
     }
 
+    /** @return class-string<FormTypeInterface>|null */
     public function getFormType(): ?string
     {
         return $this->formType;
     }
 
+    /** @param class-string<FormTypeInterface>|null $formType */
     public function setFormType(?string $formType): void
     {
         $this->formType = $formType;

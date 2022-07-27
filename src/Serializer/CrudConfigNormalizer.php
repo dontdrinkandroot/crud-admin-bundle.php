@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Serializer;
 
+use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\Config\CrudConfig;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
@@ -16,7 +17,7 @@ class CrudConfigNormalizer implements ContextAwareDenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, string $type, string $format = null, array $context = [])
+    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = [])
     {
         return CrudConfig::class === $type;
     }
@@ -26,7 +27,7 @@ class CrudConfigNormalizer implements ContextAwareDenormalizerInterface
      */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-        $resourceClass = array_key_first($data);
+        $resourceClass = Asserted::string(array_key_first($data), 'Could not find ResourceClass');
         $resourceData = $data[$resourceClass];
 
         $localContext = [

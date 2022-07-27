@@ -3,13 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Serializer;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Symfony\Component\Serializer\Exception\BadMethodCallException;
-use Symfony\Component\Serializer\Exception\ExceptionInterface;
-use Symfony\Component\Serializer\Exception\ExtraAttributesException;
-use Symfony\Component\Serializer\Exception\InvalidArgumentException;
-use Symfony\Component\Serializer\Exception\LogicException;
-use Symfony\Component\Serializer\Exception\RuntimeException;
-use Symfony\Component\Serializer\Exception\UnexpectedValueException;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
 
 class FieldDefinitionNormalizer implements ContextAwareDenormalizerInterface
@@ -17,7 +10,7 @@ class FieldDefinitionNormalizer implements ContextAwareDenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization($data, string $type, string $format = null, array $context = [])
+    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = [])
     {
         return FieldDefinition::class === $type;
     }

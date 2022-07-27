@@ -39,7 +39,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
 
     /**
      * @param CrudOperation $crudOperation
-     * @param T|null        $entity
+     * @param object|null   $entity
      *
      * @return string
      * @throws UnsupportedByProviderException
@@ -82,7 +82,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
 
     /**
      * @param CrudOperation $crudOperation
-     * @param T|null        $entity
+     * @param object|null   $entity
      *
      * @return class-string<FormTypeInterface>
      * @throws UnsupportedByProviderException
@@ -107,7 +107,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
 
     /**
      * @param CrudOperation $crudOperation
-     * @param T             $entity
+     * @param object        $entity
      *
      * @return mixed
      * @throws UnsupportedByProviderException

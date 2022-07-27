@@ -19,10 +19,5 @@
                 <file name="src/DependencyInjection/Configuration.php" />
             </errorLevel>
         </PossiblyUndefinedMethod>
-        <PossiblyInvalidCast>
-            <errorLevel type="suppress">
-                <file name="src/Service/Title/ToStringTitleProvider.php" />
-            </errorLevel>
-        </PossiblyInvalidCast>
     </issueHandlers>
 </psalm>

@@ -3,8 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Routing;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Controller\AbstractCrudController;
-use Dontdrinkandroot\CrudAdminBundle\Controller\CrudControllerInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
 use RuntimeException;
@@ -43,6 +41,7 @@ class CrudRoutesLoader extends Loader
         $routes = new RouteCollection();
         foreach ($this->controllerRegistry->getControllersByServiceId() as $id => $controller) {
 
+            /** @var class-string $entityClass */
             $entityClass = $controller->getEntityClass();
 
             if (null !== $routeInfo = $this->routeInfoResolver->resolve(CrudOperation::LIST, $entityClass)) {

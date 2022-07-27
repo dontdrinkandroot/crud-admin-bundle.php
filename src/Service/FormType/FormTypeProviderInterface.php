@@ -9,11 +9,9 @@ use Symfony\Component\Form\FormTypeInterface;
 interface FormTypeProviderInterface
 {
     /**
-     * @template T of object
-     *
      * @param CrudOperation $crudOperation
      * @param class-string  $entityClass
-     * @param T|null        $entity
+     * @param object|null   $entity
      *
      * @return class-string<FormTypeInterface>
      * @throws UnsupportedByProviderException

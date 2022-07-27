@@ -5,27 +5,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
-use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
-use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\FormInterface;
-use Symfony\Component\Form\FormTypeInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,7 +22,6 @@ use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
 
 /**
@@ -125,7 +111,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     /**
      * @param Request       $request
      * @param CrudOperation $crudOperation
-     * @param T|null        $entity
+     * @param object|null   $entity
      *
      * @return Response
      */
