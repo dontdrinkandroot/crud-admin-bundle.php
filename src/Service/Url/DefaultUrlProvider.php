@@ -4,17 +4,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Routes\RoutesResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class DefaultUrlProvider implements UrlProviderInterface
 {
     public function __construct(
-        private readonly RouteInfoResolver $routeInfoResolver,
+        private readonly RouteInfoResolverInterface $routeInfoResolver,
         private readonly RouterInterface $router,
         private readonly IdResolver $idResolver,
     ) {

@@ -10,13 +10,10 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 /**
  * @extends AbstractProviderService<RouteInfoProviderInterface>
  */
-class RouteInfoResolver extends AbstractProviderService
+class RouteInfoResolver extends AbstractProviderService implements RouteInfoResolverInterface
 {
     /**
-     * @param CrudOperation $crudOperation
-     * @param class-string  $entityClass
-     *
-     * @return ?RouteInfo
+     * {@inheritdoc}
      */
     public function resolve(CrudOperation $crudOperation, string $entityClass): ?RouteInfo
     {

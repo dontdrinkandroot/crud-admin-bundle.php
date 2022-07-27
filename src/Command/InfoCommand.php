@@ -7,6 +7,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
@@ -25,7 +26,7 @@ class InfoCommand extends Command
         private readonly CrudControllerRegistry $crudControllerRegistry,
         private readonly TemplateResolverInterface $templateResolver,
         private readonly TranslationDomainResolverInterface $translationDomainResolver,
-        private readonly RouteInfoResolver $routeInfoResolver,
+        private readonly RouteInfoResolverInterface $routeInfoResolver,
         private readonly FieldDefinitionsResolverInterface $fieldDefinitionsResolver
     ) {
         parent::__construct();

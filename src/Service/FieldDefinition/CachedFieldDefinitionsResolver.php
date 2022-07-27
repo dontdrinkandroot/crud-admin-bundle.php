@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
 use Symfony\Contracts\Cache\CacheInterface;
 
 class CachedFieldDefinitionsResolver extends FieldDefinitionsResolver
@@ -17,7 +18,7 @@ class CachedFieldDefinitionsResolver extends FieldDefinitionsResolver
      */
     public function resolve(CrudOperation $crudOperation, string $entityClass): ?array
     {
-        $key = sprintf("ddr_crud:field_definitions:%s:%s", $entityClass, $crudOperation->value);
+        $key = ProviderCacheKey::create('field_definitions', $crudOperation, $entityClass);
         return $this->cache->get($key, fn() => parent::resolve($crudOperation, $entityClass));
     }
 }

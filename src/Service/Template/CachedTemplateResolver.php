@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
 use Symfony\Contracts\Cache\CacheInterface;
 
 class CachedTemplateResolver extends TemplateResolver
@@ -17,7 +18,7 @@ class CachedTemplateResolver extends TemplateResolver
      */
     public function resolve(CrudOperation $crudOperation, string $entityClass): ?string
     {
-        $key = sprintf("ddr_crud:template:%s:%s", $entityClass, $crudOperation->value);
+        $key = ProviderCacheKey::create('template', $crudOperation, $entityClass);
         return $this->cache->get($key, fn() => parent::resolve($crudOperation, $entityClass));
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
+use App\Entity\Song;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\QueryBuilder;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;

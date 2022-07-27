@@ -11,6 +11,7 @@ services:
         arguments:
             - '@doctrine'
             - !tagged_iterator ddr_crud_admin.query_builder_extension_provider
+            - !tagged_iterator ddr_crud_admin.query_extension_provider
         tags:
             -   name: 'ddr_crud_admin.pagination_target_provider'
                 priority: -200

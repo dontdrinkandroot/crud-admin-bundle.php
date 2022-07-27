@@ -12,6 +12,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Query\QueryExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
@@ -31,6 +32,7 @@ class DdrCrudAdminExtension extends Extension
     public const TAG_ROUTE_INFO_PROVIDER = 'ddr_crud_admin.route_info_provider';
     public const TAG_ID_PROVIDER = 'ddr_crud_admin.id_provider';
     public const TAG_FIELD_DEFINITIONS_PROVIDER = 'ddr_crud_admin.field_definitions_provider';
+    public const TAG_QUERY_EXTENSION_PROVIDER = 'ddr_crud_admin.query_extension_provider';
 
     /**
      * {@inheritdoc}
@@ -43,6 +45,9 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(FormTypeProviderInterface::class)
             ->addTag(self::TAG_FORM_TYPE_PROVIDER);
+        $container
+            ->registerForAutoconfiguration(QueryExtensionProviderInterface::class)
+            ->addTag(self::TAG_QUERY_EXTENSION_PROVIDER);
         $container
             ->registerForAutoconfiguration(PaginationProviderInterface::class)
             ->addTag('ddr_crud_admin.pagination_provider');

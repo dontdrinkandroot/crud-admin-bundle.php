@@ -9,13 +9,6 @@ interface QueryBuilderExtensionProviderInterface extends ProviderInterface
 {
     /**
      * @param class-string $entityClass
-     *
-     * @return bool
-     */
-    public function supportsQueryBuilder(string $entityClass): bool;
-
-    /**
-     * @param class-string $entityClass
      * @param QueryBuilder $queryBuilder
      *
      * @return void

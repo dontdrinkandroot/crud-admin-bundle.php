@@ -1,12 +1,13 @@
 <?php
 
-namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
+namespace Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
+use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Symfony\Contracts\Cache\CacheInterface;
 
-class CachedTranslationDomainResolver extends TranslationDomainResolver
+class CachedRouteInfoResolver extends RouteInfoResolver
 {
     public function __construct(iterable $providers, private readonly CacheInterface $cache)
     {
@@ -16,9 +17,9 @@ class CachedTranslationDomainResolver extends TranslationDomainResolver
     /**
      * {@inheritdoc}
      */
-    public function resolve(CrudOperation $crudOperation, string $entityClass): ?string
+    public function resolve(CrudOperation $crudOperation, string $entityClass): ?RouteInfo
     {
-        $key = ProviderCacheKey::create('translation_domain', $crudOperation, $entityClass);
+        $key = ProviderCacheKey::create('route_info', $crudOperation, $entityClass);
         return $this->cache->get($key, fn() => parent::resolve($crudOperation, $entityClass));
     }
 }

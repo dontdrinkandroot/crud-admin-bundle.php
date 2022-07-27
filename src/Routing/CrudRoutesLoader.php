@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Routing;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
 use RuntimeException;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
@@ -16,7 +17,7 @@ class CrudRoutesLoader extends Loader
 
     public function __construct(
         private readonly CrudControllerRegistry $controllerRegistry,
-        private readonly RouteInfoResolver $routeInfoResolver
+        private readonly RouteInfoResolverInterface $routeInfoResolver
     ) {
         parent::__construct();
     }

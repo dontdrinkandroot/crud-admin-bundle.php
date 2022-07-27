@@ -24,10 +24,12 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver:
         arguments:
             - !tagged_iterator ddr_crud_admin.item_provider
-
-    Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver:
+            -
+    Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface:
+        class: Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\CachedRouteInfoResolver
         arguments:
             - !tagged_iterator ddr_crud_admin.route_info_provider
+            - '@cache.app'
 
     Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface:
         class: Dontdrinkandroot\CrudAdminBundle\Service\Template\CachedTemplateResolver
@@ -98,7 +100,7 @@ services:
 
     Dontdrinkandroot\CrudAdminBundle\Service\Url\DefaultUrlProvider:
         arguments:
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface'
             - '@router'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver'
         tags:
@@ -129,7 +131,7 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Routing\CrudRoutesLoader:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface'
         tags: [ 'routing.loader' ]
 
     Dontdrinkandroot\CrudAdminBundle\Command\InfoCommand:

@@ -3,21 +3,25 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Service\Query\QueryExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
 
 class DoctrinePaginationTargetProvider implements PaginationTargetProvider
 {
     /**
-     * @param ManagerRegistry $managerRegistry
+     * @param ManagerRegistry                                  $managerRegistry
      * @param iterable<QueryBuilderExtensionProviderInterface> $queryBuilderExtensionProviders
+     * @param iterable<QueryExtensionProviderInterface>        $queryExtensionProviders
      */
     public function __construct(
         private readonly ManagerRegistry $managerRegistry,
-        private readonly iterable $queryBuilderExtensionProviders
+        private readonly iterable $queryBuilderExtensionProviders,
+        private readonly iterable $queryExtensionProviders
     ) {
     }
 
@@ -32,7 +36,7 @@ class DoctrinePaginationTargetProvider implements PaginationTargetProvider
     /**
      * {@inheritdoc}
      */
-    public function providePaginationTarget(string $entityClass): ?QueryBuilder
+    public function providePaginationTarget(string $entityClass): ?Query
     {
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),
@@ -44,11 +48,15 @@ class DoctrinePaginationTargetProvider implements PaginationTargetProvider
             ->from($entityClass, 'entity');
 
         foreach ($this->queryBuilderExtensionProviders as $queryBuilderExtensionProvider) {
-            if ($queryBuilderExtensionProvider->supportsQueryBuilder($entityClass)) {
-                $queryBuilderExtensionProvider->extendQueryBuilder($entityClass, $queryBuilder);
-            }
+            $queryBuilderExtensionProvider->extendQueryBuilder($entityClass, $queryBuilder);
         }
 
-        return $queryBuilder;
+        $query = $queryBuilder->getQuery();
+
+        foreach ($this->queryExtensionProviders as $queryExtensionProvider) {
+            $queryExtensionProvider->extendQuery($entityClass, $query);
+        }
+
+        return $query;
     }
 }
