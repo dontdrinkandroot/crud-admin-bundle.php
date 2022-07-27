@@ -10,6 +10,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -190,7 +191,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             AuthorizationCheckerInterface::class,
             Environment::class,
             UrlGeneratorInterface::class,
-            TemplateResolver::class,
+            TemplateResolverInterface::class,
             ItemResolver::class,
             FormResolver::class,
             ItemPersister::class,
@@ -215,9 +216,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->getContainer()->get(UrlGeneratorInterface::class);
     }
 
-    protected function getTemplateResolver(): TemplateResolver
+    protected function getTemplateResolver(): TemplateResolverInterface
     {
-        return $this->getContainer()->get(TemplateResolver::class);
+        return $this->getContainer()->get(TemplateResolverInterface::class);
     }
 
     protected function getItemPersister(): ItemPersister

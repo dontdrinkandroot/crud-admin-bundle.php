@@ -7,15 +7,13 @@ use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
-class FieldDefinitionsResolver extends AbstractProviderService
+/**
+ * @extends AbstractProviderService<FieldDefinitionsProviderInterface>
+ */
+class FieldDefinitionsResolver extends AbstractProviderService implements FieldDefinitionsResolverInterface
 {
     /**
-     * @template T of object
-     *
-     * @param CrudOperation          $crudOperation
-     * @param class-string<T> $entityClass
-     *
-     * @return array<array-key, FieldDefinition>|null
+     * {@inheritdoc}
      */
     public function resolve(CrudOperation $crudOperation, string $entityClass): ?array
     {

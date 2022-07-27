@@ -8,6 +8,7 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -18,7 +19,7 @@ class DoctrineFormProvider implements FormProviderInterface
     public function __construct(
         private readonly ManagerRegistry $managerRegistry,
         private readonly FormFactoryInterface $formFactory,
-        private readonly TranslationDomainResolver $translationDomainResolver
+        private readonly TranslationDomainResolverInterface $translationDomainResolver
     ) {
     }
 

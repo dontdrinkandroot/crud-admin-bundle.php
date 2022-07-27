@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -15,7 +16,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     public function __construct(
         private readonly PaginatorInterface $paginator,
         private readonly PaginationTargetResolver $paginationTargetResolver,
-        private readonly FieldDefinitionsResolver $fieldDefinitionsResolver,
+        private readonly FieldDefinitionsResolverInterface $fieldDefinitionsResolver,
         private readonly RequestStack $requestStack
     ) {
     }

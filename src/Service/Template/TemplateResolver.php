@@ -4,21 +4,15 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
  * @extends AbstractProviderService<TemplateProviderInterface>
  */
-class TemplateResolver extends AbstractProviderService
+class TemplateResolver extends AbstractProviderService implements TemplateResolverInterface
 {
     /**
-     * @template T of object
-     *
-     * @param CrudOperation          $crudOperation
-     * @param class-string<T> $entityClass
-     *
-     * @return ?string
+     * {@inheritdoc}
      */
     public function resolve(CrudOperation $crudOperation, string $entityClass): ?string
     {

@@ -5,9 +5,12 @@ namespace Dontdrinkandroot\CrudAdminBundle\Command;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -20,10 +23,10 @@ class InfoCommand extends Command
 {
     public function __construct(
         private readonly CrudControllerRegistry $crudControllerRegistry,
-        private readonly TemplateResolver $templateResolver,
-        private readonly TranslationDomainResolver $translationDomainResolver,
+        private readonly TemplateResolverInterface $templateResolver,
+        private readonly TranslationDomainResolverInterface $translationDomainResolver,
         private readonly RouteInfoResolver $routeInfoResolver,
-        private readonly FieldDefinitionsResolver $fieldDefinitionsResolver
+        private readonly FieldDefinitionsResolverInterface $fieldDefinitionsResolver
     ) {
         parent::__construct();
     }

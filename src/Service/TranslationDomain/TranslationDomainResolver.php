@@ -5,15 +5,13 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
-class TranslationDomainResolver extends AbstractProviderService
+/**
+ * @extends AbstractProviderService<TranslationDomainProviderInterface>
+ */
+class TranslationDomainResolver extends AbstractProviderService implements TranslationDomainResolverInterface
 {
     /**
-     * @template T of object
-     *
-     * @param CrudOperation          $crudOperation
-     * @param class-string<T> $entityClass
-     *
-     * @return ?string
+     * {@inheritdoc}
      */
     public function resolve(CrudOperation $crudOperation, string $entityClass): ?string
     {

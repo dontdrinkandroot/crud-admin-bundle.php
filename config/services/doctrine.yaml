@@ -19,7 +19,7 @@ services:
         arguments:
             - '@doctrine'
             - '@translator'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface'
         tags:
             -   name: 'ddr_crud_admin.field_definitions_provider'
                 priority: -200
@@ -28,7 +28,7 @@ services:
         arguments:
             - '@doctrine'
             - '@form.factory'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver'
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface'
         tags:
             - { name: 'ddr_crud_admin.form_provider', priority: -250 }
 
