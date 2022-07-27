@@ -20,7 +20,7 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
      */
     public function getEntityClass(): string
     {
-        return Asserted::notNull($this->crudConfig->resourceClass);
+        return Asserted::notNull($this->crudConfig->entityClass);
     }
 
     /**

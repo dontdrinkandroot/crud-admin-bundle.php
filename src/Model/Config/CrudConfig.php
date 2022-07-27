@@ -7,7 +7,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 class CrudConfig
 {
-    /** @var class-string<FormTypeInterface>|null */
+    /** @psalm-var ?class-string<FormTypeInterface> */
     #[SerializedName('form_type')]
     private ?string $formType = null;
 
@@ -20,23 +20,21 @@ class CrudConfig
     #[SerializedName('field_definitions')]
     private ?FieldDefinitionsConfig $fieldDefinitionsConfig;
 
-    /**
-     * @param class-string $resourceClass
-     */
-    public function __construct(public readonly string $resourceClass)
+    /** @psalm-param class-string $entityClass */
+    public function __construct(public readonly string $entityClass)
     {
         $this->templatesConfig = null;
         $this->routeConfig = null;
         $this->fieldDefinitionsConfig = null;
     }
 
-    /** @return class-string<FormTypeInterface>|null */
+    /** @psalm-return ?class-string<FormTypeInterface> */
     public function getFormType(): ?string
     {
         return $this->formType;
     }
 
-    /** @param class-string<FormTypeInterface>|null $formType */
+    /** @psalm-param ?class-string<FormTypeInterface> $formType */
     public function setFormType(?string $formType): void
     {
         $this->formType = $formType;

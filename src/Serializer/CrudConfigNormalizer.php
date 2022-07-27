@@ -27,12 +27,12 @@ class CrudConfigNormalizer implements ContextAwareDenormalizerInterface
      */
     public function denormalize($data, string $type, string $format = null, array $context = [])
     {
-        $resourceClass = Asserted::string(array_key_first($data), 'Could not find ResourceClass');
-        $resourceData = $data[$resourceClass];
+        $entityClass = Asserted::string(array_key_first($data), 'Could not find EntityClass');
+        $resourceData = $data[$entityClass];
 
         $localContext = [
             AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
-                CrudConfig::class => ['resourceClass' => $resourceClass],
+                CrudConfig::class => ['entityClass' => $entityClass],
             ]
         ];
         $localContext = array_merge_recursive($context, $localContext);
