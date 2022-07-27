@@ -120,16 +120,20 @@ services:
         tags:
             - { name: twig.extension }
 
-    Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry:
-        arguments:
-            - !tagged_iterator ddr_crud_admin.controller
-
     Dontdrinkandroot\CrudAdminBundle\Routing\CrudRoutesLoader:
         arguments:
-            - !tagged_iterator ddr_crud_admin.controller
+            - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver'
         tags: [ 'routing.loader' ]
 
     Dontdrinkandroot\CrudAdminBundle\Command\InfoCommand:
+        autoconfigure: true
+        autowire: true
+
+    Dontdrinkandroot\CrudAdminBundle\Serializer\CrudConfigNormalizer:
+        autoconfigure: true
+        autowire: true
+
+    Dontdrinkandroot\CrudAdminBundle\Serializer\FieldDefinitionNormalizer:
         autoconfigure: true
         autowire: true

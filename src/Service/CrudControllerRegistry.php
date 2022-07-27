@@ -13,13 +13,12 @@ class CrudControllerRegistry
     private array $controllersByEntityClass = [];
 
     /**
-     * @param iterable<CrudControllerInterface> $controllers
+     * @var array<string, CrudControllerInterface>
      */
-    public function __construct(iterable $controllers)
+    private array $controllersByServiceId = [];
+
+    public function __construct()
     {
-        foreach ($controllers as $controller) {
-            $this->controllersByEntityClass[$controller->getEntityClass()] = $controller;
-        }
     }
 
     /**
@@ -50,8 +49,26 @@ class CrudControllerRegistry
             ?? throw new RuntimeException('No controller found for entityClass ' . $entityClass);
     }
 
+    public function registerController(string $serviceId, CrudControllerInterface $controller): void
+    {
+        $entityClass = $controller->getEntityClass();
+        if (array_key_exists($serviceId, $this->controllersByServiceId)) {
+            throw new RuntimeException(sprintf('There is already a controller for service id %s', $serviceId));
+        }
+        if (array_key_exists($entityClass, $this->controllersByEntityClass)) {
+            throw new RuntimeException(sprintf('There is already a controller for entity class %s', $serviceId));
+        }
+        $this->controllersByServiceId[$serviceId] = $controller;
+        $this->controllersByEntityClass[$entityClass] = $controller;
+    }
+
     public function getControllersByEntityClass(): array
     {
         return $this->controllersByEntityClass;
+    }
+
+    public function getControllersByServiceId(): array
+    {
+        return $this->controllersByServiceId;
     }
 }

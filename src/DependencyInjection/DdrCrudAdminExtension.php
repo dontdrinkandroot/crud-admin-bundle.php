@@ -25,6 +25,13 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class DdrCrudAdminExtension extends Extension
 {
+    public const TAG_CONTROLLER = 'ddr_crud_admin.controller';
+    public const TAG_FORM_TYPE_PROVIDER = 'ddr_crud_admin.form_type_provider';
+    public const TAG_TEMPLATE_PROVIDER = 'ddr_crud_admin.template_provider';
+    public const TAG_ROUTE_INFO_PROVIDER = 'ddr_crud_admin.route_info_provider';
+    public const TAG_ID_PROVIDER = 'ddr_crud_admin.id_provider';
+    public const TAG_FIELD_DEFINITIONS_PROVIDER = 'ddr_crud_admin.field_definitions_provider';
+
     /**
      * {@inheritdoc}
      */
@@ -35,7 +42,7 @@ class DdrCrudAdminExtension extends Extension
             ->addTag('ddr_crud_admin.field_renderer_provider');
         $container
             ->registerForAutoconfiguration(FormTypeProviderInterface::class)
-            ->addTag('ddr_crud_admin.form_type_provider');
+            ->addTag(self::TAG_FORM_TYPE_PROVIDER);
         $container
             ->registerForAutoconfiguration(PaginationProviderInterface::class)
             ->addTag('ddr_crud_admin.pagination_provider');
@@ -44,7 +51,7 @@ class DdrCrudAdminExtension extends Extension
             ->addTag('ddr_crud_admin.pagination_target_provider');
         $container
             ->registerForAutoconfiguration(FieldDefinitionsProviderInterface::class)
-            ->addTag('ddr_crud_admin.field_definitions_provider');
+            ->addTag(self::TAG_FIELD_DEFINITIONS_PROVIDER);
         $container
             ->registerForAutoconfiguration(FormProviderInterface::class)
             ->addTag('ddr_crud_admin.form_provider');
@@ -53,19 +60,19 @@ class DdrCrudAdminExtension extends Extension
             ->addTag('ddr_crud_admin.item_provider');
         $container
             ->registerForAutoconfiguration(RouteInfoProviderInterface::class)
-            ->addTag('ddr_crud_admin.route_info_provider');
+            ->addTag(self::TAG_ROUTE_INFO_PROVIDER);
         $container
             ->registerForAutoconfiguration(TitleProviderInterface::class)
             ->addTag('ddr_crud_admin.title_provider');
         $container
             ->registerForAutoconfiguration(TemplateProviderInterface::class)
-            ->addTag('ddr_crud_admin.template_provider');
+            ->addTag(self::TAG_TEMPLATE_PROVIDER);
         $container
             ->registerForAutoconfiguration(ItemPersisterProviderInterface::class)
             ->addTag('ddr_crud_admin.item_persister_provider');
         $container
             ->registerForAutoconfiguration(IdProviderInterface::class)
-            ->addTag('ddr_crud_admin.id_provider');
+            ->addTag(self::TAG_ID_PROVIDER);
         $container
             ->registerForAutoconfiguration(UrlProviderInterface::class)
             ->addTag('ddr_crud_admin.url_provider');
@@ -77,7 +84,7 @@ class DdrCrudAdminExtension extends Extension
             ->addTag('ddr_crud_admin.query_builder_extension_provider');
         $container
             ->registerForAutoconfiguration(CrudControllerInterface::class)
-            ->addTag('ddr_crud_admin.controller')
+            ->addTag(self::TAG_CONTROLLER)
             ->addTag('controller.service_arguments')
             ->setPublic(true);
 

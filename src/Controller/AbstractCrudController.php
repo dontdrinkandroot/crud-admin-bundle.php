@@ -43,9 +43,7 @@ use Twig\Environment;
  *
  * @implements CrudControllerInterface<T>
  */
-abstract class AbstractCrudController
-    implements CrudControllerInterface, ServiceSubscriberInterface, TitleProviderInterface, RouteInfoProviderInterface,
-               FormTypeProviderInterface, IdProviderInterface, ItemProviderInterface, TemplateProviderInterface
+abstract class AbstractCrudController implements CrudControllerInterface, ServiceSubscriberInterface
 {
     public const NEW_ID = '__NEW__';
 
@@ -71,11 +69,6 @@ abstract class AbstractCrudController
         ];
 
         return $this->render($template, $context);
-    }
-
-    public function createAction(Request $request): Response
-    {
-        return $this->updateAction($request, self::NEW_ID);
     }
 
     public function readAction(Request $request, string $id): Response
@@ -105,19 +98,42 @@ abstract class AbstractCrudController
         return $this->render($template, $context);
     }
 
-    public function updateAction(Request $request, mixed $id): Response
+    public function createAction(Request $request): Response
     {
-        $crudOperation = self::NEW_ID === $id ? CrudOperation::CREATE : CrudOperation::UPDATE;
-        $entity = CrudOperation::UPDATE === $crudOperation
-            ? $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id)
-            : null;
-        if (CrudOperation::UPDATE === $crudOperation && null === $entity) {
-            throw new NotFoundHttpException();
-        }
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity ?? $this->getEntityClass())) {
+        $crudOperation = CrudOperation::CREATE;
+        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $this->getEntityClass())) {
             throw new AccessDeniedException();
         }
 
+        return $this->createOrUpdateAction($request, $crudOperation);
+    }
+
+    public function updateAction(Request $request, mixed $id): Response
+    {
+        $crudOperation = CrudOperation::UPDATE;
+        $entity = $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id);
+        if (null === $entity) {
+            throw new NotFoundHttpException();
+        }
+        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity)) {
+            throw new AccessDeniedException();
+        }
+
+        return $this->createOrUpdateAction($request, $crudOperation, $entity);
+    }
+
+    /**
+     * @param Request       $request
+     * @param CrudOperation $crudOperation
+     * @param T|null        $entity
+     *
+     * @return Response
+     */
+    protected function createOrUpdateAction(
+        Request $request,
+        CrudOperation $crudOperation,
+        ?object $entity = null
+    ): Response {
         $form = Asserted::notNull(
             $this->getFormResolver()->resolve($crudOperation, $this->getEntityClass(), $entity),
             sprintf('Form not found for %s::%s', $crudOperation->value, $this->getEntityClass())
@@ -142,7 +158,7 @@ abstract class AbstractCrudController
         );
 
         $context = [
-            'crudOperation' => $crudOperation,
+            'crudOperation' => $crudOperation->value,
             'entityClass'   => $this->getEntityClass(),
             'entity'        => $entity,
             'form'          => $form->createView(),
@@ -250,7 +266,7 @@ abstract class AbstractCrudController
 
     protected function getContainer(): ContainerInterface
     {
-        return Asserted::notNull($this->container);
+        return Asserted::notNull($this->container, 'Container must not be null');
     }
 
     protected function renderView(string $view, array $parameters = []): string
@@ -305,147 +321,5 @@ abstract class AbstractCrudController
         }
 
         return null;
-    }
-
-    /**
-     * {@inheritdoc}
-     * @final
-     */
-    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
-    {
-        if (!$this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
-        }
-
-        return $this->getTitle($crudOperation, $entity);
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     * @param T|null        $entity
-     *
-     * @return string
-     * @throws UnsupportedByProviderException
-     */
-    protected function getTitle(CrudOperation $crudOperation, ?object $entity): string
-    {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @final
-     */
-    public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo
-    {
-        if ($this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
-        }
-
-        return $this->getRouteInfo($crudOperation);
-    }
-
-    protected function getRouteInfo(CrudOperation $crudOperation): RouteInfo
-    {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
-    }
-
-    /**
-     * {@inheritdoc}
-     * @final
-     */
-    public function provideFormType(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
-    {
-        if ($this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
-        }
-
-        return $this->getFormType($crudOperation, $entity);
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     * @param T|null        $entity
-     *
-     * @return class-string<FormTypeInterface>
-     * @throws UnsupportedByProviderException
-     */
-    protected function getFormType(CrudOperation $crudOperation, ?object $entity): string
-    {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @final
-     */
-    public function provideId(CrudOperation $crudOperation, string $entityClass, object $entity): mixed
-    {
-        if ($this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
-        }
-
-        return $this->getId($crudOperation, $entity);
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     * @param T             $entity
-     *
-     * @return mixed
-     * @throws UnsupportedByProviderException
-     */
-    protected function getId(CrudOperation $crudOperation, object $entity): mixed
-    {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
-    }
-
-    /**
-     * {@inheritdoc}
-     * @final
-     */
-    public function provideItem(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
-    {
-        if ($this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
-        }
-
-        return $this->getItem($crudOperation, $id);
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     * @param mixed         $id
-     *
-     * @return T|null
-     * @throws UnsupportedByProviderException
-     */
-    public function getItem(CrudOperation $crudOperation, mixed $id): ?object
-    {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
-    }
-
-    /**
-     * {@inheritdoc}
-     * @final
-     */
-    public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string
-    {
-        if ($this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
-        }
-
-        return $this->getTemplate($crudOperation);
-    }
-
-    /**
-     * @param CrudOperation $crudOperation
-     *
-     * @return string
-     * @throws UnsupportedByProviderException
-     */
-    public function getTemplate(CrudOperation $crudOperation): string
-    {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
     }
 }

@@ -3,7 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
@@ -21,8 +21,10 @@ class FieldDefinitionsResolver extends AbstractProviderService
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof FieldDefinitionsProviderInterface);
-            if ($provider->supportsFieldDefinitions($crudOperation, $entityClass)) {
+            try {
                 return $provider->provideFieldDefinitions($crudOperation, $entityClass);
+            } catch (UnsupportedByProviderException $e) {
+                /* Continue */
             }
         }
 

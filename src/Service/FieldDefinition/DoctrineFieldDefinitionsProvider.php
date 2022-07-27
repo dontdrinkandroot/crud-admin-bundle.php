@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use RuntimeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -19,20 +20,15 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     /**
      * {@inheritdoc}
      */
-    public function supportsFieldDefinitions(CrudOperation $crudOperation, string $entityClass): bool
-    {
-        return null !== $this->managerRegistry->getManagerForClass($entityClass);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function provideFieldDefinitions(CrudOperation $crudOperation, string $entityClass): array
     {
-        $entityManager = Asserted::instanceOf(
+        $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
+        if (null === $entityManager) {
+            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+        }
         $classMetadata = $entityManager->getClassMetadata($entityClass);
 
         $fields = array_keys($classMetadata->fieldMappings);

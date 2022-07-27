@@ -1,10 +1,13 @@
 {% extends '@DdrCrudAdmin/base.html.twig' %}
 
-{% block ddr_crud_admin_title %}{{ title }}{% endblock ddr_crud_admin_title %}
+{% set fieldDefinitions = 'LIST'|ddrCrudFieldDefinitions(entityClass) %}
+{% set translationDomain = 'LIST'|ddrCrudTranslationDomain(entityClass) %}
+
+{% block ddr_crud_admin_title %}{{ 'LIST'|ddrCrudTitle(entityClass) }}{% endblock ddr_crud_admin_title %}
 
 {% block ddr_crud_admin_header %}
     <div class="py-3 mb-4 border-bottom d-flex">
-        <h1 class="mb-0 align-self-center flex-fill">{{ title }}</h1>
+        <h1 class="mb-0 align-self-center flex-fill">{{ 'LIST'|ddrCrudTitle(entityClass) }}</h1>
         <div class="d-inline-flex align-self-center">
             {% set createRoute = 'CREATE'|ddrCrudPath(entityClass) %}
             {% if createRoute is not null and is_granted('CREATE', entityClass) %}

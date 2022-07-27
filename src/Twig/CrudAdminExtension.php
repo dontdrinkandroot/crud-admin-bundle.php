@@ -88,12 +88,13 @@ class CrudAdminExtension extends AbstractExtension
      * @template T
      *
      * @param string          $crudOperation
-     * @param class-string<T> $entityClass
+     * @param class-string<T>|T $entityOrClass
      *
      * @return string
      */
-    public function getTranslationDomain(string $crudOperation, string $entityClass): string
+    public function getTranslationDomain(string $crudOperation, string|object $entityOrClass): string
     {
+        $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         return Asserted::notNull(
             $this->translationDomainResolver->resolve(CrudOperation::from($crudOperation), $entityClass),
             sprintf("No translationDomain provided for %s::%s", $crudOperation, $entityClass)
@@ -104,12 +105,13 @@ class CrudAdminExtension extends AbstractExtension
      * @template T
      *
      * @param string          $crudOperation
-     * @param class-string<T> $entityClass
+     * @param class-string<T>|T $entityOrClass
      *
      * @return list<FieldDefinition>
      */
-    public function getFieldDefinitions(string $crudOperation, string $entityClass): array
+    public function getFieldDefinitions(string $crudOperation, string|object $entityOrClass): array
     {
+        $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         return Asserted::notNull(
             $this->fieldDefinitionsResolver->resolve(CrudOperation::from($crudOperation), $entityClass),
             sprintf("No fieldDefinitions provided for %s::%s", $crudOperation, $entityClass)
