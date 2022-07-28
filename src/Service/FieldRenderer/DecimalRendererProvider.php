@@ -2,20 +2,20 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
-use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 
-class DateRendererProvider implements FieldRendererProviderInterface
+class DecimalRendererProvider  implements FieldRendererProviderInterface
 {
     /**
      * {@inheritdoc}
      */
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
-        return Types::DATE_MUTABLE === $fieldDefinition->type
-            || Types::DATE_IMMUTABLE === $fieldDefinition->type;
+        return
+            Types::FLOAT === $fieldDefinition->type
+            || Types::DECIMAL === $fieldDefinition->type;
     }
 
     /**
@@ -23,8 +23,6 @@ class DateRendererProvider implements FieldRendererProviderInterface
      */
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
-        return FieldRenderer::escapeHtml(
-            Asserted::instanceOf($value, DateTimeInterface::class)->format('Y-m-d')
-        );
+        return number_format($value, 2);
     }
 }

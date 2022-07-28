@@ -24,6 +24,10 @@ services:
         tags:
             - { name: 'ddr_crud_admin.field_renderer_provider', priority: -240 }
 
+    Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\DecimalRendererProvider:
+        tags:
+            - { name: 'ddr_crud_admin.field_renderer_provider', priority: -240 }
+
     Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\ToStringRendererProvider:
         tags:
             - { name: 'ddr_crud_admin.field_renderer_provider', priority: -250 }

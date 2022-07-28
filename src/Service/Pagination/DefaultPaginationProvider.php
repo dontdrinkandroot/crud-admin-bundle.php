@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
 use App\Entity\Song;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
@@ -48,6 +49,13 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     public function providePagination(string $entityClass): ?PaginationInterface
     {
         $paginationTarget = $this->paginationTargetResolver->resolve($entityClass);
+        $fieldPrefix = '';
+        if ($paginationTarget instanceof QueryBuilder) {
+            $fieldPrefix = $paginationTarget->getRootAliases()[0] . '.';
+        }
+        if ($paginationTarget instanceof Query) {
+            $fieldPrefix = 'entity.';
+        }
 
         $sortFields = [];
         $fieldDefinitions = Asserted::notNull(
@@ -55,7 +63,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         );
         foreach ($fieldDefinitions as $fieldDefinition) {
             if ($fieldDefinition->sortable) {
-                $sortFields[] = 'entity.' . $fieldDefinition->propertyPath;
+                $sortFields[] = $fieldPrefix . $fieldDefinition->propertyPath;
             }
         }
 
@@ -63,8 +71,11 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         $defaultSortDirection = null;
         $defaultSort = $this->resolveDefaultSort($entityClass);
         if (null !== $defaultSort) {
-            $defaultSortFieldName = 'entity.' . $defaultSort->getField();
+            $defaultSortFieldName = $fieldPrefix . $defaultSort->getField();
             $defaultSortDirection = $defaultSort->getOrder();
+            if (!in_array($defaultSortFieldName, $sortFields, true)) {
+                $sortFields[] = $defaultSortFieldName;
+            }
         }
 
         $request = Asserted::notNull($this->requestStack->getMainRequest());

@@ -56,7 +56,7 @@ class CrudControllerRegistry
             throw new RuntimeException(sprintf('There is already a controller for service id %s', $serviceId));
         }
         if (array_key_exists($entityClass, $this->controllersByEntityClass)) {
-            throw new RuntimeException(sprintf('There is already a controller for entity class %s', $serviceId));
+            throw new RuntimeException(sprintf('There is already a controller for entity class %s', $entityClass));
         }
         $this->controllersByServiceId[$serviceId] = $controller;
         $this->controllersByEntityClass[$entityClass] = $controller;
