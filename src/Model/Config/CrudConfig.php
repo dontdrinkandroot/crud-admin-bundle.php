@@ -20,12 +20,16 @@ class CrudConfig
     #[SerializedName('field_definitions')]
     private ?FieldDefinitionsConfig $fieldDefinitionsConfig;
 
+    #[SerializedName('default_sort')]
+    private ?DefaultSortConfig $defaultSortConfig;
+
     /** @psalm-param class-string $entityClass */
     public function __construct(public readonly string $entityClass)
     {
         $this->templatesConfig = null;
         $this->routeConfig = null;
         $this->fieldDefinitionsConfig = null;
+        $this->defaultSortConfig = null;
     }
 
     /** @psalm-return ?class-string<FormTypeInterface> */
@@ -68,5 +72,15 @@ class CrudConfig
     public function setFieldDefinitionsConfig(?FieldDefinitionsConfig $fieldDefinitionsConfig): void
     {
         $this->fieldDefinitionsConfig = $fieldDefinitionsConfig;
+    }
+
+    public function getDefaultSortConfig(): ?DefaultSortConfig
+    {
+        return $this->defaultSortConfig;
+    }
+
+    public function setDefaultSortConfig(?DefaultSortConfig $defaultSortConfig): void
+    {
+        $this->defaultSortConfig = $defaultSortConfig;
     }
 }

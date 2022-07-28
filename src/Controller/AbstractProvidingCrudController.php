@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
+use Dontdrinkandroot\CrudAdminBundle\Model\Config\DefaultSortConfig;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
@@ -11,6 +12,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Sort\DefaultSortProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Symfony\Component\Form\FormTypeInterface;
@@ -22,7 +24,8 @@ use Symfony\Component\Form\FormTypeInterface;
  */
 abstract class AbstractProvidingCrudController extends AbstractCrudController
     implements TitleProviderInterface, RouteInfoProviderInterface,
-               FormTypeProviderInterface, IdProviderInterface, ItemProviderInterface, TemplateProviderInterface, FieldDefinitionsProviderInterface
+               FormTypeProviderInterface, IdProviderInterface, ItemProviderInterface, TemplateProviderInterface,
+               FieldDefinitionsProviderInterface, DefaultSortProviderInterface
 {
     /**
      * {@inheritdoc}
@@ -188,5 +191,26 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
     public function getFieldDefinitions(CrudOperation $crudOperation): array
     {
         throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+    }
+
+    /**
+     * {@inheritdoc}
+     * @final
+     */
+    public function provideDefaultSort(string $entityClass): ?DefaultSortConfig
+    {
+        if (!$this->matches($entityClass)) {
+            return null;
+        }
+
+        return $this->getDefaultSort($entityClass);
+    }
+
+    /**
+     * @param class-string $entityClass
+     */
+    public function getDefaultSort(string $entityClass): ?DefaultSortConfig
+    {
+        return null;
     }
 }

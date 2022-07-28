@@ -37,6 +37,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                 ->addTag(DdrCrudAdminExtension::TAG_ROUTE_INFO_PROVIDER)
                 ->addTag(DdrCrudAdminExtension::TAG_TEMPLATE_PROVIDER)
                 ->addTag(DdrCrudAdminExtension::TAG_FIELD_DEFINITIONS_PROVIDER)
+                ->addTag(DdrCrudAdminExtension::TAG_DEFAULT_SORT_PROVIDER)
                 ->addTag('controller.service_arguments')
                 ->addTag('container.service_subscriber')
                 ->setPublic(true);

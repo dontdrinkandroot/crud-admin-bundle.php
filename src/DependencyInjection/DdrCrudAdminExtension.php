@@ -15,6 +15,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInte
 use Dontdrinkandroot\CrudAdminBundle\Service\Query\QueryExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Sort\DefaultSortProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainProviderInterface;
@@ -33,6 +34,7 @@ class DdrCrudAdminExtension extends Extension
     public const TAG_ID_PROVIDER = 'ddr_crud_admin.id_provider';
     public const TAG_FIELD_DEFINITIONS_PROVIDER = 'ddr_crud_admin.field_definitions_provider';
     public const TAG_QUERY_EXTENSION_PROVIDER = 'ddr_crud_admin.query_extension_provider';
+    public const TAG_DEFAULT_SORT_PROVIDER = 'ddr_crud_admin.default_sort_provider';
 
     /**
      * {@inheritdoc}
@@ -48,6 +50,9 @@ class DdrCrudAdminExtension extends Extension
         $container
             ->registerForAutoconfiguration(QueryExtensionProviderInterface::class)
             ->addTag(self::TAG_QUERY_EXTENSION_PROVIDER);
+        $container
+            ->registerForAutoconfiguration(DefaultSortProviderInterface::class)
+            ->addTag(self::TAG_DEFAULT_SORT_PROVIDER);
         $container
             ->registerForAutoconfiguration(PaginationProviderInterface::class)
             ->addTag('ddr_crud_admin.pagination_provider');

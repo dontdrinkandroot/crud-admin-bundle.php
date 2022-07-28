@@ -80,6 +80,7 @@ services:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver'
             - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface'
             - '@request_stack'
+            - !tagged_iterator ddr_crud_admin.default_sort_provider
         tags:
             -   name: 'ddr_crud_admin.pagination_provider'
                 priority: -250

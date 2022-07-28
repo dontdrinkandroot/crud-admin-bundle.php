@@ -6,6 +6,7 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\Config\CrudConfig;
+use Dontdrinkandroot\CrudAdminBundle\Model\Config\DefaultSortConfig;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\DefaultRouteInfoProvider;
 
@@ -82,5 +83,17 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
         }
 
         return $formType;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getDefaultSort(string $entityClass): ?DefaultSortConfig
+    {
+        if (null === ($defaultSortConfig = $this->crudConfig->getDefaultSortConfig())) {
+            return null;
+        }
+
+        return $defaultSortConfig;
     }
 }
