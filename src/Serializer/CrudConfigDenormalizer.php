@@ -8,7 +8,7 @@ use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-class CrudConfigNormalizer implements ContextAwareDenormalizerInterface
+class CrudConfigDenormalizer implements ContextAwareDenormalizerInterface
 {
     public function __construct(private readonly ObjectNormalizer $objectNormalizer)
     {
@@ -17,7 +17,7 @@ class CrudConfigNormalizer implements ContextAwareDenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = [])
+    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
     {
         return CrudConfig::class === $type;
     }
@@ -25,7 +25,7 @@ class CrudConfigNormalizer implements ContextAwareDenormalizerInterface
     /**
      * {@inheritdoc}
      */
-    public function denormalize($data, string $type, string $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = []): CrudConfig
     {
         $entityClass = Asserted::string(array_key_first($data), 'Could not find EntityClass');
         $resourceData = $data[$entityClass];

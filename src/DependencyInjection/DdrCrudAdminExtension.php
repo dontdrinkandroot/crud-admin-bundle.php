@@ -65,6 +65,7 @@ class DdrCrudAdminExtension extends Extension
         $bundles = $container->getParameter('kernel.bundles');
         if (is_array($bundles) && array_key_exists('DoctrineBundle', $bundles)) {
             $loader->load('doctrine.php');
+            $loader->load('serializer.php');
         }
     }
 

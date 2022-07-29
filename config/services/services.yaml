@@ -138,11 +138,3 @@ services:
     Dontdrinkandroot\CrudAdminBundle\Command\InfoCommand:
         autoconfigure: true
         autowire: true
-
-    Dontdrinkandroot\CrudAdminBundle\Serializer\CrudConfigNormalizer:
-        autoconfigure: true
-        autowire: true
-
-    Dontdrinkandroot\CrudAdminBundle\Serializer\FieldDefinitionNormalizer:
-        autoconfigure: true
-        autowire: true

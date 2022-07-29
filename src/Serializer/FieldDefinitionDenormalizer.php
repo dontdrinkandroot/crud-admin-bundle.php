@@ -5,17 +5,17 @@ namespace Dontdrinkandroot\CrudAdminBundle\Serializer;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Symfony\Component\Serializer\Normalizer\ContextAwareDenormalizerInterface;
 
-class FieldDefinitionNormalizer implements ContextAwareDenormalizerInterface
+class FieldDefinitionDenormalizer implements ContextAwareDenormalizerInterface
 {
     /**
      * {@inheritdoc}
      */
-    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = [])
+    public function supportsDenormalization(mixed $data, string $type, string $format = null, array $context = []): bool
     {
         return FieldDefinition::class === $type;
     }
 
-    public function denormalize($data, string $type, string $format = null, array $context = [])
+    public function denormalize($data, string $type, string $format = null, array $context = []): FieldDefinition
     {
         return new FieldDefinition(
             propertyPath: $data['property_path'],
