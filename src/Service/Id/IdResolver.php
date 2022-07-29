@@ -6,6 +6,9 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
+/**
+ * @extends AbstractProviderService<IdProviderInterface>
+ */
 class IdResolver extends AbstractProviderService
 {
     /**
@@ -17,10 +20,9 @@ class IdResolver extends AbstractProviderService
      *
      * @return mixed
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
+    public function resolveId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof IdProviderInterface);
             try {
                 return $provider->provideId($entityClass, $crudOperation, $entity);
             } catch (UnsupportedByProviderException $e) {

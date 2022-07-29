@@ -21,10 +21,9 @@ class FormResolver extends AbstractProviderService
      *
      * @return ?FormInterface
      */
-    public function resolve(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?FormInterface
+    public function resolveForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): ?FormInterface
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof FormProviderInterface);
             try {
                 return $provider->provideForm($entityClass, $crudOperation, $entity);
             } catch (UnsupportedByProviderException $e) {

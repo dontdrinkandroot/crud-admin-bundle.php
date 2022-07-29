@@ -13,5 +13,5 @@ interface RouteInfoResolverInterface
      *
      * @return ?RouteInfo
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation): ?RouteInfo;
+    public function resolveRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo;
 }

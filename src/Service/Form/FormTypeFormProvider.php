@@ -22,7 +22,7 @@ class FormTypeFormProvider implements FormProviderInterface
      */
     public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): FormInterface
     {
-        $formType = $this->formTypeResolver->resolve($entityClass);
+        $formType = $this->formTypeResolver->resolveFormType($entityClass);
         if (null === $formType) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
         }

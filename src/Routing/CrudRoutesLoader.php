@@ -44,7 +44,7 @@ class CrudRoutesLoader extends Loader
             /** @var class-string $entityClass */
             $entityClass = $controller->getEntityClass();
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::LIST)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, CrudOperation::LIST)) {
                 $defaults = [
                     '_controller' => $id . '::listAction',
                 ];
@@ -59,7 +59,7 @@ class CrudRoutesLoader extends Loader
                 $routes->add($routeInfo->name, $route);
             }
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::CREATE)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, CrudOperation::CREATE)) {
                 $defaults = [
                     '_controller' => $id . '::createAction',
                 ];
@@ -74,7 +74,7 @@ class CrudRoutesLoader extends Loader
                 $routes->add($routeInfo->name, $route);
             }
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::READ)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, CrudOperation::READ)) {
                 $defaults = [
                     '_controller' => $id . '::readAction',
                 ];
@@ -89,7 +89,7 @@ class CrudRoutesLoader extends Loader
                 $routes->add($routeInfo->name, $route);
             }
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::UPDATE)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, CrudOperation::UPDATE)) {
                 $defaults = [
                     '_controller' => $id . '::updateAction',
                 ];
@@ -104,7 +104,7 @@ class CrudRoutesLoader extends Loader
                 $routes->add($routeInfo->name, $route);
             }
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::DELETE)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, CrudOperation::DELETE)) {
                 $defaults = [
                     '_controller' => $id . '::deleteAction',
                 ];

@@ -16,7 +16,6 @@ class TranslationDomainResolver extends AbstractProviderService implements Trans
     public function resolveTranslationDomain(string $entityClass): ?string
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof TranslationDomainProviderInterface);
             try {
                 return $provider->provideTranslationDomain($entityClass);
             } catch (UnsupportedByProviderException $e) {

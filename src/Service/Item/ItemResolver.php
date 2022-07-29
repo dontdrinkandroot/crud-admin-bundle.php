@@ -6,6 +6,9 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
+/**
+ * @extends AbstractProviderService<ItemProviderInterface>
+ */
 class ItemResolver extends AbstractProviderService
 {
     /**
@@ -15,10 +18,9 @@ class ItemResolver extends AbstractProviderService
      *
      * @return object|null
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object
+    public function resolveItem(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof ItemProviderInterface);
             try {
                 return $provider->provideItem($entityClass, $crudOperation, $id);
             } catch (UnsupportedByProviderException $e) {

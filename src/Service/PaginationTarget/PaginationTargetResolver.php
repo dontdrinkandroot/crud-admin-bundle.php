@@ -15,7 +15,7 @@ class PaginationTargetResolver extends AbstractProviderService
      *
      * @return mixed
      */
-    public function resolve(string $entityClass): mixed
+    public function resolvePaginationTarget(string $entityClass): mixed
     {
         foreach ($this->providers as $provider) {
             try {

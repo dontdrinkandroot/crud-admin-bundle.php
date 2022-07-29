@@ -47,8 +47,6 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
                 $entityManager->remove($entity);
                 $entityManager->flush();
                 break;
-            default:
-                /* Noop */
         }
     }
 }

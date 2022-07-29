@@ -22,11 +22,11 @@ class DefaultUrlProvider implements UrlProviderInterface
      */
     public function provideUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity): string
     {
-        $routeInfo = $this->routeInfoResolver->resolve($entityClass, $crudOperation);
+        $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, $crudOperation);
         if (null === $routeInfo) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
-        $id = null !== $entity ? $this->idResolver->resolve($entityClass, $crudOperation, $entity) : null;
+        $id = null !== $entity ? $this->idResolver->resolveId($entityClass, $crudOperation, $entity) : null;
         return match ($crudOperation) {
             CrudOperation::LIST,
             CrudOperation::CREATE => $this->router->generate($routeInfo->name),

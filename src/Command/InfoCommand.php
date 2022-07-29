@@ -59,7 +59,7 @@ class InfoCommand extends Command
             $output->writeln("\t" . 'controller: ' . get_class($controller));
             $output->writeln("\t" . 'routes:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $routeInfo = $this->routeInfoResolver->resolve($entityClass, $crudOperation);
+                $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, $crudOperation);
                 $output->write("\t\t" . $crudOperation->value . ":");
                 if (null === $routeInfo) {
                     $output->writeln(' null');
@@ -71,7 +71,7 @@ class InfoCommand extends Command
             }
             $output->writeln("\t" . 'templates:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $template = $this->templateResolver->resolve($entityClass, $crudOperation);
+                $template = $this->templateResolver->resolveTemplate($entityClass, $crudOperation);
                 $output->writeln(sprintf("\t\t%s: %s", $crudOperation->value, $template ?? 'null'));
             }
             $output->writeln("\t" . 'translation_domains:');
@@ -81,7 +81,10 @@ class InfoCommand extends Command
             }
             $output->writeln("\t" . 'field_definitions:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($entityClass, $crudOperation);
+                $fieldDefinitions = $this->fieldDefinitionsResolver->resolveFieldDefinitions(
+                    $entityClass,
+                    $crudOperation
+                );
                 $output->write("\t\t" . $crudOperation->value . ":");
                 if (null === $fieldDefinitions) {
                     $output->writeln(' null');

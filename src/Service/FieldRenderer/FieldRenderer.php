@@ -6,12 +6,14 @@ use Dontdrinkandroot\CrudAdminBundle\Exception\NoRendererFoundException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
+/**
+ * @extends AbstractProviderService<FieldRendererProviderInterface>
+ */
 class FieldRenderer extends AbstractProviderService
 {
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof FieldRendererProviderInterface);
             if ($provider->supports($fieldDefinition, $value)) {
                 return $provider->render($fieldDefinition, $value);
             }

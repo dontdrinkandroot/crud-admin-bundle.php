@@ -42,9 +42,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
-        $pagination = $this->getPaginationResolver()->resolve($this->getEntityClass());
+        $pagination = $this->getPaginationResolver()->resolvePagination($this->getEntityClass());
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolve($this->getEntityClass(), $crudOperation),
+            $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
             sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
         );
 
@@ -61,7 +61,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     {
         $crudOperation = CrudOperation::READ;
 
-        $entity = $this->getItemResolver()->resolve($this->getEntityClass(), $crudOperation, $id);
+        $entity = $this->getItemResolver()->resolveItem($this->getEntityClass(), $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -71,7 +71,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolve($this->getEntityClass(), $crudOperation),
+            $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
             sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
         );
 
@@ -97,7 +97,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     public function updateAction(Request $request, mixed $id): Response
     {
         $crudOperation = CrudOperation::UPDATE;
-        $entity = $this->getItemResolver()->resolve($this->getEntityClass(), $crudOperation, $id);
+        $entity = $this->getItemResolver()->resolveItem($this->getEntityClass(), $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -121,7 +121,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         ?object $entity = null
     ): Response {
         $form = Asserted::notNull(
-            $this->getFormResolver()->resolve($crudOperation, $this->getEntityClass(), $entity),
+            $this->getFormResolver()->resolveForm($crudOperation, $this->getEntityClass(), $entity),
             sprintf('Form not found for %s::%s', $crudOperation->value, $this->getEntityClass())
         );
         $form->handleRequest($request);
@@ -139,7 +139,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolve($this->getEntityClass(), $crudOperation),
+            $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
             sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
         );
 
@@ -156,7 +156,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     public function deleteAction(Request $request, mixed $id): Response
     {
         $crudOperation = CrudOperation::DELETE;
-        $entity = $this->getItemResolver()->resolve($this->getEntityClass(), $crudOperation, $id);
+        $entity = $this->getItemResolver()->resolveItem($this->getEntityClass(), $crudOperation, $id);
 
         if (null === $entity) {
             throw new NotFoundHttpException();
@@ -295,7 +295,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     protected function findRedirect(CrudOperation $crudOperation, ?object $entity = null): ?RedirectResponse
     {
-        $redirectUrl = $this->getUrlResolver()->resolve($this->getEntityClass(), CrudOperation::LIST, $entity);
+        $redirectUrl = $this->getUrlResolver()->resolveUrl($this->getEntityClass(), CrudOperation::LIST, $entity);
         if (
             null !== $redirectUrl
             && $this->getAuthorizationChecker()->isGranted(

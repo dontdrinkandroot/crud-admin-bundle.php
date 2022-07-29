@@ -13,5 +13,5 @@ interface FieldDefinitionsResolverInterface
      *
      * @return array<array-key, FieldDefinition>|null
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation): ?array;
+    public function resolveFieldDefinitions(string $entityClass, CrudOperation $crudOperation): ?array;
 }

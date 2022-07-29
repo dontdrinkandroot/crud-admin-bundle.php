@@ -6,6 +6,9 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
+/**
+ * @extends AbstractProviderService<TitleProviderInterface>
+ */
 class TitleResolver extends AbstractProviderService
 {
     /**
@@ -17,10 +20,9 @@ class TitleResolver extends AbstractProviderService
      *
      * @return ?string
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?string
+    public function resolveTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?string
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof TitleProviderInterface);
             try {
                 return $provider->provideTitle($entityClass, $crudOperation, $entity);
             } catch (UnsupportedByProviderException $e) {

@@ -18,10 +18,9 @@ class FormTypeResolver extends AbstractProviderService
      *
      * @return ?class-string<FormTypeInterface>
      */
-    public function resolve(string $entityClass): ?string
+    public function resolveFormType(string $entityClass): ?string
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof FormTypeProviderInterface);
             try {
                 return $provider->provideFormType($entityClass);
             } catch (UnsupportedByProviderException $e) {

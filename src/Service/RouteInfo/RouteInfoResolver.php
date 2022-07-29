@@ -15,10 +15,9 @@ class RouteInfoResolver extends AbstractProviderService implements RouteInfoReso
     /**
      * {@inheritdoc}
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation): ?RouteInfo
+    public function resolveRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof RouteInfoProviderInterface);
             try {
                 return $provider->provideRouteInfo($entityClass, $crudOperation);
             } catch (UnsupportedByProviderException $e) {

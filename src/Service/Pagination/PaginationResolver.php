@@ -18,7 +18,7 @@ class PaginationResolver extends AbstractProviderService
      *
      * @return PaginationInterface|null
      */
-    public function resolve(string $entityClass): ?PaginationInterface
+    public function resolvePagination(string $entityClass): ?PaginationInterface
     {
         foreach ($this->providers as $provider) {
             try {

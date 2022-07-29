@@ -82,7 +82,7 @@ class CrudAdminExtension extends AbstractExtension
     {
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
-        return $this->urlResolver->resolve($entityClass, CrudOperation::from($crudOperation), $entity);
+        return $this->urlResolver->resolveUrl($entityClass, CrudOperation::from($crudOperation), $entity);
     }
 
     /**
@@ -98,7 +98,7 @@ class CrudAdminExtension extends AbstractExtension
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
         return Asserted::notNull(
-            $this->titleResolver->resolve($entityClass, CrudOperation::from($crudOperation), $entity),
+            $this->titleResolver->resolveTitle($entityClass, CrudOperation::from($crudOperation), $entity),
             sprintf("No title provided for %s::%s", $crudOperation, $entityClass)
         );
     }
@@ -131,7 +131,7 @@ class CrudAdminExtension extends AbstractExtension
     {
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         return Asserted::notNull(
-            $this->fieldDefinitionsResolver->resolve($entityClass, CrudOperation::from($crudOperation)),
+            $this->fieldDefinitionsResolver->resolveFieldDefinitions($entityClass, CrudOperation::from($crudOperation)),
             sprintf("No fieldDefinitions provided for %s::%s", $crudOperation, $entityClass)
         );
     }

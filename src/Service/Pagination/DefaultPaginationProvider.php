@@ -37,7 +37,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
      */
     public function providePagination(string $entityClass): ?PaginationInterface
     {
-        $paginationTarget = $this->paginationTargetResolver->resolve($entityClass);
+        $paginationTarget = $this->paginationTargetResolver->resolvePaginationTarget($entityClass);
         $fieldPrefix = '';
         if ($paginationTarget instanceof QueryBuilder) {
             $fieldPrefix = $paginationTarget->getRootAliases()[0] . '.';
@@ -48,7 +48,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
 
         $sortFields = [];
         $fieldDefinitions = Asserted::notNull(
-            $this->fieldDefinitionsResolver->resolve($entityClass, CrudOperation::LIST)
+            $this->fieldDefinitionsResolver->resolveFieldDefinitions($entityClass, CrudOperation::LIST)
         );
         foreach ($fieldDefinitions as $fieldDefinition) {
             if ($fieldDefinition->sortable) {

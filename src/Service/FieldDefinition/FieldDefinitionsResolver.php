@@ -14,10 +14,9 @@ class FieldDefinitionsResolver extends AbstractProviderService implements FieldD
     /**
      * {@inheritdoc}
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation): ?array
+    public function resolveFieldDefinitions(string $entityClass, CrudOperation $crudOperation): ?array
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof FieldDefinitionsProviderInterface);
             try {
                 return $provider->provideFieldDefinitions($entityClass, $crudOperation);
             } catch (UnsupportedByProviderException $e) {

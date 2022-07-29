@@ -12,5 +12,5 @@ interface TemplateResolverInterface
      *
      * @return ?string
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation): ?string;
+    public function resolveTemplate(string $entityClass, CrudOperation $crudOperation): ?string;
 }
