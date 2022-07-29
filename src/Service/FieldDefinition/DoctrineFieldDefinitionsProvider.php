@@ -9,11 +9,10 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use RuntimeException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
-    public function __construct(private ManagerRegistry $managerRegistry, private TranslatorInterface $translator)
+    public function __construct(private readonly ManagerRegistry $managerRegistry)
     {
     }
 
