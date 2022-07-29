@@ -2,26 +2,17 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
 interface PaginationProviderInterface extends ProviderInterface
 {
     /**
-     * @template T of object
-     *
-     * @param class-string<T> $entityClass
-     *
-     * @return bool
-     */
-    public function supportsPagination(string $entityClass): bool;
-
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $entityClass
+     * @param class-string $entityClass
      *
      * @return PaginationInterface|null
+     * @throws UnsupportedByProviderException
      */
     public function providePagination(string $entityClass): ?PaginationInterface;
 }

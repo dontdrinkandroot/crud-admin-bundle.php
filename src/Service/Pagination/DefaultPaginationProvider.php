@@ -35,14 +35,6 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsPagination(string $entityClass): bool
-    {
-        return true;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function providePagination(string $entityClass): ?PaginationInterface
     {
         $paginationTarget = $this->paginationTargetResolver->resolve($entityClass);
