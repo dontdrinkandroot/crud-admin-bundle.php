@@ -31,7 +31,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      * {@inheritdoc}
      * @final
      */
-    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
+    public function provideTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): string
     {
         if (!$this->matches($entityClass)) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
@@ -56,7 +56,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      * {@inheritdoc}
      * @final
      */
-    public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo
+    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo
     {
         if (!$this->matches($entityClass)) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation);
@@ -96,7 +96,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      * {@inheritdoc}
      * @final
      */
-    public function provideId(CrudOperation $crudOperation, string $entityClass, object $entity): mixed
+    public function provideId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
     {
         if (!$this->matches($entityClass)) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
@@ -121,7 +121,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      * {@inheritdoc}
      * @final
      */
-    public function provideItem(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
+    public function provideItem(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object
     {
         if (!$this->matches($entityClass)) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation);
@@ -146,7 +146,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      * {@inheritdoc}
      * @final
      */
-    public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string
+    public function provideTemplate(string $entityClass, CrudOperation $crudOperation): string
     {
         if (!$this->matches($entityClass)) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation);

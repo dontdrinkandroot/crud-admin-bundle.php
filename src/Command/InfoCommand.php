@@ -59,7 +59,7 @@ class InfoCommand extends Command
             $output->writeln("\t" . 'controller: ' . get_class($controller));
             $output->writeln("\t" . 'routes:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $routeInfo = $this->routeInfoResolver->resolve($crudOperation, $entityClass);
+                $routeInfo = $this->routeInfoResolver->resolve($entityClass, $crudOperation);
                 $output->write("\t\t" . $crudOperation->value . ":");
                 if (null === $routeInfo) {
                     $output->writeln(' null');
@@ -71,7 +71,7 @@ class InfoCommand extends Command
             }
             $output->writeln("\t" . 'templates:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $template = $this->templateResolver->resolve($crudOperation, $entityClass);
+                $template = $this->templateResolver->resolve($entityClass, $crudOperation);
                 $output->writeln(sprintf("\t\t%s: %s", $crudOperation->value, $template ?? 'null'));
             }
             $output->writeln("\t" . 'translation_domains:');

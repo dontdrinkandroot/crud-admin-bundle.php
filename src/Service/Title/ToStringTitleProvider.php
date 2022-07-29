@@ -12,7 +12,7 @@ class ToStringTitleProvider implements TitleProviderInterface
      * {@inheritdoc}
      * @psalm-suppress InvalidCast
      */
-    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
+    public function provideTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): string
     {
         if (
             !in_array($crudOperation, [CrudOperation::READ, CrudOperation::UPDATE], true)

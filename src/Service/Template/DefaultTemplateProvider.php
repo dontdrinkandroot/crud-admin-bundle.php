@@ -11,7 +11,7 @@ class DefaultTemplateProvider implements TemplateProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string
+    public function provideTemplate(string $entityClass, CrudOperation $crudOperation): string
     {
         if (!in_array(
             $crudOperation,

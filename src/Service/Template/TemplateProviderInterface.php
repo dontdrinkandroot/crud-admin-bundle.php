@@ -11,11 +11,11 @@ interface TemplateProviderInterface extends ProviderInterface
     /**
      * @template T of object
      *
-     * @param CrudOperation $crudOperation
      * @param class-string<T> $entityClass
+     * @param CrudOperation   $crudOperation
      *
      * @return string
      * @throws UnsupportedByProviderException
      */
-    public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string;
+    public function provideTemplate(string $entityClass, CrudOperation $crudOperation): string;
 }

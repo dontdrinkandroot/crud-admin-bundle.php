@@ -12,11 +12,11 @@ interface RouteInfoProviderInterface extends ProviderInterface
     /**
      * @template T of object
      *
-     * @param CrudOperation   $crudOperation
      * @param class-string<T> $entityClass
+     * @param CrudOperation   $crudOperation
      *
      * @return RouteInfo
      * @throws UnsupportedByProviderException
      */
-    public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo;
+    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo;
 }

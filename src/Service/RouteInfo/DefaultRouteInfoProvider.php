@@ -12,7 +12,7 @@ class DefaultRouteInfoProvider implements RouteInfoProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo
+    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo
     {
         return self::getRouteInfo(
             $crudOperation,

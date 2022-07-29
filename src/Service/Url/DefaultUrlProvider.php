@@ -20,9 +20,9 @@ class DefaultUrlProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsUrl(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool
+    public function supportsUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity): bool
     {
-        return null !== $this->routeInfoResolver->resolve($crudOperation, $entityClass);
+        return null !== $this->routeInfoResolver->resolve($entityClass, $crudOperation);
     }
 
     /**
@@ -30,8 +30,8 @@ class DefaultUrlProvider implements UrlProviderInterface
      */
     public function provideUrl(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
     {
-        $routeInfo = Asserted::notNull($this->routeInfoResolver->resolve($crudOperation, $entityClass));
-        $id = null !== $entity ? $this->idResolver->resolve($crudOperation, $entityClass, $entity) : null;
+        $routeInfo = Asserted::notNull($this->routeInfoResolver->resolve($entityClass, $crudOperation));
+        $id = null !== $entity ? $this->idResolver->resolve($entityClass, $crudOperation, $entity) : null;
         return match ($crudOperation) {
             CrudOperation::LIST,
             CrudOperation::CREATE => $this->router->generate($routeInfo->name),

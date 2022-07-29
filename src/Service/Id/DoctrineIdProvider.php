@@ -21,7 +21,7 @@ class DoctrineIdProvider implements IdProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideId(CrudOperation $crudOperation, string $entityClass, object $entity): mixed
+    public function provideId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
     {
         $realEntityClass = ClassUtils::getClass($entity);
         $entityManager = Asserted::instanceOfOrNull(

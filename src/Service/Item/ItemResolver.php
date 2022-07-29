@@ -9,18 +9,18 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 class ItemResolver extends AbstractProviderService
 {
     /**
-     * @param CrudOperation $crudOperation
      * @param class-string  $entityClass
+     * @param CrudOperation $crudOperation
      * @param mixed         $id
      *
      * @return object|null
      */
-    public function resolve(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
+    public function resolve(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof ItemProviderInterface);
             try {
-                return $provider->provideItem($crudOperation, $entityClass, $id);
+                return $provider->provideItem($entityClass, $crudOperation, $id);
             } catch (UnsupportedByProviderException $e) {
                 /* Continue */
             }

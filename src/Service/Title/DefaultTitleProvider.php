@@ -17,7 +17,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
+    public function provideTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): string
     {
         return $this->translator->trans(
             id: $crudOperation->value,

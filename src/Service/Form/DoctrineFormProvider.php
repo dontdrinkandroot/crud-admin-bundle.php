@@ -24,7 +24,7 @@ class DoctrineFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool
+    public function supportsForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): bool
     {
         return null !== $this->managerRegistry->getManagerForClass($entityClass);
     }
@@ -32,7 +32,7 @@ class DoctrineFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): FormInterface
+    public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): FormInterface
     {
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),

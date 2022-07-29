@@ -9,12 +9,12 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 interface IdProviderInterface extends ProviderInterface
 {
     /**
-     * @param CrudOperation $crudOperation
      * @param class-string  $entityClass
+     * @param CrudOperation $crudOperation
      * @param object        $entity
      *
      * @return mixed
      * @throws UnsupportedByProviderException
      */
-    public function provideId(CrudOperation $crudOperation, string $entityClass, object $entity): mixed;
+    public function provideId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed;
 }

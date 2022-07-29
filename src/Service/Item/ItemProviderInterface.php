@@ -9,12 +9,12 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 interface ItemProviderInterface extends ProviderInterface
 {
     /**
-     * @param CrudOperation $crudOperation
      * @param class-string  $entityClass
+     * @param CrudOperation $crudOperation
      * @param mixed         $id
      *
      * @return object|null
      * @throws UnsupportedByProviderException
      */
-    public function provideItem(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object;
+    public function provideItem(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object;
 }

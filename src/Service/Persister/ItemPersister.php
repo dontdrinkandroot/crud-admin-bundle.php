@@ -18,8 +18,8 @@ class ItemPersister extends AbstractProviderService
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof ItemPersisterProviderInterface);
-            if ($provider->supportsPersist($crudOperation, $entityClass, $entity)) {
-                $provider->persist($crudOperation, $entityClass, $entity);
+            if ($provider->supportsPersist($entityClass, $crudOperation, $entity)) {
+                $provider->persist($entityClass, $crudOperation, $entity);
                 return;
             }
         }

@@ -4,7 +4,6 @@ namespace Dontdrinkandroot\CrudAdminBundle\Routing;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
-use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
 use RuntimeException;
 use Symfony\Component\Config\Loader\Loader;
@@ -45,7 +44,7 @@ class CrudRoutesLoader extends Loader
             /** @var class-string $entityClass */
             $entityClass = $controller->getEntityClass();
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve(CrudOperation::LIST, $entityClass)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::LIST)) {
                 $defaults = [
                     '_controller' => $id . '::listAction',
                 ];
@@ -60,7 +59,7 @@ class CrudRoutesLoader extends Loader
                 $routes->add($routeInfo->name, $route);
             }
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve(CrudOperation::CREATE, $entityClass)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::CREATE)) {
                 $defaults = [
                     '_controller' => $id . '::createAction',
                 ];
@@ -75,7 +74,7 @@ class CrudRoutesLoader extends Loader
                 $routes->add($routeInfo->name, $route);
             }
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve(CrudOperation::READ, $entityClass)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::READ)) {
                 $defaults = [
                     '_controller' => $id . '::readAction',
                 ];
@@ -90,7 +89,7 @@ class CrudRoutesLoader extends Loader
                 $routes->add($routeInfo->name, $route);
             }
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve(CrudOperation::UPDATE, $entityClass)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::UPDATE)) {
                 $defaults = [
                     '_controller' => $id . '::updateAction',
                 ];
@@ -105,7 +104,7 @@ class CrudRoutesLoader extends Loader
                 $routes->add($routeInfo->name, $route);
             }
 
-            if (null !== $routeInfo = $this->routeInfoResolver->resolve(CrudOperation::DELETE, $entityClass)) {
+            if (null !== $routeInfo = $this->routeInfoResolver->resolve($entityClass, CrudOperation::DELETE)) {
                 $defaults = [
                     '_controller' => $id . '::deleteAction',
                 ];

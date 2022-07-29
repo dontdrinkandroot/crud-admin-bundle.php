@@ -11,13 +11,13 @@ interface TitleProviderInterface extends ProviderInterface
     /**
      * @template T of object
      *
-     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
+     * @param CrudOperation   $crudOperation
      * @param T|null          $entity
      *
+     * @return string
      * @throws UnsupportedByProviderException
      *
-     * @return string
      */
-    public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string;
+    public function provideTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): string;
 }

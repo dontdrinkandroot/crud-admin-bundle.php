@@ -82,7 +82,7 @@ class CrudAdminExtension extends AbstractExtension
     {
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
-        return $this->urlResolver->resolve(CrudOperation::from($crudOperation), $entityClass, $entity);
+        return $this->urlResolver->resolve($entityClass, CrudOperation::from($crudOperation), $entity);
     }
 
     /**
@@ -98,7 +98,7 @@ class CrudAdminExtension extends AbstractExtension
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
         return Asserted::notNull(
-            $this->titleResolver->resolve(CrudOperation::from($crudOperation), $entityClass, $entity),
+            $this->titleResolver->resolve($entityClass, CrudOperation::from($crudOperation), $entity),
             sprintf("No title provided for %s::%s", $crudOperation, $entityClass)
         );
     }

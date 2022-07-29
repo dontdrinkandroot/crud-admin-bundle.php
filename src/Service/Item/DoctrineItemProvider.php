@@ -19,7 +19,7 @@ class DoctrineItemProvider implements ItemProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideItem(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
+    public function provideItem(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object
     {
         $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($entityClass),

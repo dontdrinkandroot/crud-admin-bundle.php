@@ -14,12 +14,12 @@ class TemplateResolver extends AbstractProviderService implements TemplateResolv
     /**
      * {@inheritdoc}
      */
-    public function resolve(CrudOperation $crudOperation, string $entityClass): ?string
+    public function resolve(string $entityClass, CrudOperation $crudOperation): ?string
     {
         foreach ($this->providers as $provider) {
             assert($provider instanceof TemplateProviderInterface);
             try {
-                return $provider->provideTemplate($crudOperation, $entityClass);
+                return $provider->provideTemplate($entityClass, $crudOperation);
             } catch (UnsupportedByProviderException $e) {
                 /* Continue */
             }

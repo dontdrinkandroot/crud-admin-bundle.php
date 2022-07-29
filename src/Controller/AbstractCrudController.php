@@ -9,7 +9,6 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Psr\Container\ContainerInterface;
@@ -45,7 +44,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
         $pagination = $this->getPaginationResolver()->resolve($this->getEntityClass());
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolve($crudOperation, $this->getEntityClass()),
+            $this->getTemplateResolver()->resolve($this->getEntityClass(), $crudOperation),
             sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
         );
 
@@ -62,7 +61,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     {
         $crudOperation = CrudOperation::READ;
 
-        $entity = $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id);
+        $entity = $this->getItemResolver()->resolve($this->getEntityClass(), $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -72,7 +71,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolve($crudOperation, $this->getEntityClass()),
+            $this->getTemplateResolver()->resolve($this->getEntityClass(), $crudOperation),
             sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
         );
 
@@ -98,7 +97,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     public function updateAction(Request $request, mixed $id): Response
     {
         $crudOperation = CrudOperation::UPDATE;
-        $entity = $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id);
+        $entity = $this->getItemResolver()->resolve($this->getEntityClass(), $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -140,7 +139,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolve($crudOperation, $this->getEntityClass()),
+            $this->getTemplateResolver()->resolve($this->getEntityClass(), $crudOperation),
             sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
         );
 
@@ -157,7 +156,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     public function deleteAction(Request $request, mixed $id): Response
     {
         $crudOperation = CrudOperation::DELETE;
-        $entity = $this->getItemResolver()->resolve($crudOperation, $this->getEntityClass(), $id);
+        $entity = $this->getItemResolver()->resolve($this->getEntityClass(), $crudOperation, $id);
 
         if (null === $entity) {
             throw new NotFoundHttpException();
@@ -296,7 +295,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     protected function findRedirect(CrudOperation $crudOperation, ?object $entity = null): ?RedirectResponse
     {
-        $redirectUrl = $this->getUrlResolver()->resolve(CrudOperation::LIST, $this->getEntityClass(), $entity);
+        $redirectUrl = $this->getUrlResolver()->resolve($this->getEntityClass(), CrudOperation::LIST, $entity);
         if (
             null !== $redirectUrl
             && $this->getAuthorizationChecker()->isGranted(

@@ -11,22 +11,22 @@ interface FormProviderInterface extends ProviderInterface
     /**
      * @template T of object
      *
-     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
+     * @param CrudOperation   $crudOperation
      * @param T|null          $entity
      *
      * @return bool
      */
-    public function supportsForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool;
+    public function supportsForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): bool;
 
     /**
      * @template T of object
      *
-     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
+     * @param CrudOperation   $crudOperation
      * @param T|null          $entity
      *
      * @return FormInterface
      */
-    public function provideForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): FormInterface;
+    public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): FormInterface;
 }

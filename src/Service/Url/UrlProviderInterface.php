@@ -10,13 +10,13 @@ interface UrlProviderInterface extends ProviderInterface
     /**
      * @template T of object
      *
-     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
+     * @param CrudOperation   $crudOperation
      * @param T|null          $entity
      *
      * @return bool
      */
-    public function supportsUrl(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool;
+    public function supportsUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity): bool;
 
     /**
      * @template T of object
