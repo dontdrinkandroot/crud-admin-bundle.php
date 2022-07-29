@@ -6,16 +6,15 @@ use Doctrine\Common\Util\ClassUtils;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
+use Twig\TwigFunction;
 
 class CrudAdminExtension extends AbstractExtension
 {
@@ -44,6 +43,24 @@ class CrudAdminExtension extends AbstractExtension
             new TwigFilter('ddrCrudTitle', [$this, 'getTitle']),
             new TwigFilter('ddrCrudTranslationDomain', [$this, 'getTranslationDomain']),
             new TwigFilter('ddrCrudFieldDefinitions', [$this, 'getFieldDefinitions'])
+        ];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFunctions(): array
+    {
+        return [
+            new TwigFunction(
+                'ddrCrudAdminFieldDefinitionValue',
+                [$this, 'renderFieldDefinitionValue'],
+                ['is_safe' => ['html']]
+            ),
+            new TwigFunction('ddrCrudPath', [$this, 'getPath']),
+            new TwigFunction('ddrCrudTitle', [$this, 'getTitle']),
+            new TwigFunction('ddrCrudTranslationDomain', [$this, 'getTranslationDomain']),
+            new TwigFunction('ddrCrudFieldDefinitions', [$this, 'getFieldDefinitions'])
         ];
     }
 
