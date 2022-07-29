@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 
 class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
 {
@@ -16,26 +17,23 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsPersist(string $entityClass, CrudOperation $crudOperation, object $entity): bool
-    {
-        return
-            null !== $this->managerRegistry->getManagerForClass($entityClass)
-            && in_array(
-                $crudOperation,
-                [CrudOperation::CREATE, CrudOperation::UPDATE, CrudOperation::DELETE],
-                true
-            );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function persist(string $entityClass, CrudOperation $crudOperation, object $entity): void
     {
-        $entityManager = Asserted::instanceOf(
+        if (!in_array(
+            $crudOperation,
+            [CrudOperation::CREATE, CrudOperation::UPDATE, CrudOperation::DELETE],
+            true
+        )) {
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+        }
+
+        $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
+        if (null === $entityManager) {
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+        }
 
         switch ($crudOperation) {
             case CrudOperation::CREATE:
