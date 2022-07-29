@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\Query\QueryExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
 
@@ -26,20 +27,15 @@ class DoctrinePaginationTargetProvider implements PaginationTargetProvider
     /**
      * {@inheritdoc}
      */
-    public function supportsPaginationTarget(string $entityClass): bool
-    {
-        return null !== $this->managerRegistry->getManagerForClass($entityClass);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function providePaginationTarget(string $entityClass): Query
     {
-        $entityManager = Asserted::instanceOf(
+        $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
+        if (null === $entityManager) {
+            throw new UnsupportedByProviderException($entityClass);
+        }
 
         $queryBuilder = $entityManager->createQueryBuilder()
             ->select('entity')
