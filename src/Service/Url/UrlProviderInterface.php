@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface UrlProviderInterface extends ProviderInterface
@@ -14,18 +15,8 @@ interface UrlProviderInterface extends ProviderInterface
      * @param CrudOperation   $crudOperation
      * @param T|null          $entity
      *
-     * @return bool
-     */
-    public function supportsUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity): bool;
-
-    /**
-     * @template T of object
-     *
-     * @param CrudOperation          $crudOperation
-     * @param class-string<T> $entityClass
-     * @param T|null          $entity
-     *
      * @return string
+     * @throws UnsupportedByProviderException
      */
-    public function provideUrl(CrudOperation $crudOperation, string $entityClass, ?object $entity): string;
+    public function provideUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity): string;
 }

@@ -2,8 +2,8 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
-use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
 use Symfony\Component\Routing\RouterInterface;
@@ -20,17 +20,12 @@ class DefaultUrlProvider implements UrlProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity): bool
+    public function provideUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity): string
     {
-        return null !== $this->routeInfoResolver->resolve($entityClass, $crudOperation);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function provideUrl(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
-    {
-        $routeInfo = Asserted::notNull($this->routeInfoResolver->resolve($entityClass, $crudOperation));
+        $routeInfo = $this->routeInfoResolver->resolve($entityClass, $crudOperation);
+        if (null === $routeInfo) {
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+        }
         $id = null !== $entity ? $this->idResolver->resolve($entityClass, $crudOperation, $entity) : null;
         return match ($crudOperation) {
             CrudOperation::LIST,

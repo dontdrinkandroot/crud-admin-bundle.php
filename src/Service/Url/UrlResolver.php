@@ -3,8 +3,12 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
+/**
+ * @extends AbstractProviderService<UrlProviderInterface>
+ */
 class UrlResolver extends AbstractProviderService
 {
     /**
@@ -16,12 +20,13 @@ class UrlResolver extends AbstractProviderService
      *
      * @return string|null
      */
-    public function resolve(string $entityClass, CrudOperation $crudOperation, ?object $entity = null): ?string
+    public function resolveUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity = null): ?string
     {
         foreach ($this->providers as $provider) {
-            assert($provider instanceof UrlProviderInterface);
-            if ($provider->supportsUrl($entityClass, $crudOperation, $entity)) {
-                return $provider->provideUrl($crudOperation, $entityClass, $entity);
+            try {
+                return $provider->provideUrl($entityClass, $crudOperation, $entity);
+            } catch (UnsupportedByProviderException $e) {
+                /* Continue */
             }
         }
 
