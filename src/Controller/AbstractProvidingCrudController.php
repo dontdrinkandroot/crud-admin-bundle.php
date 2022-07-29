@@ -34,7 +34,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
     public function provideTitle(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
     {
         if (!$this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
         }
 
         return $this->getTitle($crudOperation, $entity);
@@ -49,7 +49,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      */
     protected function getTitle(CrudOperation $crudOperation, ?object $entity): string
     {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
+        throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation, $entity);
     }
 
     /**
@@ -59,7 +59,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
     public function provideRouteInfo(CrudOperation $crudOperation, string $entityClass): RouteInfo
     {
         if (!$this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
 
         return $this->getRouteInfo($crudOperation);
@@ -67,32 +67,29 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
 
     protected function getRouteInfo(CrudOperation $crudOperation): RouteInfo
     {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+        throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
     }
 
     /**
      * {@inheritdoc}
      * @final
      */
-    public function provideFormType(CrudOperation $crudOperation, string $entityClass, ?object $entity): string
+    public function provideFormType(string $entityClass): string
     {
         if (!$this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+            throw new UnsupportedByProviderException($entityClass);
         }
 
-        return $this->getFormType($crudOperation, $entity);
+        return $this->getFormType();
     }
 
     /**
-     * @param CrudOperation $crudOperation
-     * @param object|null   $entity
-     *
      * @return class-string<FormTypeInterface>
      * @throws UnsupportedByProviderException
      */
-    protected function getFormType(CrudOperation $crudOperation, ?object $entity): string
+    protected function getFormType(): string
     {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
+        throw new UnsupportedByProviderException($this->getEntityClass());
     }
 
     /**
@@ -102,7 +99,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
     public function provideId(CrudOperation $crudOperation, string $entityClass, object $entity): mixed
     {
         if (!$this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
         }
 
         return $this->getId($crudOperation, $entity);
@@ -117,7 +114,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      */
     protected function getId(CrudOperation $crudOperation, object $entity): mixed
     {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass(), $entity);
+        throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation, $entity);
     }
 
     /**
@@ -127,7 +124,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
     public function provideItem(CrudOperation $crudOperation, string $entityClass, mixed $id): ?object
     {
         if (!$this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
 
         return $this->getItem($crudOperation, $id);
@@ -142,7 +139,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      */
     public function getItem(CrudOperation $crudOperation, mixed $id): ?object
     {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+        throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
     }
 
     /**
@@ -152,7 +149,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
     public function provideTemplate(CrudOperation $crudOperation, string $entityClass): string
     {
         if (!$this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
 
         return $this->getTemplate($crudOperation);
@@ -166,17 +163,17 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      */
     public function getTemplate(CrudOperation $crudOperation): string
     {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+        throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
     }
 
     /**
      * {@inheritdoc}
      * @final
      */
-    public function provideFieldDefinitions(CrudOperation $crudOperation, string $entityClass): array
+    public function provideFieldDefinitions(string $entityClass, CrudOperation $crudOperation): array
     {
         if (!$this->matches($entityClass)) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
 
         return $this->getFieldDefinitions($crudOperation);
@@ -190,7 +187,7 @@ abstract class AbstractProvidingCrudController extends AbstractCrudController
      */
     public function getFieldDefinitions(CrudOperation $crudOperation): array
     {
-        throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+        throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
     }
 
     /**

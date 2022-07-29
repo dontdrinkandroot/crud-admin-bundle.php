@@ -22,7 +22,7 @@ class FormTypeFormProvider implements FormProviderInterface
      */
     public function supportsForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): bool
     {
-        return null !== $this->formTypeResolver->resolve($crudOperation, $entityClass, $entity);
+        return null !== $this->formTypeResolver->resolve($entityClass);
     }
 
     /**
@@ -30,7 +30,7 @@ class FormTypeFormProvider implements FormProviderInterface
      */
     public function provideForm(CrudOperation $crudOperation, string $entityClass, ?object $entity): FormInterface
     {
-        $formType = Asserted::notNull($this->formTypeResolver->resolve($crudOperation, $entityClass, $entity));
+        $formType = Asserted::notNull($this->formTypeResolver->resolve($entityClass));
 
         $form = $this->formFactory->create($formType, $entity);
 

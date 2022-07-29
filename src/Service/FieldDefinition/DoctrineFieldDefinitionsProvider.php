@@ -19,14 +19,14 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     /**
      * {@inheritdoc}
      */
-    public function provideFieldDefinitions(CrudOperation $crudOperation, string $entityClass): array
+    public function provideFieldDefinitions(string $entityClass, CrudOperation $crudOperation): array
     {
         $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
         $classMetadata = $entityManager->getClassMetadata($entityClass);
 

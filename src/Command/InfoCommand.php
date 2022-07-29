@@ -4,13 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Command;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
-use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -80,12 +76,12 @@ class InfoCommand extends Command
             }
             $output->writeln("\t" . 'translation_domains:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $translationDomain = $this->translationDomainResolver->resolve($crudOperation, $entityClass);
+                $translationDomain = $this->translationDomainResolver->resolveTranslationDomain($entityClass);
                 $output->writeln(sprintf("\t\t%s: %s", $crudOperation->value, $translationDomain ?? 'null'));
             }
             $output->writeln("\t" . 'field_definitions:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($crudOperation, $entityClass);
+                $fieldDefinitions = $this->fieldDefinitionsResolver->resolve($entityClass, $crudOperation);
                 $output->write("\t\t" . $crudOperation->value . ":");
                 if (null === $fieldDefinitions) {
                     $output->writeln(' null');

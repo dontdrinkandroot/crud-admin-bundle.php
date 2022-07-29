@@ -6,8 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -48,7 +46,7 @@ class DoctrineFormProvider implements FormProviderInterface
         );
 
         $fields = array_keys($classMetadata->fieldMappings);
-        $translationDomain = $this->translationDomainResolver->resolve($crudOperation, $entityClass);
+        $translationDomain = $this->translationDomainResolver->resolveTranslationDomain($entityClass);
 
         foreach ($fields as $field) {
             $fieldMapping = $classMetadata->fieldMappings[$field];

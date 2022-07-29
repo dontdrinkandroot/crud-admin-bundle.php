@@ -8,15 +8,15 @@ use Exception;
 class UnsupportedByProviderException extends Exception
 {
     /**
-     * @param CrudOperation $crudOperation
-     * @param class-string  $entityClass
-     * @param object|null   $entity
+     * @param class-string       $entityClass
+     * @param CrudOperation|null $crudOperation
+     * @param object|null        $entity
      */
     public function __construct(
-        public readonly CrudOperation $crudOperation,
         public readonly string $entityClass,
+        public readonly ?CrudOperation $crudOperation = null,
         public ?object $entity = null
     ) {
-        parent::__construct(sprintf('%s::%s', $this->crudOperation->value, $this->entityClass));
+        parent::__construct(sprintf('%s::%s', $this->entityClass, $this->crudOperation?->value ?? 'none'));
     }
 }

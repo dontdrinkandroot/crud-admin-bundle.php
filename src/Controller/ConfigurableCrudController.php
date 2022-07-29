@@ -30,7 +30,7 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
     protected function getRouteInfo(CrudOperation $crudOperation): RouteInfo
     {
         if (null === ($routeConfig = $this->crudConfig->getRouteConfig())) {
-            throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+            throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
         }
 
         $pathPrefix = $routeConfig->getPathPrefix() ?? DefaultRouteInfoProvider::getDefaultPathPrefix(
@@ -52,7 +52,7 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
             null === ($templatesConfig = $this->crudConfig->getTemplatesConfig())
             || null === ($template = $templatesConfig->getByCrudOperation($crudOperation))
         ) {
-            throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+            throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
         }
 
         return $template;
@@ -67,7 +67,7 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
             null === ($fieldDefinitionsConfig = $this->crudConfig->getFieldDefinitionsConfig())
             || null === ($fieldDefinitions = $fieldDefinitionsConfig->getByCrudOperation($crudOperation))
         ) {
-            throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+            throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
         }
 
         return $fieldDefinitions;
@@ -76,10 +76,10 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
     /**
      * {@inheritdoc}
      */
-    protected function getFormType(CrudOperation $crudOperation, ?object $entity): string
+    protected function getFormType(): string
     {
         if (null === ($formType = $this->crudConfig->getFormType())) {
-            throw new UnsupportedByProviderException($crudOperation, $this->getEntityClass());
+            throw new UnsupportedByProviderException($this->getEntityClass());
         }
 
         return $formType;

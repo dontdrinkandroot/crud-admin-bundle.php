@@ -4,10 +4,8 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
-use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\Query\QueryExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
 
@@ -36,7 +34,7 @@ class DoctrinePaginationTargetProvider implements PaginationTargetProvider
     /**
      * {@inheritdoc}
      */
-    public function providePaginationTarget(string $entityClass): ?Query
+    public function providePaginationTarget(string $entityClass): Query
     {
         $entityManager = Asserted::instanceOf(
             $this->managerRegistry->getManagerForClass($entityClass),

@@ -18,7 +18,7 @@ class CachedTemplateResolver extends TemplateResolver
      */
     public function resolve(CrudOperation $crudOperation, string $entityClass): ?string
     {
-        $key = ProviderCacheKey::create('template', $crudOperation, $entityClass);
+        $key = ProviderCacheKey::create('template', $entityClass, $crudOperation);
         return $this->cache->get($key, fn() => parent::resolve($crudOperation, $entityClass));
     }
 }

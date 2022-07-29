@@ -26,7 +26,7 @@ class DoctrineItemProvider implements ItemProviderInterface
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
 
         return $entityManager->find($entityClass, $id);

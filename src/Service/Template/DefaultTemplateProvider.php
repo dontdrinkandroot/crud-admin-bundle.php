@@ -18,7 +18,7 @@ class DefaultTemplateProvider implements TemplateProviderInterface
             [CrudOperation::LIST, CrudOperation::READ, CrudOperation::CREATE, CrudOperation::UPDATE],
             true
         )) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
 
         $prefix = '@DdrCrudAdmin/';

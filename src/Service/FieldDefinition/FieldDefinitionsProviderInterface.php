@@ -12,11 +12,11 @@ interface FieldDefinitionsProviderInterface extends ProviderInterface
     /**
      * @template T of object
      *
-     * @param CrudOperation   $crudOperation
      * @param class-string<T> $entityClass
+     * @param CrudOperation   $crudOperation
      *
      * @return array<array-key, FieldDefinition>
      * @throws UnsupportedByProviderException
      */
-    public function provideFieldDefinitions(CrudOperation $crudOperation, string $entityClass): array;
+    public function provideFieldDefinitions(string $entityClass, CrudOperation $crudOperation): array;
 }

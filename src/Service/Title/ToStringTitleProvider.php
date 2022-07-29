@@ -19,7 +19,7 @@ class ToStringTitleProvider implements TitleProviderInterface
             || null === $entity
             || (!($entity instanceof Stringable) && !method_exists($entity, '__toString'))
         ) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
         }
 
         return (string)$entity;

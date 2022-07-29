@@ -29,7 +29,7 @@ class DoctrineIdProvider implements IdProviderInterface
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
-            throw new UnsupportedByProviderException($crudOperation, $entityClass, $entity);
+            throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
         }
         $classMetadata = $entityManager->getClassMetadata($realEntityClass);
 

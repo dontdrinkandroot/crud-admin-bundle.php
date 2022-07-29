@@ -4,15 +4,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 interface FieldDefinitionsResolverInterface
 {
     /**
-     * @param CrudOperation $crudOperation
      * @param class-string  $entityClass
+     * @param CrudOperation $crudOperation
      *
      * @return array<array-key, FieldDefinition>|null
      */
-    public function resolve(CrudOperation $crudOperation, string $entityClass): ?array;
+    public function resolve(string $entityClass, CrudOperation $crudOperation): ?array;
 }

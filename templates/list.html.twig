@@ -1,7 +1,7 @@
 {% extends '@DdrCrudAdmin/base.html.twig' %}
 
 {% set fieldDefinitions = 'LIST'|ddrCrudFieldDefinitions(entityClass) %}
-{% set translationDomain = 'LIST'|ddrCrudTranslationDomain(entityClass) %}
+{% set translationDomain = ddrCrudTranslationDomain(entityClass) %}
 
 {% block ddr_crud_admin_title %}{{ 'LIST'|ddrCrudTitle(entityClass) }}{% endblock ddr_crud_admin_title %}
 

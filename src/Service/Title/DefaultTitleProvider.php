@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -22,7 +21,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     {
         return $this->translator->trans(
             id: $crudOperation->value,
-            domain: $this->translationDomainResolver->resolve($crudOperation, $entityClass)
+            domain: $this->translationDomainResolver->resolveTranslationDomain($entityClass)
         );
     }
 }
