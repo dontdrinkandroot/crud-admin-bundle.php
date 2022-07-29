@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -24,20 +25,15 @@ class DoctrineFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): bool
-    {
-        return null !== $this->managerRegistry->getManagerForClass($entityClass);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): FormInterface
     {
-        $entityManager = Asserted::instanceOf(
+        $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
+        if (null === $entityManager) {
+            throw new UnsupportedByProviderException($entityClass, $crudOperation, $entityManager);
+        }
         $classMetadata = $entityManager->getClassMetadata($entityClass);
         $formBuilder = $this->formFactory->createBuilder(
             FormType::class,

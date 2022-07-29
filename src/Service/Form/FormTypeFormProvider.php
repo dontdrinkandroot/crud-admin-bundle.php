@@ -2,8 +2,8 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
-use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -20,17 +20,12 @@ class FormTypeFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function supportsForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): bool
-    {
-        return null !== $this->formTypeResolver->resolve($entityClass);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): FormInterface
     {
-        $formType = Asserted::notNull($this->formTypeResolver->resolve($entityClass));
+        $formType = $this->formTypeResolver->resolve($entityClass);
+        if (null === $formType) {
+            throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
+        }
 
         $form = $this->formFactory->create($formType, $entity);
 
