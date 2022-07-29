@@ -49,10 +49,7 @@
         }
     },
     "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "symfony/flex": false
-        }
+        "sort-packages": true
     },
     "extra": {
         "branch-alias": {

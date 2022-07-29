@@ -8,9 +8,17 @@ use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\Config\CrudConfig;
 use Dontdrinkandroot\CrudAdminBundle\Model\Config\DefaultSortConfig;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\DefaultRouteInfoProvider;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Sort\DefaultSortProviderInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 
-class ConfigurableCrudController extends AbstractProvidingCrudController
+class ConfigurableCrudController extends AbstractCrudController
+    implements RouteInfoProviderInterface,
+               FormTypeProviderInterface, TemplateProviderInterface,
+               FieldDefinitionsProviderInterface, DefaultSortProviderInterface
 {
     public function __construct(private readonly CrudConfig $crudConfig)
     {
@@ -27,18 +35,19 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
     /**
      * {@inheritdoc}
      */
-    protected function getRouteInfo(CrudOperation $crudOperation): RouteInfo
+    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo
     {
-        if (null === ($routeConfig = $this->crudConfig->getRouteConfig())) {
+        if (
+            !$this->matches($entityClass)
+            || null === ($routeConfig = $this->crudConfig->getRouteConfig())
+        ) {
             throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
         }
 
-        $pathPrefix = $routeConfig->getPathPrefix() ?? DefaultRouteInfoProvider::getDefaultPathPrefix(
-                $this->getEntityClass()
-            );
-        $namePrefix = $routeConfig->getNamePrefix() ?? DefaultRouteInfoProvider::getDefaultNamePrefix(
-                $this->getEntityClass()
-            );
+        $pathPrefix = $routeConfig->getPathPrefix()
+            ?? DefaultRouteInfoProvider::getDefaultPathPrefix($this->getEntityClass());
+        $namePrefix = $routeConfig->getNamePrefix()
+            ?? DefaultRouteInfoProvider::getDefaultNamePrefix($this->getEntityClass());
 
         return DefaultRouteInfoProvider::getRouteInfo($crudOperation, $namePrefix, $pathPrefix);
     }
@@ -46,10 +55,11 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
     /**
      * {@inheritdoc}
      */
-    public function getTemplate(CrudOperation $crudOperation): string
+    public function provideTemplate(string $entityClass, CrudOperation $crudOperation): string
     {
         if (
-            null === ($templatesConfig = $this->crudConfig->getTemplatesConfig())
+            !$this->matches($entityClass, $crudOperation)
+            || null === ($templatesConfig = $this->crudConfig->getTemplatesConfig())
             || null === ($template = $templatesConfig->getByCrudOperation($crudOperation))
         ) {
             throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
@@ -61,10 +71,11 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
     /**
      * {@inheritdoc}
      */
-    public function getFieldDefinitions(CrudOperation $crudOperation): array
+    public function provideFieldDefinitions(string $entityClass, CrudOperation $crudOperation): array
     {
         if (
-            null === ($fieldDefinitionsConfig = $this->crudConfig->getFieldDefinitionsConfig())
+            !$this->matches($entityClass)
+            || null === ($fieldDefinitionsConfig = $this->crudConfig->getFieldDefinitionsConfig())
             || null === ($fieldDefinitions = $fieldDefinitionsConfig->getByCrudOperation($crudOperation))
         ) {
             throw new UnsupportedByProviderException($this->getEntityClass(), $crudOperation);
@@ -73,12 +84,12 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
         return $fieldDefinitions;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    protected function getFormType(): string
+    public function provideFormType(string $entityClass): string
     {
-        if (null === ($formType = $this->crudConfig->getFormType())) {
+        if (
+            !$this->matches($entityClass)
+            || null === ($formType = $this->crudConfig->getFormType())
+        ) {
             throw new UnsupportedByProviderException($this->getEntityClass());
         }
 
@@ -88,9 +99,12 @@ class ConfigurableCrudController extends AbstractProvidingCrudController
     /**
      * {@inheritdoc}
      */
-    public function getDefaultSort(string $entityClass): ?DefaultSortConfig
+    public function provideDefaultSort(string $entityClass): ?DefaultSortConfig
     {
-        if (null === ($defaultSortConfig = $this->crudConfig->getDefaultSortConfig())) {
+        if (
+            !$this->matches($entityClass)
+            || null === ($defaultSortConfig = $this->crudConfig->getDefaultSortConfig())
+        ) {
             return null;
         }
 
