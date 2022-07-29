@@ -1,16 +1,16 @@
-{% set readRoute = 'READ'|ddrCrudPath(entity) %}
-{% if readRoute is not null  and is_granted('READ', entity)%}
+{% set readRoute = ddrCrudAdminPath(entity,'READ') %}
+{% if readRoute is not null  and is_granted('READ', entity) %}
     <a class="dropdown-item" href="{{ readRoute }}">
         {{ 'READ'|trans({}, 'DdrCrudAdmin') }}
     </a>
 {% endif %}
-{% set updateRoute = 'UPDATE'|ddrCrudPath(entity) %}
-{% if updateRoute is not null  and is_granted('UPDATE', entity)%}
+{% set updateRoute = ddrCrudAdminPath(entity,'UPDATE') %}
+{% if updateRoute is not null  and is_granted('UPDATE', entity) %}
     <a class="dropdown-item" href="{{ updateRoute }}">
         {{ 'UPDATE'|trans({}, 'DdrCrudAdmin') }}
     </a>
 {% endif %}
-{% set deleteRoute = 'DELETE'|ddrCrudPath(entity) %}
+{% set deleteRoute = ddrCrudAdminPath(entity,'DELETE') %}
 {% if deleteRoute is not null and is_granted('DELETE', entity) %}
     <a class="dropdown-item" href="{{ deleteRoute }}">
         {{ 'DELETE'|trans({}, 'DdrCrudAdmin') }}

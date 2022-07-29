@@ -39,10 +39,6 @@ class CrudAdminExtension extends AbstractExtension
                 [$this, 'renderFieldDefinitionValue'],
                 ['is_safe' => ['html']]
             ),
-            new TwigFilter('ddrCrudPath', [$this, 'getPath']),
-            new TwigFilter('ddrCrudTitle', [$this, 'getTitle']),
-            new TwigFilter('ddrCrudTranslationDomain', [$this, 'getTranslationDomain']),
-            new TwigFilter('ddrCrudFieldDefinitions', [$this, 'getFieldDefinitions'])
         ];
     }
 
@@ -57,10 +53,10 @@ class CrudAdminExtension extends AbstractExtension
                 [$this, 'renderFieldDefinitionValue'],
                 ['is_safe' => ['html']]
             ),
-            new TwigFunction('ddrCrudPath', [$this, 'getPath']),
-            new TwigFunction('ddrCrudTitle', [$this, 'getTitle']),
-            new TwigFunction('ddrCrudTranslationDomain', [$this, 'getTranslationDomain']),
-            new TwigFunction('ddrCrudFieldDefinitions', [$this, 'getFieldDefinitions'])
+            new TwigFunction('ddrCrudAdminPath', [$this, 'getPath']),
+            new TwigFunction('ddrCrudAdminTitle', [$this, 'getTitle']),
+            new TwigFunction('ddrCrudAdminTranslationDomain', [$this, 'getTranslationDomain']),
+            new TwigFunction('ddrCrudAdminFieldDefinitions', [$this, 'getFieldDefinitions'])
         ];
     }
 
@@ -73,12 +69,12 @@ class CrudAdminExtension extends AbstractExtension
     /**
      * @template T
      *
-     * @param string            $crudOperation
      * @param class-string<T>|T $entityOrClass
+     * @param string            $crudOperation
      *
      * @return string|null
      */
-    public function getPath(string $crudOperation, string|object $entityOrClass): ?string
+    public function getPath(string|object $entityOrClass, string $crudOperation): ?string
     {
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
@@ -88,12 +84,12 @@ class CrudAdminExtension extends AbstractExtension
     /**
      * @template T
      *
-     * @param string            $crudOperation
      * @param class-string<T>|T $entityOrClass
+     * @param string            $crudOperation
      *
      * @return string
      */
-    public function getTitle(string $crudOperation, string|object $entityOrClass): string
+    public function getTitle(string|object $entityOrClass, string $crudOperation): string
     {
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
@@ -122,12 +118,12 @@ class CrudAdminExtension extends AbstractExtension
     /**
      * @template T
      *
-     * @param string          $crudOperation
      * @param class-string<T>|T $entityOrClass
+     * @param string            $crudOperation
      *
      * @return list<FieldDefinition>
      */
-    public function getFieldDefinitions(string $crudOperation, string|object $entityOrClass): array
+    public function getFieldDefinitions(string|object $entityOrClass, string $crudOperation): array
     {
         $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
         return Asserted::notNull(

@@ -1,14 +1,18 @@
 {% extends '@DdrCrudAdmin/base.html.twig' %}
 
-{% block ddr_crud_admin_title %}{{ 'READ'|ddrCrudTitle(entity) }}{% endblock ddr_crud_admin_title %}
+{% set title = ddrCrudAdminTitle(entity, 'READ') %}
+{% set translationDomain = ddrCrudAdminTranslationDomain(entity) %}
+{% set fieldDefinitions = ddrCrudAdminFieldDefinitions(entity, 'READ') %}
+
+{% block ddr_crud_admin_title %}{{ title }}{% endblock ddr_crud_admin_title %}
 
 {% block ddr_crud_admin_header %}
     <div class="py-3 mb-4 border-bottom d-flex">
-        <h1 class="mb-0 align-self-center flex-fill">{{ 'READ'|ddrCrudTitle(entity) }}</h1>
+        <h1 class="mb-0 align-self-center flex-fill">{{ title }}</h1>
         <div class="d-inline-flex align-self-center">
             {% block ddr_crud_admin_read_actions %}
-                {% set updateRoute = 'UPDATE'|ddrCrudPath(entity) %}
-                {% set deleteRoute = 'DELETE'|ddrCrudPath(entity) %}
+                {% set updateRoute = ddrCrudAdminPath(entity,'UPDATE') %}
+                {% set deleteRoute = ddrCrudAdminPath(entity,'DELETE') %}
                 {% if (updateRoute is not null or deleteRoute is not null) %}
                     <div class="dropdown">
                         <button class="dropdown-toggle btn btn-lg btn-primary"
@@ -42,9 +46,8 @@
 {% block ddr_crud_admin_content %}
 
     <dl>
-        {% set fieldDefinitions = 'READ'|ddrCrudFieldDefinitions(entity) %}
         {% for fieldDefinition in fieldDefinitions %}
-            <dt>{{ fieldDefinition.propertyPath|humanize|trans({}, 'READ'|ddrCrudTranslationDomain(entity)) }}</dt>
+            <dt>{{ fieldDefinition.propertyPath|humanize|trans({}, translationDomain) }}</dt>
             <dd>{{ entity|ddrCrudAdminFieldDefinitionValue(fieldDefinition) }}</dd>
         {% endfor %}
     </dl>
