@@ -9,11 +9,9 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 interface UrlProviderInterface extends ProviderInterface
 {
     /**
-     * @template T of object
-     *
-     * @param class-string<T> $entityClass
-     * @param CrudOperation   $crudOperation
-     * @param T|null          $entity
+     * @param class-string  $entityClass
+     * @param CrudOperation $crudOperation
+     * @param ?object       $entity
      *
      * @return string
      * @throws UnsupportedByProviderException
