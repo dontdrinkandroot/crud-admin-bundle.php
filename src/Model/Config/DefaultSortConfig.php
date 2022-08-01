@@ -13,9 +13,10 @@ class DefaultSortConfig
         return $this->field;
     }
 
-    public function setField(?string $field): void
+    public function setField(?string $field): DefaultSortConfig
     {
         $this->field = $field;
+        return $this;
     }
 
     public function getOrder(): string
@@ -23,8 +24,9 @@ class DefaultSortConfig
         return $this->order;
     }
 
-    public function setOrder(string $order): void
+    public function setOrder(string $order): DefaultSortConfig
     {
         $this->order = $order;
+        return $this;
     }
 }

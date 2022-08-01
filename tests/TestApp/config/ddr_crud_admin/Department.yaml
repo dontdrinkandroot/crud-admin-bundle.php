@@ -1,0 +1,8 @@
+Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\Department:
+    form_type: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Form\Type\DepartmentType'
+    route:
+        name_prefix: 'app.department'
+        path_prefix: '/deps'
+    default_sort:
+        field: 'name'
+        order: 'desc'

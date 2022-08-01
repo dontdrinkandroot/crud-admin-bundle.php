@@ -1,2 +1,0 @@
-name_prefix: 'ddr_crud_admin_test.alternative_example_entity.'
-entity_class: 'Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity'

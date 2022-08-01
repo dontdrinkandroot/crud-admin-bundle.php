@@ -2,16 +2,16 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Controller;
 
-use Dontdrinkandroot\CrudAdminBundle\Controller\AbstractCrudController;
+use Dontdrinkandroot\CrudAdminBundle\Controller\CrudController;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity;
 
-class ExampleEntityController extends AbstractCrudController
+/**
+ * @extends CrudController<ExampleEntity>
+ */
+class ExampleEntityController extends CrudController
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getEntityClass(): string
+    public function __construct()
     {
-        return ExampleEntity::class;
+        parent::__construct(ExampleEntity::class);
     }
 }

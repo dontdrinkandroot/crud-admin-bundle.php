@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Tests\Acceptance;
 
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\AbstractIntegrationTestCase;
+use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\DepartmentOne;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\ExampleEntities;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,5 +38,24 @@ class ReadActionTest extends AbstractIntegrationTestCase
         $this->assertEquals('', $dds->eq(1)->text(null, true));
         /* RequiredField */
         $this->assertEquals('00001', $dds->eq(2)->text(null, true));
+    }
+
+    public function testStandardRequestDepartment(): void
+    {
+        $this->loadKernelAndFixtures([DepartmentOne::class]);
+        $this->logIn('user');
+        $department = $this->referenceRepository->getReference(DepartmentOne::class);
+        assert($department instanceof DepartmentOne);
+
+        $crawler = $this->kernelBrowser->request('GET', '/deps/' . $department->id);
+        $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
+
+        /* Test expected values */
+        $dds = $crawler->filter('dd');
+        $this->assertCount(2, $dds);
+        /* Id */
+        $this->assertEquals((string)$department->id, $dds->eq(0)->text(null, true));
+        /* Name */
+        $this->assertEquals('one', $dds->eq(1)->text(null, true));
     }
 }
