@@ -75,7 +75,7 @@ class YamlFileLoader extends Loader
         return $this->validate($configuration);
     }
 
-    private function validate(mixed $configuration): array
+    private function validate(array $configuration): array
     {
         return $configuration;
     }

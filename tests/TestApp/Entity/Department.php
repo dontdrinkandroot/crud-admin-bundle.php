@@ -18,7 +18,10 @@ class Department
         #[Assert\NotNull]
         #[Assert\NotBlank]
         #[ORM\Column(type: Types::STRING, nullable: false)]
-        public string $name
+        public string $name,
+
+        #[ORM\Column(type: Types::STRING, nullable: true)]
+        public ?string $phonePrefix = null
     ) {
     }
 }

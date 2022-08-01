@@ -7,13 +7,14 @@ use Dontdrinkandroot\CrudAdminBundle\Controller\ConfigurableCrudController;
 use Dontdrinkandroot\CrudAdminBundle\Controller\ConfigurableCrudControllerFactory;
 use Dontdrinkandroot\CrudAdminBundle\Controller\CrudController;
 use Dontdrinkandroot\CrudAdminBundle\Service\Configuration\YamlFileLoader;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\StaticFieldDefinitionsProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\FormType\StaticFormTypeProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\StaticRouteInfoProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Sort\StaticDefaultSortProvider;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\StaticTemplateProvider;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Finder\Finder;
 
 class CrudConfigCompilerPass implements CompilerPassInterface
@@ -27,11 +28,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
             $paths['app'] = $path;
         }
 
-        $factory = $container
-            ->register(ConfigurableCrudControllerFactory::class, ConfigurableCrudControllerFactory::class)
-            ->addArgument(new Reference('serializer'));
-
-        foreach ($paths as $bundleName => $path) {
+        foreach ($paths as $path) {
             if (!is_dir($path)) {
                 continue;
             }
@@ -83,23 +80,32 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                         ->addTag(DdrCrudAdminExtension::TAG_DEFAULT_SORT_PROVIDER, ['priority' => -150]);
                 }
 
-                $realFilePath = $file->getRealPath();
-                $alias = sprintf(
-                    "ddr_crud.configurable_controller.%s.%s",
-                    $bundleName,
-                    $file->getFilenameWithoutExtension()
-                );
-                $container->register($alias, ConfigurableCrudController::class)
-                    ->setFactory([$factory, 'create'])
-                    ->addArgument($realFilePath)
-                    ->setAutowired(true)
-                    ->setAutoconfigured(true)
-                    ->addTag(DdrCrudAdminExtension::TAG_CONTROLLER)
-                    ->addTag(DdrCrudAdminExtension::TAG_TEMPLATE_PROVIDER)
-                    ->addTag(DdrCrudAdminExtension::TAG_FIELD_DEFINITIONS_PROVIDER)
-                    ->addTag('controller.service_arguments')
-                    ->addTag('container.service_subscriber')
-                    ->setPublic(true);
+                if (array_key_exists('field_definitions', $config)) {
+                    $fieldDefinitionsByCrudOperation = Asserted::array($config['field_definitions']);
+                    $container
+                        ->register($idPrefix . 'field_definitions_provider', StaticFieldDefinitionsProvider::class)
+                        ->addArgument($entityClass)
+                        ->addArgument($fieldDefinitionsByCrudOperation)
+                        ->addTag(DdrCrudAdminExtension::TAG_FIELD_DEFINITIONS_PROVIDER, ['priority' => -150]);
+                }
+
+                if (array_key_exists('templates', $config)) {
+                    $templates = Asserted::array($config['templates']);
+                    $container
+                        ->register($idPrefix . 'template_provider', StaticTemplateProvider::class)
+                        ->addArgument($entityClass)
+                        ->addArgument($templates)
+                        ->addTag(DdrCrudAdminExtension::TAG_TEMPLATE_PROVIDER, ['priority' => -150]);
+                }
+
+                if (array_key_exists('translation_domain', $config)) {
+                    $translationDomain = Asserted::string($config['translation_domain']);
+                    $container
+                        ->register($idPrefix . 'translation_domain', StaticTemplateProvider::class)
+                        ->addArgument($entityClass)
+                        ->addArgument($translationDomain)
+                        ->addTag(DdrCrudAdminExtension::TAG_TRANSLATION_DOMAIN_PROVIDER, ['priority' => -150]);
+                }
             }
         }
     }

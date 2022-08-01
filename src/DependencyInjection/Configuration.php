@@ -17,6 +17,13 @@ class Configuration implements ConfigurationInterface
 
         // @formatter:off
         $rootNode->children()
+            ->arrayNode('entity')
+                ->useAttributeAsKey('entityClass')
+                ->arrayPrototype()
+                    ->children()
+                    ->end()
+                ->end()
+            ->end()
         ->end();
         // @formatter:on
 

@@ -10,8 +10,8 @@ interface PaginationTargetProvider extends ProviderInterface
     /**
      * @param class-string $entityClass
      *
-     * @return ?string
+     * @return mixed
      * @throws UnsupportedByProviderException
      */
-    public function providePaginationTarget(string $entityClass);
+    public function providePaginationTarget(string $entityClass): mixed;
 }

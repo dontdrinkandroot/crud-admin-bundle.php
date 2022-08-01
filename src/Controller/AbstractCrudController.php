@@ -35,6 +35,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     protected ?ContainerInterface $container = null;
 
+    /**
+     * {@inheritdoc}
+     */
     public function listAction(Request $request): Response
     {
         $crudOperation = CrudOperation::LIST;
@@ -42,10 +45,13 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
-        $pagination = $this->getPaginationResolver()->resolvePagination($this->getEntityClass());
+        $pagination = Asserted::notNull(
+            $this->getPaginationResolver()->resolvePagination($this->getEntityClass()),
+            sprintf('Could not resolve pagination for %s:%s', $this->getEntityClass(), $crudOperation->value)
+        );
         $template = Asserted::notNull(
             $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
-            sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
+            sprintf('Could not resolve template for %s:%s', $this->getEntityClass(), $crudOperation->value)
         );
 
         $context = [
@@ -57,7 +63,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->render($template, $context);
     }
 
-    public function readAction(Request $request, string $id): Response
+    /**
+     * {@inheritdoc}
+     */
+    public function readAction(Request $request, mixed $id): Response
     {
         $crudOperation = CrudOperation::READ;
 
@@ -72,7 +81,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
         $template = Asserted::notNull(
             $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
-            sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
+            sprintf('Could not resolve template for %s:%s', $this->getEntityClass(), $crudOperation->value)
         );
 
         $context = [
@@ -84,6 +93,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->render($template, $context);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function createAction(Request $request): Response
     {
         $crudOperation = CrudOperation::CREATE;
@@ -94,6 +106,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->createOrUpdateAction($request, $crudOperation);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updateAction(Request $request, mixed $id): Response
     {
         $crudOperation = CrudOperation::UPDATE;
@@ -122,7 +137,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     ): Response {
         $form = Asserted::notNull(
             $this->getFormResolver()->resolveForm($crudOperation, $this->getEntityClass(), $entity),
-            sprintf('Form not found for %s::%s', $crudOperation->value, $this->getEntityClass())
+            sprintf('Could not resolve form for %s:%s', $this->getEntityClass(), $crudOperation->value)
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
@@ -140,7 +155,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
         $template = Asserted::notNull(
             $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
-            sprintf('Could not resolve template for %s::%s', $crudOperation->value, $this->getEntityClass())
+            sprintf('Could not resolve template for %s:%s', $this->getEntityClass(), $crudOperation->value)
         );
 
         $context = [

@@ -3,14 +3,15 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Sort;
 
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
-use Dontdrinkandroot\CrudAdminBundle\Model\Config\DefaultSortConfig;
+use Dontdrinkandroot\CrudAdminBundle\Model\DefaultSort;
 
 interface DefaultSortProviderInterface
 {
     /**
      * @param class-string $entityClass
      *
-     * @return DefaultSortConfig|null
+     * @return DefaultSort|null
+     * @throws UnsupportedByProviderException
      */
-    public function provideDefaultSort(string $entityClass): ?DefaultSortConfig;
+    public function provideDefaultSort(string $entityClass): ?DefaultSort;
 }

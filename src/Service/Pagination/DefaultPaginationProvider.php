@@ -6,7 +6,8 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Model\Config\DefaultSortConfig;
+use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
+use Dontdrinkandroot\CrudAdminBundle\Model\DefaultSort;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Sort\DefaultSortProviderInterface;
@@ -37,7 +38,10 @@ class DefaultPaginationProvider implements PaginationProviderInterface
      */
     public function providePagination(string $entityClass): ?PaginationInterface
     {
-        $paginationTarget = $this->paginationTargetResolver->resolvePaginationTarget($entityClass);
+        $paginationTarget = Asserted::notNull(
+            $this->paginationTargetResolver->resolvePaginationTarget($entityClass),
+            'No pagination target found.'
+        );
         $fieldPrefix = '';
         if ($paginationTarget instanceof QueryBuilder) {
             $fieldPrefix = $paginationTarget->getRootAliases()[0] . '.';
@@ -60,8 +64,8 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         $defaultSortDirection = null;
         $defaultSort = $this->resolveDefaultSort($entityClass);
         if (null !== $defaultSort) {
-            $defaultSortFieldName = $fieldPrefix . $defaultSort->getField();
-            $defaultSortDirection = $defaultSort->getOrder();
+            $defaultSortFieldName = $fieldPrefix . $defaultSort->field;
+            $defaultSortDirection = $defaultSort->order;
             if (!in_array($defaultSortFieldName, $sortFields, true)) {
                 $sortFields[] = $defaultSortFieldName;
             }
@@ -88,14 +92,14 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     /**
      * @param class-string $entityClass
      *
-     * @return DefaultSortConfig|null
+     * @return DefaultSort|null
      */
-    private function resolveDefaultSort(string $entityClass): ?DefaultSortConfig
+    private function resolveDefaultSort(string $entityClass): ?DefaultSort
     {
         foreach ($this->defaultSortProviders as $defaultSortProvider) {
-            $defaultSort = $defaultSortProvider->provideDefaultSort($entityClass);
-            if (null !== $defaultSort) {
-                return $defaultSort;
+            try {
+                return $defaultSortProvider->provideDefaultSort($entityClass);
+            } catch (UnsupportedByProviderException $e) {
             }
         }
 
