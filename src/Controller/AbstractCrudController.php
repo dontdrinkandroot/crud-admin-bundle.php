@@ -4,7 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Event\ListModelEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
+use Dontdrinkandroot\CrudAdminBundle\Event\ReadModelEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
@@ -40,27 +42,31 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
      */
     public function listAction(Request $request): Response
     {
+        $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::LIST;
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $this->getEntityClass())) {
+
+        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entityClass)) {
             throw new AccessDeniedException();
         }
 
         $pagination = Asserted::notNull(
-            $this->getPaginationResolver()->resolvePagination($this->getEntityClass()),
-            sprintf('Could not resolve pagination for %s:%s', $this->getEntityClass(), $crudOperation->value)
+            $this->getPaginationResolver()->resolvePagination($entityClass),
+            sprintf('Could not resolve pagination for %s:%s', $entityClass, $crudOperation->value)
         );
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
-            sprintf('Could not resolve template for %s:%s', $this->getEntityClass(), $crudOperation->value)
+            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
+            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
         );
 
         $context = [
             'crudOperation' => $crudOperation->value,
-            'entityClass'   => $this->getEntityClass(),
+            'entityClass'   => $entityClass,
             'entities'      => $pagination,
         ];
+        $event = new ListModelEvent($entityClass, $context);
+        $this->getEventDispatcher()->dispatch($event);
 
-        return $this->render($template, $context);
+        return $this->render($template, $event->context);
     }
 
     /**
@@ -68,9 +74,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
      */
     public function readAction(Request $request, mixed $id): Response
     {
+        $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::READ;
 
-        $entity = $this->getItemResolver()->resolveItem($this->getEntityClass(), $crudOperation, $id);
+        $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
@@ -80,17 +87,19 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         }
 
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
-            sprintf('Could not resolve template for %s:%s', $this->getEntityClass(), $crudOperation->value)
+            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
+            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
         );
 
         $context = [
             'crudOperation' => $crudOperation->value,
-            'entityClass'   => $this->getEntityClass(),
+            'entityClass'   => $entityClass,
             'entity'        => $entity,
         ];
+        $event = new ReadModelEvent($entityClass, $context);
+        $this->getEventDispatcher()->dispatch($event);
 
-        return $this->render($template, $context);
+        return $this->render($template, $event->context);
     }
 
     /**
@@ -270,14 +279,14 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return Asserted::notNull($this->container, 'Container must not be null');
     }
 
-    protected function renderView(string $view, array $parameters = []): string
+    protected function renderView(string $view, array $context = []): string
     {
-        return $this->getTwig()->render($view, $parameters);
+        return $this->getTwig()->render($view, $context);
     }
 
-    protected function render(string $view, array $parameters = [], Response $response = null): Response
+    protected function render(string $view, array $context = [], Response $response = null): Response
     {
-        $content = $this->renderView($view, $parameters);
+        $content = $this->renderView($view, $context);
 
         if (null === $response) {
             $response = new Response();
