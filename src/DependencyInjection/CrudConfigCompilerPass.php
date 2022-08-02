@@ -12,6 +12,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FormType\StaticFormTypeProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\StaticRouteInfoProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Sort\StaticDefaultSortProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\StaticTemplateProvider;
+use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\StaticTranslationDomainProvider;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -101,7 +102,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                 if (array_key_exists('translation_domain', $config)) {
                     $translationDomain = Asserted::string($config['translation_domain']);
                     $container
-                        ->register($idPrefix . 'translation_domain', StaticTemplateProvider::class)
+                        ->register($idPrefix . 'translation_domain', StaticTranslationDomainProvider::class)
                         ->addArgument($entityClass)
                         ->addArgument($translationDomain)
                         ->addTag(DdrCrudAdminExtension::TAG_TRANSLATION_DOMAIN_PROVIDER, ['priority' => -150]);
