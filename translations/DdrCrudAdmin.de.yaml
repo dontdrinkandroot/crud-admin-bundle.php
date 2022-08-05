@@ -1,5 +1,5 @@
-LIST: Liste
-CREATE: Anlegen
-READ: Anzeigen
-UPDATE: Bearbeiten
-DELETE: Löschen
+action:
+    create: Anlegen
+    read: Anzeigen
+    update: Bearbeiten
+    delete: Löschen

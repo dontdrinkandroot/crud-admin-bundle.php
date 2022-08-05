@@ -20,7 +20,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     public function provideTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): string
     {
         return $this->translator->trans(
-            id: $crudOperation->value,
+            id: 'title.'.strtolower($crudOperation->value),
             domain: $this->translationDomainResolver->resolveTranslationDomain($entityClass)
         );
     }

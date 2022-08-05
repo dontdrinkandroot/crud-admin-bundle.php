@@ -1,5 +1,5 @@
-LIST: List
-CREATE: Create
-READ: Show
-UPDATE: Edit
-DELETE: Delete
+action:
+    create: Create
+    read: Show
+    update: Edit
+    delete: Delete
