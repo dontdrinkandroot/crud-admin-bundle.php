@@ -9,8 +9,8 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
     /**
-     * @param class-string $entityClass
-     * @param array        $fieldDefinitionsByCrudOperation
+     * @param class-string         $entityClass
+     * @param array<string, array> $fieldDefinitionsByCrudOperation
      */
     public function __construct(
         private readonly string $entityClass,
@@ -25,13 +25,12 @@ class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterfac
     {
         if (
             $entityClass !== $this->entityClass
-            || !array_key_exists($crudOperation->value, $this->fieldDefinitionsByCrudOperation)
+            || null === ($fieldDefinitions = $this->getFieldDefinitions($crudOperation))
         ) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
 
         $parsedDefinitions = [];
-        $fieldDefinitions = $this->fieldDefinitionsByCrudOperation[$crudOperation->value];
         foreach ($fieldDefinitions as $fieldDefinition) {
             $parsedDefinitions[] = new FieldDefinition(
                 $fieldDefinition['property_path'],
@@ -42,5 +41,15 @@ class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterfac
         }
 
         return $parsedDefinitions;
+    }
+
+    private function getFieldDefinitions(CrudOperation $crudOperation): ?array {
+        $key = $crudOperation->value;
+        if (array_key_exists($key, $this->fieldDefinitionsByCrudOperation)) {
+            return $this->fieldDefinitionsByCrudOperation[$key];
+        }
+
+        $key = strtolower($key);
+        return $this->fieldDefinitionsByCrudOperation[$key] ?? null;
     }
 }

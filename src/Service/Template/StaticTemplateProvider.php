@@ -7,6 +7,10 @@ use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 
 class StaticTemplateProvider implements TemplateProviderInterface
 {
+    /**
+     * @param class-string $entityClass
+     * @param array<string, string>  $templates
+     */
     public function __construct(private readonly string $entityClass, private readonly array $templates)
     {
     }
@@ -18,11 +22,22 @@ class StaticTemplateProvider implements TemplateProviderInterface
     {
         if (
             $entityClass !== $this->entityClass
-            || !array_key_exists($crudOperation->value, $this->templates)
+            || null === ($template = $this->getTemplate($crudOperation))
         ) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
 
-        return $this->templates[$crudOperation->value];
+        return $template;
+    }
+
+    private function getTemplate(CrudOperation $crudOperation): ?string
+    {
+        $key = $crudOperation->value;
+        if (array_key_exists($key, $this->templates)) {
+            return $this->templates[$key];
+        }
+
+        $key = strtolower($key);
+        return $this->templates[$key] ?? null;
     }
 }
