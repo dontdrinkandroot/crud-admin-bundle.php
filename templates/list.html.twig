@@ -27,7 +27,7 @@
     {% set filterFields = [] %}
     {% for fieldDefinition in fieldDefinitions %}
         {% if fieldDefinition.filterable %}
-            {% set filterFields = filterFields|merge({("entity." ~ fieldDefinition.propertyPath): fieldDefinition.propertyPath|humanize|trans({}, translationDomain)}) %}
+            {% set filterFields = filterFields|merge({("entity." ~ fieldDefinition.propertyPath): fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain)}) %}
         {% endif %}
     {% endfor %}
 
@@ -40,9 +40,9 @@
         <tr class="text-nowrap">
             {% for fieldDefinition in fieldDefinitions %}
                 {% if fieldDefinition.sortable %}
-                    <th>{{ knp_pagination_sortable(entities, fieldDefinition.propertyPath|humanize|trans({}, translationDomain), 'entity.'~fieldDefinition.propertyPath) }}</th>
+                    <th>{{ knp_pagination_sortable(entities, fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain), 'entity.'~fieldDefinition.propertyPath) }}</th>
                 {% else %}
-                    <th>{{ fieldDefinition.propertyPath|humanize|trans({}, translationDomain) }}</th>
+                    <th>{{ fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain) }}</th>
                 {% endif %}
             {% endfor %}
             {% block ddr_crud_admin_list_entity_actions_header %}

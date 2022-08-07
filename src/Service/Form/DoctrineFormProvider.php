@@ -7,6 +7,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
+use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,7 +19,8 @@ class DoctrineFormProvider implements FormProviderInterface
     public function __construct(
         private readonly ManagerRegistry $managerRegistry,
         private readonly FormFactoryInterface $formFactory,
-        private readonly TranslationDomainResolverInterface $translationDomainResolver
+        private readonly TranslationDomainResolverInterface $translationDomainResolver,
+        private readonly LabelService $fieldDefinitionLabelService
     ) {
     }
 
@@ -34,14 +36,16 @@ class DoctrineFormProvider implements FormProviderInterface
         if (null === $entityManager) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation, $entityManager);
         }
+
         $classMetadata = $entityManager->getClassMetadata($entityClass);
+        $fields = array_keys($classMetadata->fieldMappings);
+
         $formBuilder = $this->formFactory->createBuilder(
             FormType::class,
             $entity,
             ['data_class' => $entityClass]
         );
 
-        $fields = array_keys($classMetadata->fieldMappings);
         $translationDomain = $this->translationDomainResolver->resolveTranslationDomain($entityClass);
 
         foreach ($fields as $field) {
@@ -51,7 +55,10 @@ class DoctrineFormProvider implements FormProviderInterface
                 $formBuilder->add(
                     $fieldName,
                     null,
-                    ['translation_domain' => $translationDomain]
+                    [
+                        'label' => $this->fieldDefinitionLabelService->getLabel($fieldName),
+                        'translation_domain' => $translationDomain
+                    ]
                 );
             }
         }

@@ -8,6 +8,7 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
+use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
@@ -24,7 +25,8 @@ class CrudAdminExtension extends AbstractExtension
         private readonly UrlResolver $urlResolver,
         private readonly TitleResolver $titleResolver,
         private readonly TranslationDomainResolverInterface $translationDomainResolver,
-        private readonly FieldDefinitionsResolverInterface $fieldDefinitionsResolver
+        private readonly FieldDefinitionsResolverInterface $fieldDefinitionsResolver,
+        private readonly LabelService $labelService
     ) {
     }
 
@@ -39,6 +41,7 @@ class CrudAdminExtension extends AbstractExtension
                 [$this, 'renderFieldDefinitionValue'],
                 ['is_safe' => ['html']]
             ),
+            new TwigFilter('ddrCrudAdminLabel', [$this, 'getLabel'])
         ];
     }
 
@@ -56,7 +59,8 @@ class CrudAdminExtension extends AbstractExtension
             new TwigFunction('ddrCrudAdminPath', [$this, 'getPath']),
             new TwigFunction('ddrCrudAdminTitle', [$this, 'getTitle']),
             new TwigFunction('ddrCrudAdminTranslationDomain', [$this, 'getTranslationDomain']),
-            new TwigFunction('ddrCrudAdminFieldDefinitions', [$this, 'getFieldDefinitions'])
+            new TwigFunction('ddrCrudAdminFieldDefinitions', [$this, 'getFieldDefinitions']),
+            new TwigFunction('ddrCrudAdminLabel', [$this, 'getLabel'])
         ];
     }
 
@@ -130,6 +134,10 @@ class CrudAdminExtension extends AbstractExtension
             $this->fieldDefinitionsResolver->resolveFieldDefinitions($entityClass, CrudOperation::from($crudOperation)),
             sprintf("No fieldDefinitions provided for %s::%s", $crudOperation, $entityClass)
         );
+    }
+
+    public function getLabel(FieldDefinition|string $value): string {
+        return $this->labelService->getLabel($value);
     }
 
     /**

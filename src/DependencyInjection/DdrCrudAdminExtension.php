@@ -55,12 +55,16 @@ class DdrCrudAdminExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
+        $container->setParameter('ddr.crud_admin.field_definition.humanize', $config['humanize']);
+
         $this->registerAutoConfigurationTags($container);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
         $loader->load('services.yaml');
 
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
+        $loader->load('services.php');
+        $loader->load('providers.php');
 
         $bundles = $container->getParameter('kernel.bundles');
         if (is_array($bundles) && array_key_exists('DoctrineBundle', $bundles)) {

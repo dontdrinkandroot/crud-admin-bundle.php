@@ -7,6 +7,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\DoctrineFieldDefini
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\DoctrineFormProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\DoctrineIdProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\DoctrineItemProvider;
+use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\DoctrinePaginationTargetProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\DoctrineItemPersisterProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
@@ -38,7 +39,8 @@ return function (ContainerConfigurator $configurator) {
         ->args([
             service('doctrine'),
             service('form.factory'),
-            service(TranslationDomainResolverInterface::class)
+            service(TranslationDomainResolverInterface::class),
+            service(LabelService::class)
         ])
         ->tag(DdrCrudAdminExtension::TAG_FORM_PROVIDER, ['priority' => -200]);
 

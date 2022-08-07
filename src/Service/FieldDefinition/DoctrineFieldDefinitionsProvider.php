@@ -28,8 +28,8 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
         if (null === $entityManager) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
-        $classMetadata = $entityManager->getClassMetadata($entityClass);
 
+        $classMetadata = $entityManager->getClassMetadata($entityClass);
         $fields = array_keys($classMetadata->fieldMappings);
 
         $fieldDefinitions = [];

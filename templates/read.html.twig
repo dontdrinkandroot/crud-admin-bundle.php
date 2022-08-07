@@ -27,12 +27,12 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             {% if updateRoute is not null and is_granted('UPDATE', entity) %}
                                 <a class="dropdown-item" href="{{ updateRoute }}">
-                                    {{ 'UPDATE'|trans({}, 'DdrCrudAdmin') }}
+                                    {{ 'action.update'|trans({}, 'DdrCrudAdmin') }}
                                 </a>
                             {% endif %}
                             {% if deleteRoute is not null and is_granted('DELETE', entity) %}
                                 <a class="dropdown-item" href="{{ deleteRoute }}">
-                                    {{ 'DELETE'|trans({}, 'DdrCrudAdmin') }}
+                                    {{ 'action.delete'|trans({}, 'DdrCrudAdmin') }}
                                 </a>
                             {% endif %}
                         </div>
@@ -47,7 +47,7 @@
 
     <dl>
         {% for fieldDefinition in fieldDefinitions %}
-            <dt>{{ fieldDefinition.propertyPath|humanize|trans({}, translationDomain) }}</dt>
+            <dt>{{ fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain) }}</dt>
             <dd>{{ entity|ddrCrudAdminFieldDefinitionValue(fieldDefinition) }}</dd>
         {% endfor %}
     </dl>

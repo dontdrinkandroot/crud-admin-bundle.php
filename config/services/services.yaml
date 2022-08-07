@@ -118,17 +118,6 @@ services:
         tags:
             - { name: 'ddr_crud_admin.translation_domain_provider', priority: -250 }
 
-    Dontdrinkandroot\CrudAdminBundle\Twig\CrudAdminExtension:
-        arguments:
-            - '@property_accessor'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface'
-            - '@Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface'
-        tags:
-            - { name: twig.extension }
-
     Dontdrinkandroot\CrudAdminBundle\Routing\CrudRoutesLoader:
         arguments:
             - '@Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry'
