@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Tests\Acceptance;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\AbstractIntegrationTestCase;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\DepartmentTwo;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\ExampleEntities;
+use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\Department;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -14,7 +15,8 @@ class ReadActionTest extends AbstractIntegrationTestCase
     {
         $this->loadKernelAndFixtures([ExampleEntities::class]);
         $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
-        assert($exampleEntity instanceof ExampleEntity);
+        self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
+
         $crawler = $this->kernelBrowser->request('GET', '/example_entities/' . $exampleEntity->getId());
         $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->kernelBrowser->getResponse()->getStatusCode());
     }
@@ -24,7 +26,7 @@ class ReadActionTest extends AbstractIntegrationTestCase
         $this->loadKernelAndFixtures([ExampleEntities::class]);
         $this->logIn('user');
         $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
-        assert($exampleEntity instanceof ExampleEntity);
+        self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
         $crawler = $this->kernelBrowser->request('GET', '/example_entities/' . $exampleEntity->getId());
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
@@ -45,7 +47,7 @@ class ReadActionTest extends AbstractIntegrationTestCase
         $this->loadKernelAndFixtures([DepartmentTwo::class]);
         $this->logIn('user');
         $department = $this->referenceRepository->getReference(DepartmentTwo::class);
-        assert($department instanceof DepartmentTwo);
+        self::assertInstanceOf(Department::class, $department);
 
         $crawler = $this->kernelBrowser->request('GET', '/deps/' . $department->id);
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
