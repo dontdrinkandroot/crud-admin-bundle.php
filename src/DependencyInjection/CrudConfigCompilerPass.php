@@ -3,8 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
 use Dontdrinkandroot\Common\Asserted;
-use Dontdrinkandroot\CrudAdminBundle\Controller\ConfigurableCrudController;
-use Dontdrinkandroot\CrudAdminBundle\Controller\ConfigurableCrudControllerFactory;
 use Dontdrinkandroot\CrudAdminBundle\Controller\CrudController;
 use Dontdrinkandroot\CrudAdminBundle\Service\Configuration\YamlFileLoader;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\StaticFieldDefinitionsProvider;
@@ -24,7 +22,13 @@ class CrudConfigCompilerPass implements CompilerPassInterface
     {
         $paths = $this->getBundlesResourcesPaths($container);
         $projectDir = Asserted::string($container->getParameter('kernel.project_dir'));
+
         $path = $projectDir . '/config/ddr_crud_admin';
+        if ($container->fileExists($path, '/\.(ya?ml)$/')) {
+            $paths['app'] = $path;
+        }
+
+        $path = $projectDir . '/config/ddr_crud';
         if ($container->fileExists($path, '/\.(ya?ml)$/')) {
             $paths['app'] = $path;
         }
@@ -124,6 +128,8 @@ class CrudConfigCompilerPass implements CompilerPassInterface
             $dirname = $bundle['path'];
             $paths[] = "$dirname/Resources/config/ddr_crud_admin";
             $paths[] = "$dirname/config/ddr_crud_admin";
+            $paths[] = "$dirname/Resources/config/ddr_crud";
+            $paths[] = "$dirname/config/ddr_crud";
 
             foreach ($paths as $path) {
                 if ($container->fileExists($path, false)) {
