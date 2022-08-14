@@ -40,5 +40,5 @@ return function (ContainerConfigurator $configurator) {
             service('security.authorization_checker'),
             service('translator')
         ])
-        ->tag('kernel.event_listener', ['event' => RedirectAfterWriteEvent::class, 'method' => 'onRedirectAfterWrite']);
+        ->tag('kernel.event_listener', ['event' => RedirectAfterWriteEvent::class, 'method' => 'onRedirectAfterWrite', 'priority' => -250]);
 };
