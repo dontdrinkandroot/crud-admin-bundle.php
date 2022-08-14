@@ -66,7 +66,7 @@ class DoctrineFormProvider implements FormProviderInterface
         $formBuilder->add(
             'submit',
             SubmitType::class,
-            ['translation_domain' => 'DdrCrudAdmin']
+            ['label' => 'submit', 'translation_domain' => 'DdrCrudAdmin']
         );
 
         return $formBuilder->getForm();
