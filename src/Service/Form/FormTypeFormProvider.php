@@ -32,7 +32,7 @@ class FormTypeFormProvider implements FormProviderInterface
         $form->add(
             'submit',
             SubmitType::class,
-            ['translation_domain' => 'DdrCrudAdmin']
+            ['label' => 'submit', 'translation_domain' => 'DdrCrudAdmin']
         );
 
         return $form;

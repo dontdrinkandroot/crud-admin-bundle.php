@@ -7,6 +7,7 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Event\ListModelEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\ReadModelEvent;
+use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
@@ -133,9 +134,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     }
 
     /**
-     * @param Request       $request
+     * @param Request $request
      * @param CrudOperation $crudOperation
-     * @param object|null   $entity
+     * @param object|null $entity
      *
      * @return Response
      */
@@ -144,32 +145,34 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         CrudOperation $crudOperation,
         ?object $entity = null
     ): Response {
+        $entityClass = $this->getEntityClass();
         $form = Asserted::notNull(
-            $this->getFormResolver()->resolveForm($crudOperation, $this->getEntityClass(), $entity),
-            sprintf('Could not resolve form for %s:%s', $this->getEntityClass(), $crudOperation->value)
+            $this->getFormResolver()->resolveForm($crudOperation, $entityClass, $entity),
+            sprintf('Could not resolve form for %s:%s', $entityClass, $crudOperation->value)
         );
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            $entity = Asserted::instanceOf($form->getData(), $this->getEntityClass());
-            $this->getItemPersister()->persistItem($crudOperation, $this->getEntityClass(), $entity);
+            $entity = Asserted::instanceOf($form->getData(), $entityClass);
+            $this->getItemPersister()->persistItem($crudOperation, $entityClass, $entity);
             $this->getEventDispatcher()->dispatch(
-                new PostProcessFormEvent($crudOperation, $this->getEntityClass(), $form, $entity)
+                new PostProcessFormEvent($crudOperation, $entityClass, $form, $entity)
             );
 
-            $redirectResponse = $this->findRedirect($crudOperation, $entity);
-            if (null !== $redirectResponse) {
-                return $redirectResponse;
+            $event = new RedirectAfterWriteEvent($entityClass, $crudOperation, $entity, $request);
+            $this->getEventDispatcher()->dispatch($event);
+            if (null !== ($response = $event->response)) {
+                return $response;
             }
         }
 
         $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolveTemplate($this->getEntityClass(), $crudOperation),
-            sprintf('Could not resolve template for %s:%s', $this->getEntityClass(), $crudOperation->value)
+            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
+            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
         );
 
         $context = [
             'crudOperation' => $crudOperation->value,
-            'entityClass'   => $this->getEntityClass(),
+            'entityClass'   => $entityClass,
             'entity'        => $entity,
             'form'          => $form->createView(),
         ];
@@ -180,7 +183,8 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     public function deleteAction(Request $request, mixed $id): Response
     {
         $crudOperation = CrudOperation::DELETE;
-        $entity = $this->getItemResolver()->resolveItem($this->getEntityClass(), $crudOperation, $id);
+        $entityClass = $this->getEntityClass();
+        $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
 
         if (null === $entity) {
             throw new NotFoundHttpException();
@@ -190,10 +194,15 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
-        $this->getItemPersister()->persistItem($crudOperation, $this->getEntityClass(), $entity);
+        $this->getItemPersister()->persistItem($crudOperation, $entityClass, $entity);
 
-        $redirectResponse = $this->findRedirect($crudOperation, $entity);
-        return $redirectResponse ?? new Response('OK');
+        $event = new RedirectAfterWriteEvent($entityClass, $crudOperation, $entity, $request);
+        $this->getEventDispatcher()->dispatch($event);
+        if (null !== ($response = $event->response)) {
+            return $response;
+        }
+
+        return new Response('OK');
     }
 
     #[Required]
@@ -317,19 +326,4 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return in_array($crudOperation, $validCrudOperations, true);
     }
 
-    protected function findRedirect(CrudOperation $crudOperation, ?object $entity = null): ?RedirectResponse
-    {
-        $redirectUrl = $this->getUrlResolver()->resolveUrl($this->getEntityClass(), CrudOperation::LIST, $entity);
-        if (
-            null !== $redirectUrl
-            && $this->getAuthorizationChecker()->isGranted(
-                CrudOperation::LIST->value,
-                $this->getEntityClass()
-            )
-        ) {
-            return new RedirectResponse($redirectUrl);
-        }
-
-        return null;
-    }
 }

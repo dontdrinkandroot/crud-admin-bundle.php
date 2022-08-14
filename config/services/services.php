@@ -2,6 +2,8 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Config;
 
+use Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultRedirectAfterWriteListener;
+use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
@@ -31,4 +33,12 @@ return function (ContainerConfigurator $configurator) {
             service(LabelService::class)
         ])
         ->tag('twig.extension');
+
+    $services->set(DefaultRedirectAfterWriteListener::class, DefaultRedirectAfterWriteListener::class)
+        ->args([
+            service(UrlResolver::class),
+            service('security.authorization_checker'),
+            service('translator')
+        ])
+        ->tag('kernel.event_listener', ['event' => RedirectAfterWriteEvent::class, 'method' => 'onRedirectAfterWrite']);
 };

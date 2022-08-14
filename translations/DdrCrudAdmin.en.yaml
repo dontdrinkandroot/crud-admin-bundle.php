@@ -3,3 +3,8 @@ action:
     read: Show
     update: Edit
     delete: Delete
+submit: Save
+success:
+    create: Creation successful.
+    update: Update successful.
+    delete: Deletion successful.

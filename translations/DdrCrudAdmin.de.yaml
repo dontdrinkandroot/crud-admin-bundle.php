@@ -3,3 +3,8 @@ action:
     read: Anzeigen
     update: Bearbeiten
     delete: Löschen
+submit: Speichern
+success:
+    create: Erfolgreich angelegt.
+    update: Erfolgreich aktualisiert.
+    delete: Erfolgreich gelöscht.
