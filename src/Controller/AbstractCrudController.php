@@ -161,9 +161,6 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         if ($form->isSubmitted() && $form->isValid()) {
             $entity = Asserted::instanceOf($form->getData(), $entityClass);
             $this->getItemPersister()->persistItem($crudOperation, $entityClass, $entity);
-            $this->getEventDispatcher()->dispatch(
-                new PostProcessFormEvent($entityClass, $crudOperation, $form, $entity)
-            );
 
             $event = new RedirectAfterWriteEvent($entityClass, $crudOperation, $entity, $request);
             $this->getEventDispatcher()->dispatch($event);
