@@ -17,6 +17,10 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -140,9 +144,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     }
 
     /**
-     * @param Request $request
+     * @param Request       $request
      * @param CrudOperation $crudOperation
-     * @param object|null $entity
+     * @param object|null   $entity
      *
      * @return Response
      */
@@ -200,15 +204,36 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             throw new AccessDeniedException();
         }
 
-        $this->getItemPersister()->persistItem($crudOperation, $entityClass, $entity);
+        $form = $this->getFormFactory()->createBuilder()
+            ->add('confirm', SubmitType::class, ['label' => 'delete.confirm', 'translation_domain' => 'DdrCrudAdmin'])
+            ->getForm();
 
-        $event = new RedirectAfterWriteEvent($entityClass, $crudOperation, $entity, $request);
-        $this->getEventDispatcher()->dispatch($event);
-        if (null !== ($response = $event->response)) {
-            return $response;
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getItemPersister()->persistItem($crudOperation, $entityClass, $entity);
+
+            $event = new RedirectAfterWriteEvent($entityClass, $crudOperation, $entity, $request);
+            $this->getEventDispatcher()->dispatch($event);
+            if (null !== ($response = $event->response)) {
+                return $response;
+            }
         }
 
-        return new Response('OK');
+        $template = Asserted::notNull(
+            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
+            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
+        );
+
+        $context = [
+            'crudOperation' => $crudOperation->value,
+            'entityClass'   => $entityClass,
+            'entity'        => $entity,
+            'form'          => $form->createView(),
+        ];
+        $event = new ViewModelEvent($entityClass, $crudOperation, $context);
+        $this->getEventDispatcher()->dispatch($event);
+
+        return $this->render($template, $event->context);
     }
 
     #[Required]
@@ -235,7 +260,8 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             ItemPersister::class,
             UrlResolver::class,
             EventDispatcherInterface::class,
-            PaginationResolver::class
+            PaginationResolver::class,
+            FormFactoryInterface::class
         ];
     }
 
@@ -247,6 +273,11 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     protected function getTwig(): Environment
     {
         return $this->getContainer()->get(Environment::class);
+    }
+
+    protected function getFormFactory(): FormFactoryInterface
+    {
+        return $this->getContainer()->get(FormFactoryInterface::class);
     }
 
     protected function getUrlGenerator(): UrlGeneratorInterface

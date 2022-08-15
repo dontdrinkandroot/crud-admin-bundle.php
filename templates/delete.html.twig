@@ -1,0 +1,22 @@
+{% extends '@DdrCrudAdmin/base.html.twig' %}
+
+{% set title = ddrCrudAdminTitle(entity ?? entityClass, crudOperation) %}
+
+{% block ddr_crud_admin_title %}{{ title }}{% endblock ddr_crud_admin_title %}
+
+{% block ddr_crud_admin_header %}
+    <div class="py-3 mb-4 border-bottom d-flex">
+        <h1 class="mb-0 align-self-center flex-fill">{{ title }}</h1>
+        <div class="d-inline-flex align-self-center">
+        </div>
+    </div>
+{% endblock ddr_crud_admin_header %}
+
+{% block ddr_crud_admin_content %}
+    <div class="alert alert-warning">
+        {{ 'delete.confirmation_text'|trans({}, 'DdrCrudAdmin') }}
+    </div>
+    {{ form_start(form) }}
+    {{ form_widget(form.confirm) }}
+    {{ form_end(form) }}
+{% endblock ddr_crud_admin_content %}

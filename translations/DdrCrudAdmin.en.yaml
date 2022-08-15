@@ -3,6 +3,9 @@ action:
     read: Show
     update: Edit
     delete: Delete
+delete:
+    confirm: Confirm
+    confirmation_text: Are you sure you want to delete this entry?
 submit: Save
 success:
     create: Creation successful.

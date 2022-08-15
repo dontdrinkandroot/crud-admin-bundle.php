@@ -3,6 +3,9 @@ action:
     read: Anzeigen
     update: Bearbeiten
     delete: Löschen
+delete:
+    confirm: Bestätigen
+    confirmation_text: Sind Sie sich sicher, dass Sie diesen Eintrag löschen wollen?
 submit: Speichern
 success:
     create: Erfolgreich angelegt.

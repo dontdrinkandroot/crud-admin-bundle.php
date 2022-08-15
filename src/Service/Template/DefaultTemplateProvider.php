@@ -13,22 +13,13 @@ class DefaultTemplateProvider implements TemplateProviderInterface
      */
     public function provideTemplate(string $entityClass, CrudOperation $crudOperation): string
     {
-        if (!in_array(
-            $crudOperation,
-            [CrudOperation::LIST, CrudOperation::READ, CrudOperation::CREATE, CrudOperation::UPDATE],
-            true
-        )) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
-        }
-
         $prefix = '@DdrCrudAdmin/';
 
         return match ($crudOperation) {
             CrudOperation::LIST => $prefix . 'list.html.twig',
             CrudOperation::READ => $prefix . 'read.html.twig',
-            CrudOperation::CREATE => $prefix . 'update.html.twig',
-            CrudOperation::UPDATE => $prefix . 'update.html.twig',
-            default => throw new RuntimeException('Unsupported CrudOperation: ' . $crudOperation->value)
+            CrudOperation::CREATE, CrudOperation::UPDATE => $prefix . 'update.html.twig',
+            CrudOperation::DELETE => $prefix . 'delete.html.twig',
         };
     }
 }
