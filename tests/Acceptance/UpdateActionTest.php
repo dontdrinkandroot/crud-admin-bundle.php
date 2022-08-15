@@ -41,14 +41,14 @@ class UpdateActionTest extends AbstractIntegrationTestCase
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
 
         /* Test validation is working */
-        $crawler = $this->kernelBrowser->submitForm('Submit', ['form[requiredField]' => null]);
+        $crawler = $this->kernelBrowser->submitForm('Save', ['form[requiredField]' => null]);
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
         $formGroups = $crawler->filter('form > div > div');
         $formGroupRequired = $formGroups->eq(1);
         $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text(null, true));
 
         /* Test submission is working */
-        $crawler = $this->kernelBrowser->submitForm('Submit', ['form[requiredField]' => 'ChangedValue']);
+        $crawler = $this->kernelBrowser->submitForm('Save', ['form[requiredField]' => 'ChangedValue']);
         $this->assertEquals(Response::HTTP_FOUND, $this->kernelBrowser->getResponse()->getStatusCode());
         self::assertResponseRedirects('/example_entities/');
 

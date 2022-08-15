@@ -8,6 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Event\ListModelEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\ReadModelEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
+use Dontdrinkandroot\CrudAdminBundle\Event\ViewModelEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
@@ -16,7 +17,6 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -54,6 +54,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             $this->getPaginationResolver()->resolvePagination($entityClass),
             sprintf('Could not resolve pagination for %s:%s', $entityClass, $crudOperation->value)
         );
+
         $template = Asserted::notNull(
             $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
             sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
@@ -64,7 +65,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             'entityClass'   => $entityClass,
             'entities'      => $pagination,
         ];
-        $event = new ListModelEvent($entityClass, $context);
+        $event = new ViewModelEvent($entityClass, $crudOperation, $context);
         $this->getEventDispatcher()->dispatch($event);
 
         return $this->render($template, $event->context);
@@ -97,7 +98,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             'entityClass'   => $entityClass,
             'entity'        => $entity,
         ];
-        $event = new ReadModelEvent($entityClass, $context);
+        $event = new ViewModelEvent($entityClass, $crudOperation, $context);
         $this->getEventDispatcher()->dispatch($event);
 
         return $this->render($template, $event->context);
@@ -108,8 +109,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
      */
     public function createAction(Request $request): Response
     {
+        $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::CREATE;
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $this->getEntityClass())) {
+
+        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entityClass)) {
             throw new AccessDeniedException();
         }
 
@@ -121,11 +124,14 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
      */
     public function updateAction(Request $request, mixed $id): Response
     {
+        $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::UPDATE;
-        $entity = $this->getItemResolver()->resolveItem($this->getEntityClass(), $crudOperation, $id);
+
+        $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
+
         if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity)) {
             throw new AccessDeniedException();
         }
@@ -150,12 +156,13 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             $this->getFormResolver()->resolveForm($crudOperation, $entityClass, $entity),
             sprintf('Could not resolve form for %s:%s', $entityClass, $crudOperation->value)
         );
+
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entity = Asserted::instanceOf($form->getData(), $entityClass);
             $this->getItemPersister()->persistItem($crudOperation, $entityClass, $entity);
             $this->getEventDispatcher()->dispatch(
-                new PostProcessFormEvent($crudOperation, $entityClass, $form, $entity)
+                new PostProcessFormEvent($entityClass, $crudOperation, $form, $entity)
             );
 
             $event = new RedirectAfterWriteEvent($entityClass, $crudOperation, $entity, $request);
@@ -176,16 +183,18 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             'entity'        => $entity,
             'form'          => $form->createView(),
         ];
+        $event = new ViewModelEvent($entityClass, $crudOperation, $context);
+        $this->getEventDispatcher()->dispatch($event);
 
-        return $this->render($template, $context);
+        return $this->render($template, $event->context);
     }
 
     public function deleteAction(Request $request, mixed $id): Response
     {
-        $crudOperation = CrudOperation::DELETE;
         $entityClass = $this->getEntityClass();
-        $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
+        $crudOperation = CrudOperation::DELETE;
 
+        $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
