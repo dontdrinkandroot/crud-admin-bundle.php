@@ -10,7 +10,7 @@
     <div class="py-3 mb-4 border-bottom d-flex">
         <h1 class="mb-0 align-self-center flex-fill">{{ title }}</h1>
         <div class="d-inline-flex align-self-center">
-            {% block ddr_crud_admin_read_actions %}
+            {% block ddr_crud_admin_primary_actions %}
                 {% set updateRoute = ddrCrudAdminPath(entity,'UPDATE') %}
                 {% set deleteRoute = ddrCrudAdminPath(entity,'DELETE') %}
                 {% if (updateRoute is not null or deleteRoute is not null) %}
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                 {% endif %}
-            {% endblock ddr_crud_admin_read_actions %}
+            {% endblock ddr_crud_admin_primary_actions %}
         </div>
     </div>
 {% endblock ddr_crud_admin_header %}

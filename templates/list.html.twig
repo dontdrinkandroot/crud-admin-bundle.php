@@ -10,12 +10,14 @@
     <div class="py-3 mb-4 border-bottom d-flex">
         <h1 class="mb-0 align-self-center flex-fill">{{ title }}</h1>
         <div class="d-inline-flex align-self-center">
-            {% set createRoute = ddrCrudAdminPath(entityClass,'CREATE') %}
-            {% if createRoute is not null and is_granted('CREATE', entityClass) %}
-                <a class="btn btn-primary btn-lg" href="{{ createRoute }}">
-                    {{ 'action.create'|trans({}, 'DdrCrudAdmin') }}
-                </a>
-            {% endif %}
+            {% block ddr_crud_admin_primary_actions %}
+                {% set createRoute = ddrCrudAdminPath(entityClass,'CREATE') %}
+                {% if createRoute is not null and is_granted('CREATE', entityClass) %}
+                    <a class="btn btn-primary btn-lg" href="{{ createRoute }}">
+                        {{ 'action.create'|trans({}, 'DdrCrudAdmin') }}
+                    </a>
+                {% endif %}
+            {% endblock ddr_crud_admin_primary_actions %}
         </div>
     </div>
 {% endblock ddr_crud_admin_header %}
@@ -56,7 +58,7 @@
                 {% for fieldDefinition in fieldDefinitions %}
                     <td>{{ entity|ddrCrudAdminFieldDefinitionValue(fieldDefinition) }}</td>
                 {% endfor %}
-                {% block ddr_crud_admin_list_entity_actions %}
+                {% block ddr_crud_admin_entity_item_actions %}
                     <td style="width: 1%" class="dropdown">
                         <a class="dropdown-toggle ddr-no-caret"
                            type="button"
@@ -68,10 +70,10 @@
                             {{ 'ACTIONS'|trans({}, 'DdrCrudAdmin') }}
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                            {{ include('@DdrCrudAdmin/list.entity.actions.dropdown-content.partial.html.twig') }}
+                            {{ include('@DdrCrudAdmin/entity-item.actions.dropdown-content.partial.html.twig') }}
                         </div>
                     </td>
-                {% endblock ddr_crud_admin_list_entity_actions %}
+                {% endblock ddr_crud_admin_entity_item_actions %}
             </tr>
         {% endfor %}
         </tbody>
