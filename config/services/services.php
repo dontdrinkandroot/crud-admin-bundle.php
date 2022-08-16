@@ -2,7 +2,10 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Config;
 
+use Dontdrinkandroot\CrudAdminBundle\Event\Listener\AuthorizationListener;
 use Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultRedirectAfterWriteListener;
+use Dontdrinkandroot\CrudAdminBundle\Event\PostSetDataEvent;
+use Dontdrinkandroot\CrudAdminBundle\Event\PreSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
@@ -40,5 +43,19 @@ return function (ContainerConfigurator $configurator) {
             service('security.authorization_checker'),
             service('translator')
         ])
-        ->tag('kernel.event_listener', ['event' => RedirectAfterWriteEvent::class, 'method' => 'onRedirectAfterWrite', 'priority' => -250]);
+        ->tag(
+            'kernel.event_listener',
+            ['event' => RedirectAfterWriteEvent::class, 'method' => 'onRedirectAfterWrite', 'priority' => -250]
+        );
+
+    $services->set(AuthorizationListener::class, AuthorizationListener::class)
+        ->args([
+            service('security.authorization_checker'),
+        ])
+        ->tag('kernel.event_listener', ['event' => PreSetDataEvent::class, 'method' => 'onPreSetData', 'priority' => 50]
+        )
+        ->tag(
+            'kernel.event_listener',
+            ['event' => PostSetDataEvent::class, 'method' => 'onPostSetData', 'priority' => 50]
+        );
 };

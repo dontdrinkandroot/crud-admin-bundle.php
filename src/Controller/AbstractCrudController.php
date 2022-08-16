@@ -4,11 +4,11 @@ namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Event\ListModelEvent;
-use Dontdrinkandroot\CrudAdminBundle\Event\PostProcessFormEvent;
-use Dontdrinkandroot\CrudAdminBundle\Event\ReadModelEvent;
+use Dontdrinkandroot\CrudAdminBundle\Event\PostSetDataEvent;
+use Dontdrinkandroot\CrudAdminBundle\Event\PreSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\ViewModelEvent;
+use Dontdrinkandroot\CrudAdminBundle\Exception\AbortWithResponseException;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
@@ -18,15 +18,12 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
-use Symfony\Component\Form\SubmitButton;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Service\Attribute\Required;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;
@@ -50,8 +47,11 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::LIST;
 
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entityClass)) {
-            throw new AccessDeniedException();
+        $event = new PreSetDataEvent($entityClass, $crudOperation, $request);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
         }
 
         $pagination = Asserted::notNull(
@@ -59,10 +59,14 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             sprintf('Could not resolve pagination for %s:%s', $entityClass, $crudOperation->value)
         );
 
-        $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
-            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
-        );
+        $event = new PostSetDataEvent($entityClass, $crudOperation, $request, $pagination);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
+        }
+
+        $template = $this->fetchTemplate($entityClass, $crudOperation);
 
         $context = [
             'crudOperation' => $crudOperation->value,
@@ -83,19 +87,26 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::READ;
 
+        $event = new PreSetDataEvent($entityClass, $crudOperation, $request);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
+        }
+
         $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
 
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity)) {
-            throw new AccessDeniedException();
+        $event = new PostSetDataEvent($entityClass, $crudOperation, $request, $entity);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
         }
 
-        $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
-            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
-        );
+        $template = $this->fetchTemplate($entityClass, $crudOperation);
 
         $context = [
             'crudOperation' => $crudOperation->value,
@@ -116,8 +127,11 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::CREATE;
 
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entityClass)) {
-            throw new AccessDeniedException();
+        $event = new PreSetDataEvent($entityClass, $crudOperation, $request);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
         }
 
         return $this->createOrUpdateAction($request, $crudOperation);
@@ -131,13 +145,16 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::UPDATE;
 
+        $event = new PreSetDataEvent($entityClass, $crudOperation, $request);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
+        }
+
         $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
-        }
-
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity)) {
-            throw new AccessDeniedException();
         }
 
         return $this->createOrUpdateAction($request, $crudOperation, $entity);
@@ -154,8 +171,17 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         Request $request,
         CrudOperation $crudOperation,
         ?object $entity = null
-    ): Response {
+    ): Response
+    {
         $entityClass = $this->getEntityClass();
+
+        $event = new PostSetDataEvent($entityClass, $crudOperation, $request, $entity);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
+        }
+
         $form = Asserted::notNull(
             $this->getFormResolver()->resolveForm($crudOperation, $entityClass, $entity),
             sprintf('Could not resolve form for %s:%s', $entityClass, $crudOperation->value)
@@ -173,10 +199,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             }
         }
 
-        $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
-            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
-        );
+        $template = $this->fetchTemplate($entityClass, $crudOperation);
 
         $context = [
             'crudOperation' => $crudOperation->value,
@@ -195,13 +218,23 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         $entityClass = $this->getEntityClass();
         $crudOperation = CrudOperation::DELETE;
 
+        $event = new PreSetDataEvent($entityClass, $crudOperation, $request);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
+        }
+
         $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
         if (null === $entity) {
             throw new NotFoundHttpException();
         }
 
-        if (!$this->getAuthorizationChecker()->isGranted($crudOperation->value, $entity)) {
-            throw new AccessDeniedException();
+        $event = new PostSetDataEvent($entityClass, $crudOperation, $request, $entity);
+        try {
+            $this->getEventDispatcher()->dispatch($event);
+        } catch (AbortWithResponseException $e) {
+            return $e->response;
         }
 
         $form = $this->getFormFactory()->createBuilder()
@@ -219,10 +252,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             }
         }
 
-        $template = Asserted::notNull(
-            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
-            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
-        );
+        $template = $this->fetchTemplate($entityClass, $crudOperation);
 
         $context = [
             'crudOperation' => $crudOperation->value,
@@ -278,6 +308,20 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     protected function getFormFactory(): FormFactoryInterface
     {
         return $this->getContainer()->get(FormFactoryInterface::class);
+    }
+
+    /**
+     * @param class-string  $entityClass
+     * @param CrudOperation $crudOperation
+     *
+     * @return string
+     */
+    public function fetchTemplate(string $entityClass, CrudOperation $crudOperation): string
+    {
+        return Asserted::notNull(
+            $this->getTemplateResolver()->resolveTemplate($entityClass, $crudOperation),
+            sprintf('Could not resolve template for %s:%s', $entityClass, $crudOperation->value)
+        );
     }
 
     protected function getUrlGenerator(): UrlGeneratorInterface
