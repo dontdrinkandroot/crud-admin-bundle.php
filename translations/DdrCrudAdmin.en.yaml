@@ -11,3 +11,9 @@ success:
     create: Creation successful.
     update: Update successful.
     delete: Deletion successful.
+title:
+    list: '%name%'
+    create: 'Create %name%'
+    read: '%name%'
+    update: 'Edit %name%'
+    delete: 'Delete %name%'

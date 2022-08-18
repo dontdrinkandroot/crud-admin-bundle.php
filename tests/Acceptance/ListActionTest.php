@@ -34,10 +34,11 @@ class ListActionTest extends AbstractIntegrationTestCase
     {
         $this->loadKernelAndFixtures([DepartmentOne::class, DepartmentTwo::class]);
         $this->logIn('user');
+
         $crawler = $this->kernelBrowser->request('GET', '/deps/');
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
 
-        self::assertEquals('Overrridden - title.list', $crawler->filter('title')->text());
+        self::assertEquals('Overrridden - Departments', $crawler->filter('title')->text());
 
         $rows = $crawler->filter('tr');
         $this->assertCount(3, $rows); /* Header + 2 Entity */

@@ -56,6 +56,7 @@ class DdrCrudAdminExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $container->setParameter('ddr.crud_admin.field_definition.humanize', $config['humanize']);
+        $container->setParameter('ddr.crud_admin.field_definition.title_type', $config['title_type']);
 
         $this->registerAutoConfigurationTags($container);
 

@@ -11,3 +11,9 @@ success:
     create: Erfolgreich angelegt.
     update: Erfolgreich aktualisiert.
     delete: Erfolgreich gelöscht.
+title:
+    list: '%name%'
+    create: '%name% anlegen'
+    read: '%name%'
+    update: '%name% bearbeiten'
+    delete: '%name% löschen'
