@@ -8,10 +8,10 @@ Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\Department:
         field: 'name'
         order: 'desc'
     field_definitions:
-        LIST:
+        list:
             -   property_path: 'name'
                 type: 'string'
                 sortable: true
                 filterable: true
     templates:
-        LIST: 'list.html.twig'
+        list: 'list.html.twig'
