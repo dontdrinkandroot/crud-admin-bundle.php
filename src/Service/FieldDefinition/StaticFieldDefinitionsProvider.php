@@ -43,13 +43,15 @@ class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterfac
         return $parsedDefinitions;
     }
 
-    private function getFieldDefinitions(CrudOperation $crudOperation): ?array {
-        $key = $crudOperation->value;
-        if (array_key_exists($key, $this->fieldDefinitionsByCrudOperation)) {
-            return $this->fieldDefinitionsByCrudOperation[$key];
+    private function getFieldDefinitions(CrudOperation $crudOperation): ?array
+    {
+        $key = strtolower($crudOperation->value);
+        $fieldDefinitions = $this->fieldDefinitionsByCrudOperation[$key] ?? [];
+
+        if (0 === count($fieldDefinitions)) {
+            return null;
         }
 
-        $key = strtolower($key);
-        return $this->fieldDefinitionsByCrudOperation[$key] ?? null;
+        return $fieldDefinitions;
     }
 }
