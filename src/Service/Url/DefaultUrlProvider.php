@@ -26,13 +26,15 @@ class DefaultUrlProvider implements UrlProviderInterface
         if (null === $routeInfo) {
             throw new UnsupportedByProviderException($entityClass, $crudOperation);
         }
-        $id = null !== $entity ? $this->idResolver->resolveId($entityClass, $crudOperation, $entity) : null;
         return match ($crudOperation) {
             CrudOperation::LIST,
             CrudOperation::CREATE => $this->router->generate($routeInfo->name),
             CrudOperation::READ,
             CrudOperation::DELETE,
-            CrudOperation::UPDATE => $this->router->generate($routeInfo->name, ['id' => $id]),
+            CrudOperation::UPDATE => $this->router->generate(
+                $routeInfo->name,
+                ['id' => null !== $entity ? $this->idResolver->resolveId($entityClass, $crudOperation, $entity) : null]
+            ),
         };
     }
 }
