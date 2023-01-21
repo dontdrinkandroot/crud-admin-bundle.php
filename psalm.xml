@@ -17,6 +17,7 @@
         <PossiblyUndefinedMethod>
             <errorLevel type="suppress">
                 <file name="src/DependencyInjection/Configuration.php" />
+                <file name="src/DependencyInjection/EntityConfiguration.php"/>
             </errorLevel>
         </PossiblyUndefinedMethod>
     </issueHandlers>

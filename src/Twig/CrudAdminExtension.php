@@ -123,9 +123,9 @@ class CrudAdminExtension extends AbstractExtension
      * @template T
      *
      * @param class-string<T>|T $entityOrClass
-     * @param string            $crudOperation
+     * @param string $crudOperation
      *
-     * @return list<FieldDefinition>
+     * @return FieldDefinition[]
      */
     public function getFieldDefinitions(string|object $entityOrClass, string $crudOperation): array
     {
