@@ -20,7 +20,7 @@ class RouteInfoResolver extends AbstractProviderService implements RouteInfoReso
         foreach ($this->providers as $provider) {
             try {
                 return $provider->provideRouteInfo($entityClass, $crudOperation);
-            } catch (UnsupportedByProviderException $e) {
+            } catch (UnsupportedByProviderException) {
                 /* Continue */
             }
         }

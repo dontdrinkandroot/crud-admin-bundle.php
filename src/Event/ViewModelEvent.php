@@ -8,8 +8,6 @@ class ViewModelEvent
 {
     /**
      * @param class-string  $entityClass
-     * @param CrudOperation $crudOperation
-     * @param array         $context
      */
     public function __construct(
         public readonly string $entityClass,

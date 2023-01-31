@@ -25,10 +25,8 @@ class DepartmentType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefault('data_class', Department::class);
-        $resolver->setDefault('empty_data', function (FormInterface $form) {
-            return new Department(
-                Asserted::string($form->get('name')->getData())
-            );
-        });
+        $resolver->setDefault('empty_data', fn(FormInterface $form): Department => new Department(
+            Asserted::string($form->get('name')->getData())
+        ));
     }
 }

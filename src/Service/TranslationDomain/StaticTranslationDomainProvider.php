@@ -8,7 +8,6 @@ class StaticTranslationDomainProvider implements TranslationDomainProviderInterf
 {
     /**
      * @param class-string $entityClass
-     * @param string       $translationDomain
      */
     public function __construct(private readonly string $entityClass, private readonly string $translationDomain)
     {

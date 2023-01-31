@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
  */
 class DateTimeRendererProviderTest extends TestCase
 {
-    public function testRendering()
+    public function testRendering(): void
     {
         $renderer = new DateTimeRendererProvider();
         $fieldDefinition = new FieldDefinition('path', 'datetime');

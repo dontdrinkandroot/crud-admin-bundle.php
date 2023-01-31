@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
-return function (ContainerConfigurator $configurator) {
+return function (ContainerConfigurator $configurator): void {
     $services = $configurator->services();
 
     $services->set(DefaultTitleProvider::class, DefaultTitleProvider::class)

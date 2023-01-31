@@ -23,7 +23,7 @@ class FormTypeResolver extends AbstractProviderService
         foreach ($this->providers as $provider) {
             try {
                 return $provider->provideFormType($entityClass);
-            } catch (UnsupportedByProviderException $e) {
+            } catch (UnsupportedByProviderException) {
                 /* Continue */
             }
         }

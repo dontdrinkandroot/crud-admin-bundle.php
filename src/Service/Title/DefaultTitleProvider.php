@@ -10,8 +10,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DefaultTitleProvider implements TitleProviderInterface
 {
-    public const TYPE_AUTO = 'auto';
-    public const TYPE_MANUAL = 'manual';
+    final public const TYPE_AUTO = 'auto';
+    final public const TYPE_MANUAL = 'manual';
 
     public function __construct(
         private readonly TranslationDomainResolverInterface $translationDomainResolver,

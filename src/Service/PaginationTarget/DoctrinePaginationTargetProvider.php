@@ -13,7 +13,6 @@ use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionP
 class DoctrinePaginationTargetProvider implements PaginationTargetProvider
 {
     /**
-     * @param ManagerRegistry                                  $managerRegistry
      * @param iterable<QueryBuilderExtensionProviderInterface> $queryBuilderExtensionProviders
      * @param iterable<QueryExtensionProviderInterface>        $queryExtensionProviders
      */

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class ExplicitNullRendererProviderTest extends TestCase
 {
-    public function testRendering()
+    public function testRendering(): void
     {
         $renderer = new ExplicitNullRendererProvider();
         $fieldDefinition = new FieldDefinition('path', 'date');

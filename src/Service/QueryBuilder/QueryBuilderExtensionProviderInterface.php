@@ -9,9 +9,7 @@ interface QueryBuilderExtensionProviderInterface extends ProviderInterface
 {
     /**
      * @param class-string $entityClass
-     * @param QueryBuilder $queryBuilder
      *
-     * @return void
      */
     public function extendQueryBuilder(string $entityClass, QueryBuilder $queryBuilder): void;
 }

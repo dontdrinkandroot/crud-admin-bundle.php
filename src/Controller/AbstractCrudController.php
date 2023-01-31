@@ -35,7 +35,7 @@ use Twig\Environment;
  */
 abstract class AbstractCrudController implements CrudControllerInterface, ServiceSubscriberInterface
 {
-    public const NEW_ID = '__NEW__';
+    final public const NEW_ID = '__NEW__';
 
     protected ?ContainerInterface $container = null;
 
@@ -160,13 +160,6 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->createOrUpdateAction($request, $crudOperation, $entity);
     }
 
-    /**
-     * @param Request       $request
-     * @param CrudOperation $crudOperation
-     * @param object|null   $entity
-     *
-     * @return Response
-     */
     protected function createOrUpdateAction(
         Request $request,
         CrudOperation $crudOperation,
@@ -312,9 +305,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     /**
      * @param class-string  $entityClass
-     * @param CrudOperation $crudOperation
      *
-     * @return string
      */
     public function fetchTemplate(string $entityClass, CrudOperation $crudOperation): string
     {

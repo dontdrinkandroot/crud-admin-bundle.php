@@ -18,6 +18,6 @@ class CachedTranslationDomainResolver extends TranslationDomainResolver
     public function resolveTranslationDomain(string $entityClass): ?string
     {
         $key = ProviderCacheKey::create('translation_domain', $entityClass);
-        return $this->cache->get($key, fn() => parent::resolveTranslationDomain($entityClass));
+        return $this->cache->get($key, fn(): ?string => parent::resolveTranslationDomain($entityClass));
     }
 }

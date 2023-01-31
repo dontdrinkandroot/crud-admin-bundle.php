@@ -20,6 +20,6 @@ class CachedRouteInfoResolver extends RouteInfoResolver
     public function resolveRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo
     {
         $key = ProviderCacheKey::create('route_info', $entityClass, $crudOperation);
-        return $this->cache->get($key, fn() => parent::resolveRouteInfo($entityClass, $crudOperation));
+        return $this->cache->get($key, fn(): ?RouteInfo => parent::resolveRouteInfo($entityClass, $crudOperation));
     }
 }

@@ -19,7 +19,7 @@ class FieldDefinitionsResolver extends AbstractProviderService implements FieldD
         foreach ($this->providers as $provider) {
             try {
                 return $provider->provideFieldDefinitions($entityClass, $crudOperation);
-            } catch (UnsupportedByProviderException $e) {
+            } catch (UnsupportedByProviderException) {
                 /* Continue */
             }
         }

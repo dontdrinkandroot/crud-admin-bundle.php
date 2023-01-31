@@ -20,6 +20,6 @@ class JsonRendererProvider implements FieldRendererProviderInterface
      */
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
-        return FieldRenderer::escapeHtml(json_encode($value));
+        return FieldRenderer::escapeHtml(json_encode($value, JSON_THROW_ON_ERROR));
     }
 }

@@ -19,6 +19,6 @@ class CachedFieldDefinitionsResolver extends FieldDefinitionsResolver
     public function resolveFieldDefinitions(string $entityClass, CrudOperation $crudOperation): ?array
     {
         $key = ProviderCacheKey::create('field_definitions', $entityClass, $crudOperation);
-        return $this->cache->get($key, fn() => parent::resolveFieldDefinitions($entityClass, $crudOperation));
+        return $this->cache->get($key, fn(): ?array => parent::resolveFieldDefinitions($entityClass, $crudOperation));
     }
 }

@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class NullRendererProviderTest extends TestCase
 {
-    public function testRendering()
+    public function testRendering(): void
     {
         $renderer = new NullRendererProvider();
         $fieldDefinition = new FieldDefinition('path', 'json');

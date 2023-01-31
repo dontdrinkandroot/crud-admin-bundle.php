@@ -9,8 +9,6 @@ class StaticDefaultSortProvider implements DefaultSortProviderInterface
 {
     /**
      * @param class-string $entityClass
-     * @param string       $field
-     * @param string       $order
      */
     public function __construct(
         private readonly string $entityClass,

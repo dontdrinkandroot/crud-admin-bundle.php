@@ -10,7 +10,6 @@ interface DefaultSortProviderInterface
     /**
      * @param class-string $entityClass
      *
-     * @return DefaultSort|null
      * @throws UnsupportedByProviderException
      */
     public function provideDefaultSort(string $entityClass): ?DefaultSort;

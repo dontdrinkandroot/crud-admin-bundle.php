@@ -34,8 +34,6 @@ class DefaultRouteInfoProvider implements RouteInfoProviderInterface
 
     /**
      * @param class-string $entityClass
-     *
-     * @return string
      */
     public static function getDefaultNamePrefix(string $entityClass): string
     {
@@ -45,8 +43,6 @@ class DefaultRouteInfoProvider implements RouteInfoProviderInterface
 
     /**
      * @param class-string $entityClass
-     *
-     * @return string
      */
     public static function getDefaultPathPrefix(string $entityClass): string
     {

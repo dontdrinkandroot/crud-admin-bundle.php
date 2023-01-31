@@ -14,7 +14,6 @@ class ItemPersister extends AbstractProviderService
     /**
      * @template T of object
      *
-     * @param CrudOperation          $crudOperation
      * @param class-string<T> $entityClass
      * @param T $entity
      */
@@ -24,7 +23,7 @@ class ItemPersister extends AbstractProviderService
             try {
                 $provider->persist($entityClass, $crudOperation, $entity);
                 return;
-            } catch (UnsupportedByProviderException $e) {
+            } catch (UnsupportedByProviderException) {
                 /* Continue */
             }
         }

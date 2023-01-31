@@ -38,10 +38,10 @@ class CrudAdminExtension extends AbstractExtension
         return [
             new TwigFilter(
                 'ddrCrudAdminFieldDefinitionValue',
-                [$this, 'renderFieldDefinitionValue'],
+                $this->renderFieldDefinitionValue(...),
                 ['is_safe' => ['html']]
             ),
-            new TwigFilter('ddrCrudAdminLabel', [$this, 'getLabel'])
+            new TwigFilter('ddrCrudAdminLabel', $this->getLabel(...))
         ];
     }
 
@@ -53,14 +53,14 @@ class CrudAdminExtension extends AbstractExtension
         return [
             new TwigFunction(
                 'ddrCrudAdminFieldDefinitionValue',
-                [$this, 'renderFieldDefinitionValue'],
+                $this->renderFieldDefinitionValue(...),
                 ['is_safe' => ['html']]
             ),
-            new TwigFunction('ddrCrudAdminPath', [$this, 'getPath']),
-            new TwigFunction('ddrCrudAdminTitle', [$this, 'getTitle']),
-            new TwigFunction('ddrCrudAdminTranslationDomain', [$this, 'getTranslationDomain']),
-            new TwigFunction('ddrCrudAdminFieldDefinitions', [$this, 'getFieldDefinitions']),
-            new TwigFunction('ddrCrudAdminLabel', [$this, 'getLabel'])
+            new TwigFunction('ddrCrudAdminPath', $this->getPath(...)),
+            new TwigFunction('ddrCrudAdminTitle', $this->getTitle(...)),
+            new TwigFunction('ddrCrudAdminTranslationDomain', $this->getTranslationDomain(...)),
+            new TwigFunction('ddrCrudAdminFieldDefinitions', $this->getFieldDefinitions(...)),
+            new TwigFunction('ddrCrudAdminLabel', $this->getLabel(...))
         ];
     }
 
@@ -74,9 +74,7 @@ class CrudAdminExtension extends AbstractExtension
      * @template T
      *
      * @param class-string<T>|T $entityOrClass
-     * @param string            $crudOperation
      *
-     * @return string|null
      */
     public function getPath(string|object $entityOrClass, string $crudOperation): ?string
     {
@@ -89,9 +87,7 @@ class CrudAdminExtension extends AbstractExtension
      * @template T
      *
      * @param class-string<T>|T $entityOrClass
-     * @param string            $crudOperation
      *
-     * @return string
      */
     public function getTitle(string|object $entityOrClass, string $crudOperation): string
     {
@@ -107,8 +103,6 @@ class CrudAdminExtension extends AbstractExtension
      * @template T
      *
      * @param class-string<T>|T $entityOrClass
-     *
-     * @return string
      */
     public function getTranslationDomain(string|object $entityOrClass): string
     {
@@ -123,7 +117,6 @@ class CrudAdminExtension extends AbstractExtension
      * @template T
      *
      * @param class-string<T>|T $entityOrClass
-     * @param string $crudOperation
      *
      * @return FieldDefinition[]
      */
@@ -136,7 +129,8 @@ class CrudAdminExtension extends AbstractExtension
         );
     }
 
-    public function getLabel(FieldDefinition|string $value): string {
+    public function getLabel(FieldDefinition|string $value): string
+    {
         return $this->labelService->getLabel($value);
     }
 
@@ -149,8 +143,8 @@ class CrudAdminExtension extends AbstractExtension
      */
     private function getClass(object $entity): string
     {
-        $entityClass = get_class($entity);
-        if (class_exists('Doctrine\Common\Util\ClassUtils')) {
+        $entityClass = $entity::class;
+        if (class_exists(ClassUtils::class)) {
             return ClassUtils::getRealClass($entityClass);
         }
 

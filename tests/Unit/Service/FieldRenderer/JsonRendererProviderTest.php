@@ -11,7 +11,7 @@ use PHPUnit\Framework\TestCase;
  */
 class JsonRendererProviderTest extends TestCase
 {
-    public function testRendering()
+    public function testRendering(): void
     {
         $renderer = new JsonRendererProvider();
         $fieldDefinition = new FieldDefinition('path', 'json');

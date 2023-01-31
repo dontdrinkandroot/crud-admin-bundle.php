@@ -18,10 +18,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class DefaultPaginationProvider implements PaginationProviderInterface
 {
     /**
-     * @param PaginatorInterface                     $paginator
-     * @param PaginationTargetResolver               $paginationTargetResolver
-     * @param FieldDefinitionsResolverInterface      $fieldDefinitionsResolver
-     * @param RequestStack                           $requestStack
      * @param iterable<DefaultSortProviderInterface> $defaultSortProviders
      */
     public function __construct(
@@ -29,7 +25,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         private readonly PaginationTargetResolver $paginationTargetResolver,
         private readonly FieldDefinitionsResolverInterface $fieldDefinitionsResolver,
         private readonly RequestStack $requestStack,
-        private iterable $defaultSortProviders
+        private readonly iterable $defaultSortProviders
     ) {
     }
 
@@ -91,15 +87,13 @@ class DefaultPaginationProvider implements PaginationProviderInterface
 
     /**
      * @param class-string $entityClass
-     *
-     * @return DefaultSort|null
      */
     private function resolveDefaultSort(string $entityClass): ?DefaultSort
     {
         foreach ($this->defaultSortProviders as $defaultSortProvider) {
             try {
                 return $defaultSortProvider->provideDefaultSort($entityClass);
-            } catch (UnsupportedByProviderException $e) {
+            } catch (UnsupportedByProviderException) {
             }
         }
 

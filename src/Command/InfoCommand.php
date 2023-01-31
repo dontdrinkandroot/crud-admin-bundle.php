@@ -56,7 +56,7 @@ class InfoCommand extends Command
 
         foreach ($controllersByEntityClass as $entityClass => $controller) {
             $output->writeln($entityClass . ":");
-            $output->writeln("\t" . 'controller: ' . get_class($controller));
+            $output->writeln("\t" . 'controller: ' . $controller::class);
             $output->writeln("\t" . 'routes:');
             foreach (CrudOperation::all() as $crudOperation) {
                 $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, $crudOperation);
@@ -104,6 +104,6 @@ class InfoCommand extends Command
                 }
             }
         }
-        return 0;
+        return Command::SUCCESS;
     }
 }

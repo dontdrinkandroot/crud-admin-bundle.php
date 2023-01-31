@@ -19,7 +19,7 @@ class TemplateResolver extends AbstractProviderService implements TemplateResolv
         foreach ($this->providers as $provider) {
             try {
                 return $provider->provideTemplate($entityClass, $crudOperation);
-            } catch (UnsupportedByProviderException $e) {
+            } catch (UnsupportedByProviderException) {
                 /* Continue */
             }
         }

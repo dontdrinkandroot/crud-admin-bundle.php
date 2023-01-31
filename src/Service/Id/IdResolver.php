@@ -15,17 +15,15 @@ class IdResolver extends AbstractProviderService
      * @template T of object
      *
      * @param class-string<T> $entityClass
-     * @param CrudOperation   $crudOperation
      * @param T               $entity
      *
-     * @return mixed
      */
     public function resolveId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
     {
         foreach ($this->providers as $provider) {
             try {
                 return $provider->provideId($entityClass, $crudOperation, $entity);
-            } catch (UnsupportedByProviderException $e) {
+            } catch (UnsupportedByProviderException) {
                 /* Continue */
             }
         }
