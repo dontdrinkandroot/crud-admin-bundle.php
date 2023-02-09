@@ -8,6 +8,7 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
+use Dontdrinkandroot\CrudAdminBundle\Service\ReflectionDataMapper;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -40,11 +41,16 @@ class DoctrineFormProvider implements FormProviderInterface
         $classMetadata = $entityManager->getClassMetadata($entityClass);
         $fields = array_keys($classMetadata->fieldMappings);
 
+        $dataMapper = new ReflectionDataMapper($entityClass);
         $formBuilder = $this->formFactory->createBuilder(
             FormType::class,
             $entity,
-            ['data_class' => $entityClass]
+            [
+                'data_class' => $entityClass,
+                'empty_data' => $dataMapper->getInstantiator()
+            ]
         );
+        $formBuilder->setDataMapper($dataMapper);
 
         $translationDomain = $this->translationDomainResolver->resolveTranslationDomain($entityClass);
 
