@@ -18,6 +18,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand('ddr:crud-admin:info')]
 class InfoCommand extends Command
 {
+    final const ARGUMENT_ENTITY_CLASS = 'entity-class';
+
     public function __construct(
         private readonly CrudControllerRegistry $crudControllerRegistry,
         private readonly TemplateResolverInterface $templateResolver,
@@ -33,7 +35,7 @@ class InfoCommand extends Command
      */
     protected function configure(): void
     {
-        $this->addArgument('ENTITY_CLASS', InputArgument::OPTIONAL);
+        $this->addArgument(self::ARGUMENT_ENTITY_CLASS, InputArgument::OPTIONAL);
     }
 
     /**
@@ -41,7 +43,7 @@ class InfoCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $entityClass = $input->getArgument('ENTITY_CLASS');
+        $entityClass = $input->getArgument(self::ARGUMENT_ENTITY_CLASS);
         if (null !== $entityClass) {
             $controller = $this->crudControllerRegistry->findControllerByEntityClass($entityClass);
             if (null === $controller) {
