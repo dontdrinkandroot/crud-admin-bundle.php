@@ -7,9 +7,6 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\DateRendererProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class DateRendererProviderTest extends TestCase
 {
     public function testRendering(): void

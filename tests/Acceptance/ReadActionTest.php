@@ -33,13 +33,13 @@ class ReadActionTest extends AbstractIntegrationTestCase
 
         /* Test expected values */
         $dds = $crawler->filter('dd');
-        $this->assertCount(3, $dds);
+        $this->assertCount(6, $dds);
         /* Id */
         $this->assertEquals('2', $dds->eq(0)->text(null, true));
         /* NullField */
-        $this->assertEquals('', $dds->eq(1)->text(null, true));
+        $this->assertEquals('requiredReadonly00001', $dds->eq(1)->text(null, true));
         /* RequiredField */
-        $this->assertEquals('00001', $dds->eq(2)->text(null, true));
+        $this->assertEquals('required00001', $dds->eq(2)->text(null, true));
     }
 
     public function testStandardRequestDepartment(): void

@@ -6,9 +6,6 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\ExplicitNullRendererProvider;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @author Philip Washington Sorst <philip@sorst.net>
- */
 class ExplicitNullRendererProviderTest extends TestCase
 {
     public function testRendering(): void

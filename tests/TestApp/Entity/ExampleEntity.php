@@ -14,35 +14,35 @@ class ExampleEntity
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
     private ?int $id = null;
 
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    private ?string $nullField = null;
+    public function __construct(
+        /* Doctrine does not support readonly public properties yet, change when fixed with symfony 6 */
+        #[Assert\NotBlank]
+        #[ORM\Column(type: 'string', nullable: false)]
+        private readonly string $requiredReadonly,
 
-    #[Assert\NotBlank]
-    #[ORM\Column(type: Types::STRING, nullable: false)]
-    private ?string $requiredField = null;
+        #[Assert\NotBlank]
+        #[ORM\Column(type: 'string', nullable: false)]
+        public string $required,
 
-    public function getId(): ?int
+        #[ORM\Column(type: 'string', nullable: true)]
+        public ?string $requiredNullable,
+
+        #[Assert\NotBlank]
+        #[ORM\Column(type: 'string', nullable: false)]
+        public string $requiredWithDefault = 'defaultValue',
+
+        #[ORM\Column(type: 'string', nullable: true)]
+        public ?string $nullableWithDefault = null,
+    ) {
+    }
+
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getNullField(): ?string
+    public function getRequiredReadonly(): string
     {
-        return $this->nullField;
-    }
-
-    public function setNullField(?string $nullField): void
-    {
-        /* Keep field null */
-    }
-
-    public function getRequiredField(): ?string
-    {
-        return $this->requiredField;
-    }
-
-    public function setRequiredField(?string $requiredField): void
-    {
-        $this->requiredField = $requiredField;
+        return $this->requiredReadonly;
     }
 }

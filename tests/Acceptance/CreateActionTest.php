@@ -37,11 +37,16 @@ class CreateActionTest extends AbstractIntegrationTestCase
         $crawler = $this->kernelBrowser->submitForm('Save', []);
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
         $formGroups = $crawler->filter('form > div > div');
+        $formGroupRequired = $formGroups->eq(0);
+        $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text(null, true));
         $formGroupRequired = $formGroups->eq(1);
         $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text(null, true));
 
         /* Test submission is working */
-        $crawler = $this->kernelBrowser->submitForm('Save', ['form[requiredField]' => 'TestValue']);
+        $crawler = $this->kernelBrowser->submitForm('Save', [
+            'form[requiredReadonly]' => 'requiredReadonlyValue',
+            'form[required]' => 'requiredValue',
+        ]);
         $this->assertEquals(Response::HTTP_FOUND, $this->kernelBrowser->getResponse()->getStatusCode());
         self::assertResponseRedirects('/example_entities/');
 
@@ -56,7 +61,10 @@ class CreateActionTest extends AbstractIntegrationTestCase
         self::assertCount(1, $entities);
         $entity = $entities[0];
         self::assertInstanceOf(ExampleEntity::class, $entity);
-        self::assertNull($entity->getNullField());
-        self::assertEquals('TestValue', $entity->getRequiredField());
+        self::assertEquals('requiredReadonlyValue', $entity->getRequiredReadonly());
+        self::assertEquals('requiredValue', $entity->required);
+        self::assertNull($entity->requiredNullable);
+        self::assertEquals('defaultValue', $entity->requiredWithDefault);
+        self::assertNull($entity->nullableWithDefault);
     }
 }
