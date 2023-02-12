@@ -2,23 +2,17 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service;
 
-use App\Entity\Job;
 use Closure;
 use Dontdrinkandroot\Common\Asserted;
-use Dontdrinkandroot\Common\StringUtils;
-use PHPUnit\Framework\Assert;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
 use ReflectionProperty;
 use RuntimeException;
 use Symfony\Component\Form\DataMapperInterface;
-use Symfony\Component\Form\DataTransformerInterface;
 use Symfony\Component\Form\Exception\UnexpectedTypeException;
 use Symfony\Component\Form\Extension\Core\DataAccessor\PropertyPathAccessor;
 use Symfony\Component\Form\FormInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
-use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Traversable;
 
 use function is_array;
@@ -46,11 +40,12 @@ class ReflectionDataMapper implements DataMapperInterface
     }
 
     /**
+     * @param array<string,mixed> $customDefaults
      * @return Closure(FormInterface): T
      */
-    public function getInstantiator(): Closure
+    public function getInstantiator(array $customDefaults = []): Closure
     {
-        return function (FormInterface $form) {
+        return function (FormInterface $form) use ($customDefaults) {
             $constructor = $this->reflectedClass->getConstructor();
             if (null === $constructor) {
                 return $this->reflectedClass->newInstance();
@@ -64,25 +59,15 @@ class ReflectionDataMapper implements DataMapperInterface
                 $value = null;
                 if ($form->has($parameterName)) {
                     $value = $form->get($parameterName)->getData();
+                } elseif (array_key_exists($parameterName, $customDefaults)) {
+                    $value = $customDefaults[$parameterName];
                 } elseif ($parameter->isDefaultValueAvailable()) {
                     $value = $parameter->getDefaultValue();
                 }
+
                 if (null === $value && !$parameter->allowsNull()) {
-                    $type = self::getParameterType($parameter);
-                    $value = match ($type->getName()) {
-                        'int' => 0,
-                        'float' => 0.0,
-                        'string' => '',
-                        'bool' => false,
-                        'array' => [],
-                        default => throw new RuntimeException(
-                            sprintf(
-                                'Cannot instantiate %s, parameter %s is not a builtin type',
-                                $parameter->getDeclaringClass()?->getName() ?? 'n/a',
-                                $parameter->getName()
-                            )
-                        )
-                    };
+                    $type = self::getType($parameter);
+                    $value = $this->resolveDefaultForType($type);
                 }
                 $args[] = $value;
             }
@@ -91,36 +76,14 @@ class ReflectionDataMapper implements DataMapperInterface
         };
     }
 
-    private static function getParameterType(ReflectionParameter|ReflectionProperty $parameter): ReflectionNamedType
-    {
-        if (!$parameter->hasType()) {
-            throw new RuntimeException(
-                sprintf(
-                    'Cannot instantiate %s, parameter %s has no type and no default value',
-                    $parameter->getDeclaringClass()?->getName() ?? 'n/a',
-                    $parameter->getName()
-                )
-            );
-        }
-        $type = $parameter->getType();
-        if (!$type instanceof ReflectionNamedType) {
-            throw new RuntimeException(
-                sprintf(
-                    'Cannot instantiate %s, parameter %s has no type and no default value',
-                    $parameter->getDeclaringClass()?->getName() ?? 'n/a',
-                    $parameter->getName()
-                )
-            );
-        }
-        return $type;
-    }
-
     /**
      * Similar to DataMapper, but if empty it sets the values to the default values of the constructor.
      *
      * {@inheritdoc}
+     * @param Traversable<FormInterface> $forms
+     * @psalm-suppress MoreSpecificImplementedParamType
      */
-    public function mapDataToForms($viewData, Traversable $forms): void
+    public function mapDataToForms(mixed $viewData, Traversable $forms): void
     {
         $empty = null === $viewData || [] === $viewData;
         if (!$empty && !is_array($viewData) && !is_object($viewData)) {
@@ -155,7 +118,7 @@ class ReflectionDataMapper implements DataMapperInterface
         foreach ($forms as $form) {
             $config = $form->getConfig();
 
-            if (!$empty && $config->getMapped() && $this->propertyPathAccessor->isReadable($viewData, $form)) {
+            if ($config->getMapped() && $this->propertyPathAccessor->isReadable($viewData, $form)) {
                 $form->setData($this->propertyPathAccessor->getValue($viewData, $form));
             } else {
                 $form->setData($config->getData());
@@ -167,8 +130,10 @@ class ReflectionDataMapper implements DataMapperInterface
      * Similar to DataMapper, but it does not set the data if it has not changed for readonly properties (excluding default) of if it is not nullable and the current value is the default value.
      *
      * {@inheritdoc}
+     * @param Traversable<FormInterface> $forms
+     * @psalm-suppress MoreSpecificImplementedParamType
      */
-    public function mapFormsToData(Traversable $forms, &$viewData): void
+    public function mapFormsToData(Traversable $forms, mixed &$viewData): void
     {
         if (null === $viewData) {
             return;
@@ -194,6 +159,7 @@ class ReflectionDataMapper implements DataMapperInterface
                     $this->reflectedClass->hasProperty($formName)
                 ) {
                     $property = $this->reflectedClass->getProperty($formName);
+                    $type = self::getType($property);
                     if (
                         $property->isReadOnly()
                     ) {
@@ -202,18 +168,17 @@ class ReflectionDataMapper implements DataMapperInterface
                         }
 
                         if (
-                            !$this->allowsNull($property)
+                            !$type->allowsNull()
                             && null === $value
-                            && $currentValue === $this->resolveDefaultForType($property->getType())
+                            && $currentValue === self::resolveDefaultForType($type)
                         ) {
                             continue;
                         }
-
                     } elseif (
-                        !$this->allowsNull($property)
-                        && (null === $value)
+                        !$type->allowsNull()
+                        && null === $value
                     ) {
-                        $value = $this->resolveDefaultForType($property->getType());
+                        $value = self::resolveDefaultForType($type);
                     }
                 }
 
@@ -222,7 +187,7 @@ class ReflectionDataMapper implements DataMapperInterface
         }
     }
 
-    private function resolveDefaultForType(ReflectionNamedType $type): mixed
+    private static function resolveDefaultForType(ReflectionNamedType $type): mixed
     {
         return match ($type->getName()) {
             'int' => 0,
@@ -232,15 +197,25 @@ class ReflectionDataMapper implements DataMapperInterface
             'array' => [],
             default => throw new RuntimeException(
                 sprintf(
-                    'Cannot resolve default for type %s, parameter is not a builtin type',
+                    'Cannot resolve default for type %s, only builtin types are supported',
                     $type->getName()
                 )
             )
         };
     }
 
-    private function allowsNull(ReflectionProperty|ReflectionParameter $property): bool
+    private static function getType(ReflectionParameter|ReflectionProperty $parameter): ReflectionNamedType
     {
-        return self::getParameterType($property)->allowsNull();
+        $type = $parameter->getType();
+        if (!$type instanceof ReflectionNamedType) {
+            throw new RuntimeException(
+                sprintf(
+                    'Only reflection named types are supported, got %s',
+                    null !== $type ? $type::class : 'null'
+                )
+            );
+        }
+
+        return $type;
     }
 }
