@@ -91,26 +91,20 @@ class ReflectionDataMapper implements DataMapperInterface
         }
 
         if ($empty) {
-            $constructor = $this->reflectedClass->getConstructor();
-            if (null === $constructor) {
-                return;
-            }
-            $constructorParameters = array_reduce(
-                $constructor->getParameters(),
-                fn(array $carry, ReflectionParameter $parameter) => $carry + [$parameter->getName() => $parameter],
+            $propertiesWithDefaults = array_reduce(
+                array_filter(
+                    $this->reflectedClass->getProperties(),
+                    fn(ReflectionProperty $property) => $property->hasDefaultValue()
+                ),
+                fn(array $carry, ReflectionProperty $parameter) => $carry + [$parameter->getName() => $parameter],
                 []
             );
 
-            /* Set default value from constructor for each form */
             foreach ($forms as $form) {
-                $parameter = $constructorParameters[$form->getName()] ?? null;
-                if (null === $parameter) {
-                    continue;
+                $formName = $form->getName();
+                if (array_key_exists($formName, $propertiesWithDefaults)) {
+                    $form->setData($propertiesWithDefaults[$formName]->getDefaultValue());
                 }
-                if (!$parameter->isDefaultValueAvailable()) {
-                    continue;
-                }
-                $form->setData($parameter->getDefaultValue());
             }
             return;
         }
