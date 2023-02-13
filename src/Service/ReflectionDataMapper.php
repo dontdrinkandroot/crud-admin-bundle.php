@@ -91,19 +91,30 @@ class ReflectionDataMapper implements DataMapperInterface
         }
 
         if ($empty) {
-            $propertiesWithDefaults = array_reduce(
-                array_filter(
-                    $this->reflectedClass->getProperties(),
-                    fn(ReflectionProperty $property) => $property->hasDefaultValue()
+            $propertiesWithDefaults = array_filter(
+                $this->reflectedClass->getProperties(),
+                fn(ReflectionProperty $property) => $property->hasDefaultValue()
+            );
+            $constructorArgumentsWithDefaults = array_filter(
+                $this->reflectedClass->getConstructor()?->getParameters() ?? [],
+                fn(ReflectionParameter $parameter) => $parameter->isDefaultValueAvailable()
+            );
+            $namesWithDefaultValues = array_reduce(
+                array_merge(
+                    $propertiesWithDefaults,
+                    $constructorArgumentsWithDefaults
                 ),
-                fn(array $carry, ReflectionProperty $parameter) => $carry + [$parameter->getName() => $parameter],
+                fn(array $carry, ReflectionProperty|ReflectionParameter $property) => array_merge(
+                    $carry,
+                    [$property->getName() => $property->getDefaultValue()]
+                ),
                 []
             );
 
             foreach ($forms as $form) {
                 $formName = $form->getName();
-                if (array_key_exists($formName, $propertiesWithDefaults)) {
-                    $form->setData($propertiesWithDefaults[$formName]->getDefaultValue());
+                if (array_key_exists($formName, $namesWithDefaultValues)) {
+                    $form->setData($namesWithDefaultValues[$formName]);
                 }
             }
             return;

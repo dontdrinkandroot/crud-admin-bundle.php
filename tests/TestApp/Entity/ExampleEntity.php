@@ -12,7 +12,7 @@ class ExampleEntity
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER, nullable: false)]
-    private ?int $id = null;
+    private int $id;
 
     public function __construct(
         /* Doctrine does not support readonly public properties yet, change when fixed with symfony 6 */
