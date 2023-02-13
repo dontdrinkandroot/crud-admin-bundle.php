@@ -67,7 +67,7 @@ class DdrCrudAdminExtension extends Extension
         $loader->load('services.php');
         $loader->load('providers.php');
         $loader->load('resolvers.php');
-        $loader->load('fieldDefinitionRenderers.php');
+        $loader->load('field_definition_renderers.php');
 
         $bundles = $container->getParameter('kernel.bundles');
         if (is_array($bundles) && array_key_exists('DoctrineBundle', $bundles)) {

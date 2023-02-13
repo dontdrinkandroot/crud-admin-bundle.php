@@ -3,18 +3,19 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
+use Dontdrinkandroot\CrudAdminBundle\Exception\EntityNotFoundException;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface ItemProviderInterface extends ProviderInterface
 {
     /**
-     * @param class-string  $entityClass
+     * @param class-string $entityClass
      * @param CrudOperation $crudOperation
-     * @param mixed         $id
+     * @param mixed $id
      *
      * @return object|null
-     * @throws UnsupportedByProviderException
+     *
+     * @throws EntityNotFoundException
      */
     public function provideItem(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object;
 }

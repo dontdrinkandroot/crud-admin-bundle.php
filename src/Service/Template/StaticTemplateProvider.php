@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 
 class StaticTemplateProvider implements TemplateProviderInterface
 {
@@ -18,13 +17,13 @@ class StaticTemplateProvider implements TemplateProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideTemplate(string $entityClass, CrudOperation $crudOperation): string
+    public function provideTemplate(string $entityClass, CrudOperation $crudOperation): ?string
     {
         if (
             $entityClass !== $this->entityClass
             || null === ($template = $this->getTemplate($crudOperation))
         ) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+            return null;
         }
 
         return $template;

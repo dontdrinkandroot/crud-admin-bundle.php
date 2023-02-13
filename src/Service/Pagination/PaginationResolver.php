@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
@@ -19,10 +18,9 @@ class PaginationResolver extends AbstractProviderService
     public function resolvePagination(string $entityClass): ?PaginationInterface
     {
         foreach ($this->providers as $provider) {
-            try {
-                return $provider->providePagination($entityClass);
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
+            $pagination = $provider->providePagination($entityClass);
+            if (null !== $pagination) {
+                return $pagination;
             }
         }
 

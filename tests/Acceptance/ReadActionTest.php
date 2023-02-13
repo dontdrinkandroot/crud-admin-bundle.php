@@ -2,34 +2,34 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Tests\Acceptance;
 
-use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\AbstractIntegrationTestCase;
+use Dontdrinkandroot\CrudAdminBundle\Tests\AbstractTestCase;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\DepartmentTwo;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\ExampleEntities;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\Department;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity;
 use Symfony\Component\HttpFoundation\Response;
 
-class ReadActionTest extends AbstractIntegrationTestCase
+class ReadActionTest extends AbstractTestCase
 {
     public function testUnauthorized(): void
     {
-        $this->loadKernelAndFixtures([ExampleEntities::class]);
+        $this->loadClientAndFixtures([ExampleEntities::class]);
         $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
-        $crawler = $this->kernelBrowser->request('GET', '/example_entities/' . $exampleEntity->getId());
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->kernelBrowser->getResponse()->getStatusCode());
+        $crawler = $this->client->request('GET', '/example_entities/' . $exampleEntity->getId());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
     }
 
     public function testStandardRequest(): void
     {
-        $this->loadKernelAndFixtures([ExampleEntities::class]);
+        $this->loadClientAndFixtures([ExampleEntities::class]);
         $this->logIn('user');
         $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
-        $crawler = $this->kernelBrowser->request('GET', '/example_entities/' . $exampleEntity->getId());
-        $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
+        $crawler = $this->client->request('GET', '/example_entities/' . $exampleEntity->getId());
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         /* Test expected values */
         $dds = $crawler->filter('dd');
@@ -44,13 +44,13 @@ class ReadActionTest extends AbstractIntegrationTestCase
 
     public function testStandardRequestDepartment(): void
     {
-        $this->loadKernelAndFixtures([DepartmentTwo::class]);
+        $this->loadClientAndFixtures([DepartmentTwo::class]);
         $this->logIn('user');
         $department = $this->referenceRepository->getReference(DepartmentTwo::class);
         self::assertInstanceOf(Department::class, $department);
 
-        $crawler = $this->kernelBrowser->request('GET', '/deps/' . $department->id);
-        $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
+        $crawler = $this->client->request('GET', '/deps/' . $department->id);
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         /* Test expected values */
         $dds = $crawler->filter('dd');

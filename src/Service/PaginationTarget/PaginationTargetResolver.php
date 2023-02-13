@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
@@ -16,10 +15,9 @@ class PaginationTargetResolver extends AbstractProviderService
     public function resolvePaginationTarget(string $entityClass): mixed
     {
         foreach ($this->providers as $provider) {
-            try {
-                return $provider->providePaginationTarget($entityClass);
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
+            $paginationTarget = $provider->providePaginationTarget($entityClass);
+            if (null !== $paginationTarget) {
+                return $paginationTarget;
             }
         }
 

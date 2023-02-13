@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FormType;
 
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Symfony\Component\Form\FormTypeInterface;
 
@@ -16,15 +15,14 @@ class FormTypeResolver extends AbstractProviderService
      *
      * @param class-string<T> $entityClass
      *
-     * @return ?class-string<FormTypeInterface>
+     * @return class-string<FormTypeInterface>|null
      */
     public function resolveFormType(string $entityClass): ?string
     {
         foreach ($this->providers as $provider) {
-            try {
-                return $provider->provideFormType($entityClass);
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
+            $formType = $provider->provideFormType($entityClass);
+            if (null !== $formType) {
+                return $formType;
             }
         }
 

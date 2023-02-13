@@ -3,19 +3,17 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Symfony\Component\Form\FormInterface;
 
 interface FormProviderInterface extends ProviderInterface
 {
     /**
-     * @param class-string  $entityClass
+     * @param class-string $entityClass
      * @param CrudOperation $crudOperation
-     * @param object|null   $entity
+     * @param object|null $entity
      *
-     * @return FormInterface
-     * @throws UnsupportedByProviderException
+     * @return FormInterface|null
      */
-    public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): FormInterface;
+    public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?FormInterface;
 }

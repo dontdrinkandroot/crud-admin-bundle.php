@@ -2,8 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
-
 class StaticTranslationDomainProvider implements TranslationDomainProviderInterface
 {
     /**
@@ -19,7 +17,7 @@ class StaticTranslationDomainProvider implements TranslationDomainProviderInterf
     public function provideTranslationDomain(string $entityClass): ?string
     {
         if ($entityClass !== $this->entityClass) {
-            throw new UnsupportedByProviderException($entityClass);
+            return null;
         }
 
         return $this->translationDomain;

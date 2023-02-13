@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 
 class StaticRouteInfoProvider implements RouteInfoProviderInterface
@@ -18,10 +17,10 @@ class StaticRouteInfoProvider implements RouteInfoProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo
+    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo
     {
         if ($entityClass !== $this->entityClass) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+            return null;
         }
 
         $namePrefix = $this->namePrefix ?? DefaultRouteInfoProvider::getDefaultNamePrefix($entityClass);

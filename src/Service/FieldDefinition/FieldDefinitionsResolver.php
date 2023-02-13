@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
@@ -18,8 +17,8 @@ class FieldDefinitionsResolver extends AbstractProviderService implements FieldD
     public function resolveFieldDefinitions(string $entityClass, CrudOperation $crudOperation): ?array
     {
         foreach ($this->providers as $provider) {
-            try {
-                $fieldDefinitions = $provider->provideFieldDefinitions($entityClass);
+            $fieldDefinitions = $provider->provideFieldDefinitions($entityClass);
+            if (null !== $fieldDefinitions) {
                 return array_filter(
                     $fieldDefinitions,
                     fn(FieldDefinition $fieldDefinition) => in_array(
@@ -28,8 +27,6 @@ class FieldDefinitionsResolver extends AbstractProviderService implements FieldD
                         true
                     )
                 );
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
             }
         }
 

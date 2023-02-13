@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
@@ -15,16 +14,15 @@ class TitleResolver extends AbstractProviderService
      * @template T of object
      *
      * @param class-string<T> $entityClass
-     * @param T|null          $entity
+     * @param T|null $entity
      *
      */
     public function resolveTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?string
     {
         foreach ($this->providers as $provider) {
-            try {
-                return $provider->provideTitle($entityClass, $crudOperation, $entity);
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
+            $title = $provider->provideTitle($entityClass, $crudOperation, $entity);
+            if (null !== $title) {
+                return $title;
             }
         }
 

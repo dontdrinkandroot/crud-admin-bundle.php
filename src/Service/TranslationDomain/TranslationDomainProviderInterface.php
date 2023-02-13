@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 interface TranslationDomainProviderInterface extends ProviderInterface
@@ -12,8 +11,7 @@ interface TranslationDomainProviderInterface extends ProviderInterface
      *
      * @param class-string<T> $entityClass
      *
-     * @return ?string
-     * @throws UnsupportedByProviderException
+     * @return string|null
      */
     public function provideTranslationDomain(string $entityClass): ?string;
 }

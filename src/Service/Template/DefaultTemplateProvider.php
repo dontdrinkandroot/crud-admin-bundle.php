@@ -3,8 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
-use RuntimeException;
 
 class DefaultTemplateProvider implements TemplateProviderInterface
 {

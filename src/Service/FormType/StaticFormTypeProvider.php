@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FormType;
 
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Symfony\Component\Form\FormTypeInterface;
 
 class StaticFormTypeProvider implements FormTypeProviderInterface
@@ -18,10 +17,10 @@ class StaticFormTypeProvider implements FormTypeProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideFormType(string $entityClass): string
+    public function provideFormType(string $entityClass): ?string
     {
         if ($entityClass !== $this->entityClass) {
-            throw new UnsupportedByProviderException($entityClass);
+            return null;
         }
 
         return $this->formType;

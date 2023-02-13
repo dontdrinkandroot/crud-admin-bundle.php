@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
@@ -20,11 +19,9 @@ class ItemPersister extends AbstractProviderService
     public function persistItem(CrudOperation $crudOperation, string $entityClass, object $entity): void
     {
         foreach ($this->providers as $provider) {
-            try {
-                $provider->persist($entityClass, $crudOperation, $entity);
+            $result = $provider->persist($entityClass, $crudOperation, $entity);
+            if (true === $result) {
                 return;
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
             }
         }
     }

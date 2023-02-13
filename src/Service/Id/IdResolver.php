@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
@@ -15,16 +14,15 @@ class IdResolver extends AbstractProviderService
      * @template T of object
      *
      * @param class-string<T> $entityClass
-     * @param T               $entity
+     * @param T $entity
      *
      */
     public function resolveId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
     {
         foreach ($this->providers as $provider) {
-            try {
-                return $provider->provideId($entityClass, $crudOperation, $entity);
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
+            $id = $provider->provideId($entityClass, $crudOperation, $entity);
+            if (null !== $id) {
+                return $id;
             }
         }
 

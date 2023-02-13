@@ -6,7 +6,6 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\DefaultSort;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
@@ -78,9 +77,9 @@ class DefaultPaginationProvider implements PaginationProviderInterface
             $request->query->getInt('page', 1),
             $limit,
             [
-                PaginatorInterface::SORT_FIELD_ALLOW_LIST   => $sortFields,
+                PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
-                PaginatorInterface::DEFAULT_SORT_DIRECTION  => $defaultSortDirection
+                PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection
             ]
         );
     }
@@ -91,9 +90,9 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     private function resolveDefaultSort(string $entityClass): ?DefaultSort
     {
         foreach ($this->defaultSortProviders as $defaultSortProvider) {
-            try {
-                return $defaultSortProvider->provideDefaultSort($entityClass);
-            } catch (UnsupportedByProviderException) {
+            $defaultSort = $defaultSortProvider->provideDefaultSort($entityClass);
+            if (null !== $defaultSort) {
+                return $defaultSort;
             }
         }
 

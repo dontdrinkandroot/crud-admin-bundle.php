@@ -6,7 +6,6 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -29,7 +28,7 @@ class DoctrineIdProvider implements IdProviderInterface
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation, $entity);
+            return null;
         }
         $classMetadata = $entityManager->getClassMetadata($realEntityClass);
 

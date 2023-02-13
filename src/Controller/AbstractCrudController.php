@@ -9,6 +9,7 @@ use Dontdrinkandroot\CrudAdminBundle\Event\PreSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\ViewModelEvent;
 use Dontdrinkandroot\CrudAdminBundle\Exception\AbortWithResponseException;
+use Dontdrinkandroot\CrudAdminBundle\Exception\EntityNotFoundException;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
@@ -94,8 +95,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             return $e->response;
         }
 
-        $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
-        if (null === $entity) {
+        try {
+            $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
+        } catch (EntityNotFoundException $e) {
             throw new NotFoundHttpException();
         }
 

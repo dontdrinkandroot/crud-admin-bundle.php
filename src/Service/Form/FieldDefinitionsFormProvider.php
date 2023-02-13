@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
 use Dontdrinkandroot\CrudAdminBundle\Service\ReflectionDataMapper;
@@ -26,12 +25,11 @@ class FieldDefinitionsFormProvider implements FormProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): FormInterface
+    public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?FormInterface
     {
         $fieldDefinitions = $this->fieldDefinitionsResolver->resolveFieldDefinitions($entityClass, $crudOperation);
-
         if (null === $fieldDefinitions) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+            return null;
         }
 
         $dataMapper = new ReflectionDataMapper($entityClass);

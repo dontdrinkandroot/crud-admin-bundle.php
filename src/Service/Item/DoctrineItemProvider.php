@@ -6,9 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
-use Dontdrinkandroot\CrudAdminBundle\Model\CrudAdminContext;
-use Dontdrinkandroot\CrudAdminBundle\Request\RequestAttributes;
+use Dontdrinkandroot\CrudAdminBundle\Exception\EntityNotFoundException;
 
 class DoctrineItemProvider implements ItemProviderInterface
 {
@@ -26,9 +24,14 @@ class DoctrineItemProvider implements ItemProviderInterface
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+            return null;
         }
 
-        return $entityManager->find($entityClass, $id);
+        $entity = $entityManager->find($entityClass, $id);
+        if (null === $entity) {
+            throw new EntityNotFoundException($entityClass, $crudOperation, $id);
+        }
+
+        return $entity;
     }
 }

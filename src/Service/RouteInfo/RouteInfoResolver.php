@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
@@ -18,10 +17,9 @@ class RouteInfoResolver extends AbstractProviderService implements RouteInfoReso
     public function resolveRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo
     {
         foreach ($this->providers as $provider) {
-            try {
-                return $provider->provideRouteInfo($entityClass, $crudOperation);
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
+            $routeInfo = $provider->provideRouteInfo($entityClass, $crudOperation);
+            if (null !== $routeInfo) {
+                return $routeInfo;
             }
         }
 

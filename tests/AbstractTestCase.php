@@ -1,6 +1,6 @@
 <?php
 
-namespace Dontdrinkandroot\CrudAdminBundle\Tests\TestApp;
+namespace Dontdrinkandroot\CrudAdminBundle\Tests;
 
 use Doctrine\Common\DataFixtures\ReferenceRepository;
 use DOMDocument;
@@ -11,15 +11,15 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
-class AbstractIntegrationTestCase extends WebTestCase
+class AbstractTestCase extends WebTestCase
 {
     protected ReferenceRepository $referenceRepository;
 
-    protected KernelBrowser $kernelBrowser;
+    protected KernelBrowser $client;
 
-    protected function loadKernelAndFixtures(array $classNames = []): ReferenceRepository
+    protected function loadClientAndFixtures(array $classNames = []): ReferenceRepository
     {
-        $this->kernelBrowser = self::createClient();
+        $this->client = self::createClient();
         $databaseToolCollection = Asserted::instanceOf(
             self::getContainer()->get(DatabaseToolCollection::class),
             DatabaseToolCollection::class
@@ -29,6 +29,18 @@ class AbstractIntegrationTestCase extends WebTestCase
             ->getReferenceRepository();
 
         return $this->referenceRepository;
+    }
+
+    /**
+     * @template T of object
+     * @param class-string<T> $class
+     * @return T
+     */
+    protected static function getService(string $class): object
+    {
+        $service = self::getContainer()->get($class);
+        self::assertInstanceOf($class, $service);
+        return $service;
     }
 
     public static function getFormattedHtml(Crawler $crawler): string
@@ -48,6 +60,6 @@ class AbstractIntegrationTestCase extends WebTestCase
             UserProviderInterface::class
         );
         $user = $userProvider->loadUserByIdentifier($identifier);
-        $this->kernelBrowser->loginUser($user);
+        $this->client->loginUser($user);
     }
 }

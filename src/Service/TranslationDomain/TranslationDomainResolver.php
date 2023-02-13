@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
@@ -16,10 +15,9 @@ class TranslationDomainResolver extends AbstractProviderService implements Trans
     public function resolveTranslationDomain(string $entityClass): ?string
     {
         foreach ($this->providers as $provider) {
-            try {
-                return $provider->provideTranslationDomain($entityClass);
-            } catch (UnsupportedByProviderException) {
-                /* Continue */
+            $translationDomain = $provider->provideTranslationDomain($entityClass);
+            if (null !== $translationDomain) {
+                return $translationDomain;
             }
         }
 

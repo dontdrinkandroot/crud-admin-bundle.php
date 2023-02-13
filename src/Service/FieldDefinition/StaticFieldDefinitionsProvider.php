@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 
 class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
@@ -21,13 +20,12 @@ class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterfac
     /**
      * {@inheritdoc}
      */
-    public function provideFieldDefinitions(string $entityClass): array
+    public function provideFieldDefinitions(string $entityClass): ?array
     {
         if (
             $entityClass !== $this->entityClass
-            || count($this->fieldDefinitionConfigurations) === 0
         ) {
-            throw new UnsupportedByProviderException($entityClass);
+            return null;
         }
 
         $parsedDefinitions = [];

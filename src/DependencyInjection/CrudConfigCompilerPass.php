@@ -90,12 +90,14 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                 }
 
                 if (array_key_exists('field_definitions', $config)) {
-                    $fieldDefinitionsByCrudOperation = Asserted::array($config['field_definitions']);
-                    $container
-                        ->register($idPrefix . 'field_definitions_provider', StaticFieldDefinitionsProvider::class)
-                        ->addArgument($entityClass)
-                        ->addArgument($fieldDefinitionsByCrudOperation)
-                        ->addTag(DdrCrudAdminExtension::TAG_FIELD_DEFINITIONS_PROVIDER, ['priority' => -150]);
+                    $fieldDefinitions = Asserted::array($config['field_definitions']);
+                    if (count($fieldDefinitions) > 0) {
+                        $container
+                            ->register($idPrefix . 'field_definitions_provider', StaticFieldDefinitionsProvider::class)
+                            ->addArgument($entityClass)
+                            ->addArgument($fieldDefinitions)
+                            ->addTag(DdrCrudAdminExtension::TAG_FIELD_DEFINITIONS_PROVIDER, ['priority' => -150]);
+                    }
                 }
 
                 if (array_key_exists('templates', $config)) {

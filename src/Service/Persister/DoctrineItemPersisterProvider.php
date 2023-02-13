@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 
 class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
 {
@@ -17,14 +16,14 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     /**
      * {@inheritdoc}
      */
-    public function persist(string $entityClass, CrudOperation $crudOperation, object $entity): void
+    public function persist(string $entityClass, CrudOperation $crudOperation, object $entity): bool|null
     {
         if (!in_array(
             $crudOperation,
             [CrudOperation::CREATE, CrudOperation::UPDATE, CrudOperation::DELETE],
             true
         )) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+            return null;
         }
 
         $entityManager = Asserted::instanceOfOrNull(
@@ -32,21 +31,23 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+            return null;
         }
 
         switch ($crudOperation) {
             case CrudOperation::CREATE:
                 $entityManager->persist($entity);
                 $entityManager->flush();
-                break;
+                return true;
             case CrudOperation::UPDATE:
                 $entityManager->flush();
-                break;
+                return true;
             case CrudOperation::DELETE:
                 $entityManager->remove($entity);
                 $entityManager->flush();
-                break;
+                return true;
         }
+
+        return null;
     }
 }

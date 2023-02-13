@@ -2,27 +2,27 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Tests\Acceptance;
 
-use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\AbstractIntegrationTestCase;
+use Dontdrinkandroot\CrudAdminBundle\Tests\AbstractTestCase;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\DepartmentOne;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\DepartmentTwo;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures\ExampleEntities;
 use Symfony\Component\HttpFoundation\Response;
 
-class ListActionTest extends AbstractIntegrationTestCase
+class ListActionTest extends AbstractTestCase
 {
     public function testUnauthorized(): void
     {
-        $this->loadKernelAndFixtures([ExampleEntities::class]);
-        $crawler = $this->kernelBrowser->request('GET', '/example_entities/');
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->kernelBrowser->getResponse()->getStatusCode());
+        $this->loadClientAndFixtures([ExampleEntities::class]);
+        $crawler = $this->client->request('GET', '/example_entities/');
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
     }
 
     public function testStandardRequest(): void
     {
-        $this->loadKernelAndFixtures([ExampleEntities::class]);
+        $this->loadClientAndFixtures([ExampleEntities::class]);
         $this->logIn('user');
-        $crawler = $this->kernelBrowser->request('GET', '/example_entities/');
-        $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
+        $crawler = $this->client->request('GET', '/example_entities/');
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         $rows = $crawler->filter('tr');
         $this->assertCount(11, $rows); /* Header + 10 Entities */
@@ -32,11 +32,11 @@ class ListActionTest extends AbstractIntegrationTestCase
 
     public function testStandardRequestDepartment(): void
     {
-        $this->loadKernelAndFixtures([DepartmentOne::class, DepartmentTwo::class]);
+        $this->loadClientAndFixtures([DepartmentOne::class, DepartmentTwo::class]);
         $this->logIn('user');
 
-        $crawler = $this->kernelBrowser->request('GET', '/deps/');
-        $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
+        $crawler = $this->client->request('GET', '/deps/');
+        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
 
         self::assertEquals('Overrridden - Departments', $crawler->filter('title')->text());
 

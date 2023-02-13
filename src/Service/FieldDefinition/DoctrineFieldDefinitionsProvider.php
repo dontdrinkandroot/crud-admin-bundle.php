@@ -7,7 +7,6 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use RuntimeException;
 
@@ -21,14 +20,14 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     /**
      * {@inheritdoc}
      */
-    public function provideFieldDefinitions(string $entityClass): array
+    public function provideFieldDefinitions(string $entityClass): ?array
     {
         $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
-            throw new UnsupportedByProviderException($entityClass);
+            return null;
         }
 
         $classMetadata = $entityManager->getClassMetadata($entityClass);
