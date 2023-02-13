@@ -97,7 +97,7 @@ class InfoCommand extends Command
                             sprintf(
                                 "\t\t\t- { name: %s, type: %s, sortable: %s, filterable: %s }",
                                 $fieldDefinition->propertyPath,
-                                $fieldDefinition->type,
+                                $fieldDefinition->displayType,
                                 $fieldDefinition->sortable ? 'true' : 'false',
                                 $fieldDefinition->filterable ? 'true' : 'false'
                             )

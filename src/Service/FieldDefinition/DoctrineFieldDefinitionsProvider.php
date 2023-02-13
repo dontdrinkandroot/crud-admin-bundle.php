@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
@@ -12,21 +13,22 @@ use RuntimeException;
 
 class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
-    public function __construct(private readonly ManagerRegistry $managerRegistry)
-    {
+    public function __construct(
+        private readonly ManagerRegistry $managerRegistry
+    ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideFieldDefinitions(string $entityClass, CrudOperation $crudOperation): array
+    public function provideFieldDefinitions(string $entityClass): array
     {
         $entityManager = Asserted::instanceOfOrNull(
             $this->managerRegistry->getManagerForClass($entityClass),
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+            throw new UnsupportedByProviderException($entityClass);
         }
 
         $classMetadata = $entityManager->getClassMetadata($entityClass);
@@ -36,27 +38,37 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
         foreach ($fields as $field) {
             if ($classMetadata->hasField($field)) {
                 $fieldMapping = $classMetadata->fieldMappings[$field];
+                $crudOperations = CrudOperation::all();
+                /* Exclude auto generated id fields for CREATE and UPDATE */
+                if (
+                    true === ($fieldMapping['id'] ?? false)
+                    && $classMetadata->generatorType !== ClassMetadata::GENERATOR_TYPE_NONE
+                ) {
+                    $crudOperations = [CrudOperation::LIST, CrudOperation::READ];
+                }
+
                 $type = $fieldMapping['type'];
                 $fieldName = $fieldMapping['fieldName'];
                 $filterable = false;
                 if (in_array($type, ['string', 'integer'])) {
                     $filterable = true;
                 }
-
                 $fieldDefinitions[$fieldName] = new FieldDefinition(
-                    $fieldName,
-                    $type,
-                    true,
-                    $filterable
+                    propertyPath: $fieldName,
+                    displayType: $type,
+                    crudOperations: $crudOperations,
+                    sortable: true,
+                    filterable: $filterable
                 );
             } elseif ($classMetadata->hasAssociation($field)) {
                 $associationMapping = $classMetadata->associationMappings[$field];
                 $fieldName = $associationMapping['fieldName'];
                 $fieldDefinitions[$fieldName] = new FieldDefinition(
-                    $fieldName,
-                    'string',
-                    false,
-                    false
+                    propertyPath: $fieldName,
+                    displayType: 'string',
+                    crudOperations: CrudOperation::all(),
+                    sortable: false,
+                    filterable: false
                 );
             } else {
                 throw new RuntimeException('Could not resolve field definition for ' . $field);

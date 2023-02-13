@@ -13,7 +13,7 @@ class ArrayRendererProvider implements FieldRendererProviderInterface
      */
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
-        return 'array' === $fieldDefinition->type || Types::SIMPLE_ARRAY === $fieldDefinition->type;
+        return 'array' === $fieldDefinition->displayType || Types::SIMPLE_ARRAY === $fieldDefinition->displayType;
     }
 
     /**

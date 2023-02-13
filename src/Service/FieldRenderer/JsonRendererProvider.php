@@ -12,7 +12,7 @@ class JsonRendererProvider implements FieldRendererProviderInterface
      */
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
-        return Types::JSON === $fieldDefinition->type;
+        return Types::JSON === $fieldDefinition->displayType;
     }
 
     /**

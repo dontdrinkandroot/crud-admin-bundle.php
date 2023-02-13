@@ -8,10 +8,20 @@ Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\Department:
         field: 'name'
         order: 'desc'
     field_definitions:
-        list:
-            -   property_path: 'name'
-                type: 'string'
-                sortable: true
-                filterable: true
+        -   property_path: 'id'
+            display_type: 'integer'
+            crud_operations: [ 'read' ]
+            sortable: true
+            filterable: true
+        -   property_path: 'name'
+            display_type: 'string'
+            crud_operations: [ 'list', 'read' ]
+            sortable: true
+            filterable: true
+        -   property_path: 'phonePrefix'
+            display_type: 'string'
+            crud_operations: [ 'read' ]
+            sortable: true
+            filterable: true
     templates:
         list: 'list.html.twig'

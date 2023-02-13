@@ -22,7 +22,7 @@ class FieldRenderer extends AbstractProviderService
         throw new NoRendererFoundException(
             sprintf(
                 'Cannot render FieldDefinitionType "%s" with value "%s"',
-                $fieldDefinition->type,
+                $fieldDefinition->displayType,
                 $value
             )
         );

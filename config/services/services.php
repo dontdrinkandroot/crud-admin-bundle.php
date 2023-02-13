@@ -2,14 +2,19 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Config;
 
+use Dontdrinkandroot\CrudAdminBundle\Command\InfoCommand;
 use Dontdrinkandroot\CrudAdminBundle\Event\Listener\AuthorizationListener;
 use Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultRedirectAfterWriteListener;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PreSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
+use Dontdrinkandroot\CrudAdminBundle\Routing\CrudRoutesLoader;
+use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
+use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
@@ -58,4 +63,21 @@ return function (ContainerConfigurator $configurator): void {
             'kernel.event_listener',
             ['event' => PostSetDataEvent::class, 'method' => 'onPostSetData', 'priority' => 50]
         );
+
+    $services->set(CrudRoutesLoader::class)
+        ->args([
+            service(CrudControllerRegistry::class),
+            service(RouteInfoResolverInterface::class)
+        ])
+        ->tag('routing.loader');
+
+    $services->set(InfoCommand::class)
+        ->args([
+            service(CrudControllerRegistry::class),
+            service(TemplateResolverInterface::class),
+            service(TranslationDomainResolverInterface::class),
+            service(RouteInfoResolverInterface::class),
+            service(FieldDefinitionsResolverInterface::class),
+        ])
+        ->tag('console.command');
 };

@@ -22,7 +22,6 @@ use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomain
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlProviderInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
@@ -47,6 +46,10 @@ class DdrCrudAdminExtension extends Extension
     final public const TAG_TRANSLATION_DOMAIN_PROVIDER = 'ddr_crud_admin.translation_domain_provider';
     final public const TAG_QUERY_BUILDER_EXTENSION_PROVIDER = 'ddr_crud_admin.query_builder_extension_provider';
 
+    final public const PRIORITY_LOW = -256;
+    final public const PRIORITY_MEDIUM = -192;
+    final public const PRIORITY_HIGH = -128;
+
     /**
      * {@inheritdoc}
      */
@@ -60,12 +63,11 @@ class DdrCrudAdminExtension extends Extension
 
         $this->registerAutoConfigurationTags($container);
 
-        $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
-        $loader->load('services.yaml');
-
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/../../config/services'));
         $loader->load('services.php');
         $loader->load('providers.php');
+        $loader->load('resolvers.php');
+        $loader->load('fieldDefinitionRenderers.php');
 
         $bundles = $container->getParameter('kernel.bundles');
         if (is_array($bundles) && array_key_exists('DoctrineBundle', $bundles)) {

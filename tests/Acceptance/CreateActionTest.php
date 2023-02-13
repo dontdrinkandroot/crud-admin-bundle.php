@@ -38,9 +38,9 @@ class CreateActionTest extends AbstractIntegrationTestCase
         $this->assertEquals(Response::HTTP_OK, $this->kernelBrowser->getResponse()->getStatusCode());
         $formGroups = $crawler->filter('form > div > div');
         $formGroupRequired = $formGroups->eq(0);
-        $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text(null, true));
+        $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text());
         $formGroupRequired = $formGroups->eq(1);
-        $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text(null, true));
+        $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text());
 
         /* Test submission is working */
         $crawler = $this->kernelBrowser->submitForm('Save', [

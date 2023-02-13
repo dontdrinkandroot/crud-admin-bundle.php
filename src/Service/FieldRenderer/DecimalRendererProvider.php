@@ -3,7 +3,6 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
 use Doctrine\DBAL\Types\Types;
-use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 
 class DecimalRendererProvider  implements FieldRendererProviderInterface
@@ -14,8 +13,8 @@ class DecimalRendererProvider  implements FieldRendererProviderInterface
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
         return
-            Types::FLOAT === $fieldDefinition->type
-            || Types::DECIMAL === $fieldDefinition->type;
+            Types::FLOAT === $fieldDefinition->displayType
+            || Types::DECIMAL === $fieldDefinition->displayType;
     }
 
     /**

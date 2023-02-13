@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\UnsupportedByProviderException;
+use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 
 /**
@@ -18,7 +19,15 @@ class FieldDefinitionsResolver extends AbstractProviderService implements FieldD
     {
         foreach ($this->providers as $provider) {
             try {
-                return $provider->provideFieldDefinitions($entityClass, $crudOperation);
+                $fieldDefinitions = $provider->provideFieldDefinitions($entityClass);
+                return array_filter(
+                    $fieldDefinitions,
+                    fn(FieldDefinition $fieldDefinition) => in_array(
+                        $crudOperation,
+                        $fieldDefinition->crudOperations,
+                        true
+                    )
+                );
             } catch (UnsupportedByProviderException) {
                 /* Continue */
             }

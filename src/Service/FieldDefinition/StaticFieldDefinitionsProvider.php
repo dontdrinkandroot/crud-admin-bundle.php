@@ -9,49 +9,44 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
     /**
-     * @param class-string         $entityClass
-     * @param array<string, array> $fieldDefinitionsByCrudOperation
+     * @param class-string $entityClass
+     * @param array<string, array> $fieldDefinitionConfigurations
      */
     public function __construct(
         private readonly string $entityClass,
-        private readonly array $fieldDefinitionsByCrudOperation
+        private readonly array $fieldDefinitionConfigurations
     ) {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function provideFieldDefinitions(string $entityClass, CrudOperation $crudOperation): array
+    public function provideFieldDefinitions(string $entityClass): array
     {
         if (
             $entityClass !== $this->entityClass
-            || null === ($fieldDefinitions = $this->getFieldDefinitions($crudOperation))
+            || count($this->fieldDefinitionConfigurations) === 0
         ) {
-            throw new UnsupportedByProviderException($entityClass, $crudOperation);
+            throw new UnsupportedByProviderException($entityClass);
         }
 
         $parsedDefinitions = [];
-        foreach ($fieldDefinitions as $fieldDefinition) {
+        foreach ($this->fieldDefinitionConfigurations as $fieldDefinitionConfiguration) {
+            /** @var list<CrudOperation> $crudOperations */
+            $crudOperations = array_map(
+                fn(string $crudOperation) => CrudOperation::from(strtoupper($crudOperation)),
+                $fieldDefinitionConfiguration['crud_operations']
+            );
             $parsedDefinitions[] = new FieldDefinition(
-                $fieldDefinition['property_path'],
-                $fieldDefinition['type'],
-                $fieldDefinition['sortable'] ?? false,
-                $fieldDefinition['filterable'] ?? false,
+                propertyPath: $fieldDefinitionConfiguration['property_path'],
+                displayType: $fieldDefinitionConfiguration['display_type'],
+                crudOperations: $crudOperations,
+                formType: $fieldDefinitionConfiguration['form_type'] ?? null,
+                sortable: $fieldDefinitionConfiguration['sortable'] ?? false,
+                filterable: $fieldDefinitionConfiguration['filterable'] ?? false,
             );
         }
 
         return $parsedDefinitions;
-    }
-
-    private function getFieldDefinitions(CrudOperation $crudOperation): ?array
-    {
-        $key = strtolower($crudOperation->value);
-        $fieldDefinitions = $this->fieldDefinitionsByCrudOperation[$key] ?? [];
-
-        if (0 === count($fieldDefinitions)) {
-            return null;
-        }
-
-        return $fieldDefinitions;
     }
 }
