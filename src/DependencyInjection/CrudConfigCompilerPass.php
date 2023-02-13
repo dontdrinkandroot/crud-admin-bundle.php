@@ -66,7 +66,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                         ->register($idPrefix . 'form_type_provider', StaticFormTypeProvider::class)
                         ->addArgument($entityClass)
                         ->addArgument($formType)
-                        ->addTag(DdrCrudAdminExtension::TAG_FORM_TYPE_PROVIDER, ['priority' => -150]);
+                        ->addTag(DdrCrudAdminExtension::TAG_FORM_TYPE_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_HIGH]);
                 }
 
                 if (array_key_exists('route', $config)) {
@@ -76,7 +76,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                         ->addArgument($entityClass)
                         ->addArgument($route['name_prefix'] ?? null)
                         ->addArgument($route['path_prefix'] ?? null)
-                        ->addTag(DdrCrudAdminExtension::TAG_ROUTE_INFO_PROVIDER, ['priority' => -150]);
+                        ->addTag(DdrCrudAdminExtension::TAG_ROUTE_INFO_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_HIGH]);
                 }
 
                 if (array_key_exists('default_sort', $config)) {
@@ -86,7 +86,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                         ->addArgument($entityClass)
                         ->addArgument($defaultSort['field'])
                         ->addArgument($defaultSort['order'])
-                        ->addTag(DdrCrudAdminExtension::TAG_DEFAULT_SORT_PROVIDER, ['priority' => -150]);
+                        ->addTag(DdrCrudAdminExtension::TAG_DEFAULT_SORT_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_HIGH]);
                 }
 
                 if (array_key_exists('field_definitions', $config)) {
@@ -96,7 +96,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                             ->register($idPrefix . 'field_definitions_provider', StaticFieldDefinitionsProvider::class)
                             ->addArgument($entityClass)
                             ->addArgument($fieldDefinitions)
-                            ->addTag(DdrCrudAdminExtension::TAG_FIELD_DEFINITIONS_PROVIDER, ['priority' => -150]);
+                            ->addTag(DdrCrudAdminExtension::TAG_FIELD_DEFINITIONS_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_HIGH]);
                     }
                 }
 
@@ -106,7 +106,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                         ->register($idPrefix . 'template_provider', StaticTemplateProvider::class)
                         ->addArgument($entityClass)
                         ->addArgument($templates)
-                        ->addTag(DdrCrudAdminExtension::TAG_TEMPLATE_PROVIDER, ['priority' => -150]);
+                        ->addTag(DdrCrudAdminExtension::TAG_TEMPLATE_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_HIGH]);
                 }
 
                 if (array_key_exists('translation_domain', $config)) {
@@ -115,7 +115,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
                         ->register($idPrefix . 'translation_domain', StaticTranslationDomainProvider::class)
                         ->addArgument($entityClass)
                         ->addArgument($translationDomain)
-                        ->addTag(DdrCrudAdminExtension::TAG_TRANSLATION_DOMAIN_PROVIDER, ['priority' => -150]);
+                        ->addTag(DdrCrudAdminExtension::TAG_TRANSLATION_DOMAIN_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_HIGH]);
                 }
             }
         }
