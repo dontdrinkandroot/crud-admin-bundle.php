@@ -46,13 +46,14 @@ class FieldDefinitionsFormProvider implements FormProviderInterface
         $translationDomain = $this->translationDomainResolver->resolveTranslationDomain($entityClass);
 
         foreach ($fieldDefinitions as $fieldDefinition) {
+            $options = [
+                'label' => $this->fieldDefinitionLabelService->getLabel($fieldDefinition->propertyPath),
+                'translation_domain' => $translationDomain
+            ];
             $formBuilder->add(
                 $fieldDefinition->propertyPath,
                 $fieldDefinition->formType,
-                [
-                    'label' => $this->fieldDefinitionLabelService->getLabel($fieldDefinition->propertyPath),
-                    'translation_domain' => $translationDomain
-                ]
+                $options
             );
         }
 
