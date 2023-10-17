@@ -22,7 +22,7 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template       T
+     * @template T
      *
      * @param class-string<T> $entityClass
      *
@@ -36,7 +36,7 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template       T
+     * @template T
      *
      * @param class-string<T> $entityClass
      *

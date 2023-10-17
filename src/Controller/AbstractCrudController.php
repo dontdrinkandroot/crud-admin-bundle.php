@@ -71,10 +71,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
         $context = [
             'crudOperation' => $crudOperation->value,
-            'entityClass'   => $entityClass,
-            'entities'      => $pagination,
+            'entityClass' => $entityClass,
+            'entities' => $pagination,
         ];
-        $event = new ViewModelEvent($entityClass, $crudOperation, $context);
+        $event = new ViewModelEvent($entityClass, $crudOperation, $context, $request);
         $this->getEventDispatcher()->dispatch($event);
 
         return $this->render($template, $event->context);
@@ -112,10 +112,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
         $context = [
             'crudOperation' => $crudOperation->value,
-            'entityClass'   => $entityClass,
-            'entity'        => $entity,
+            'entityClass' => $entityClass,
+            'entity' => $entity,
         ];
-        $event = new ViewModelEvent($entityClass, $crudOperation, $context);
+        $event = new ViewModelEvent($entityClass, $crudOperation, $context, $request);
         $this->getEventDispatcher()->dispatch($event);
 
         return $this->render($template, $event->context);
@@ -166,8 +166,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         Request $request,
         CrudOperation $crudOperation,
         ?object $entity = null
-    ): Response
-    {
+    ): Response {
         $entityClass = $this->getEntityClass();
 
         $event = new PostSetDataEvent($entityClass, $crudOperation, $request, $entity);
@@ -198,11 +197,11 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
         $context = [
             'crudOperation' => $crudOperation->value,
-            'entityClass'   => $entityClass,
-            'entity'        => $entity,
-            'form'          => $form->createView(),
+            'entityClass' => $entityClass,
+            'entity' => $entity,
+            'form' => $form->createView(),
         ];
-        $event = new ViewModelEvent($entityClass, $crudOperation, $context);
+        $event = new ViewModelEvent($entityClass, $crudOperation, $context, $request);
         $this->getEventDispatcher()->dispatch($event);
 
         return $this->render($template, $event->context);
@@ -251,9 +250,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
         $context = [
             'crudOperation' => $crudOperation->value,
-            'entityClass'   => $entityClass,
-            'entity'        => $entity,
-            'form'          => $form->createView(),
+            'entityClass' => $entityClass,
+            'entity' => $entity,
+            'form' => $form->createView(),
         ];
         $event = new ViewModelEvent($entityClass, $crudOperation, $context);
         $this->getEventDispatcher()->dispatch($event);
@@ -306,7 +305,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     }
 
     /**
-     * @param class-string  $entityClass
+     * @param class-string $entityClass
      *
      */
     public function fetchTemplate(string $entityClass, CrudOperation $crudOperation): string

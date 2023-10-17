@@ -1,5 +1,0 @@
-imports:
-    - { resource: field_definition_renderer.yaml }
-
-services:
-

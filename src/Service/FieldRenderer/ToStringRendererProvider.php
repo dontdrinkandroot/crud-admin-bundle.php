@@ -3,6 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use StringBackedEnum;
+use UnitEnum;
 
 class ToStringRendererProvider implements FieldRendererProviderInterface
 {
@@ -19,6 +21,14 @@ class ToStringRendererProvider implements FieldRendererProviderInterface
      */
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
+        if ($value instanceof StringBackedEnum) {
+            return $value->value;
+        }
+
+        if ($value instanceof UnitEnum) {
+            return $value->name;
+        }
+
         return FieldRenderer::escapeHtml((string)$value);
     }
 }

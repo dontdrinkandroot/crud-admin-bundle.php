@@ -36,7 +36,7 @@ return function (ContainerConfigurator $configurator): void {
     $services->set(FieldDefinitionsResolverInterface::class, CachedFieldDefinitionsResolver::class)
         ->args([
             tagged_iterator(DdrCrudAdminExtension::TAG_FIELD_DEFINITIONS_PROVIDER),
-            service('cache.app')
+            service('cache.system')
         ]);
 
     $services->set(PaginationResolver::class)
@@ -57,13 +57,13 @@ return function (ContainerConfigurator $configurator): void {
     $services->set(RouteInfoResolverInterface::class, CachedRouteInfoResolver::class)
         ->args([
             tagged_iterator(DdrCrudAdminExtension::TAG_ROUTE_INFO_PROVIDER),
-            service('cache.app')
+            service('cache.system')
         ]);
 
     $services->set(TemplateResolverInterface::class, CachedTemplateResolver::class)
         ->args([
             tagged_iterator(DdrCrudAdminExtension::TAG_TEMPLATE_PROVIDER),
-            service('cache.app')
+            service('cache.system')
         ]);
 
     $services->set(FormTypeResolver::class)
@@ -94,6 +94,6 @@ return function (ContainerConfigurator $configurator): void {
     $services->set(TranslationDomainResolverInterface::class, CachedTranslationDomainResolver::class)
         ->args([
             tagged_iterator(DdrCrudAdminExtension::TAG_TRANSLATION_DOMAIN_PROVIDER),
-            service('cache.app')
+            service('cache.system')
         ]);
 };
