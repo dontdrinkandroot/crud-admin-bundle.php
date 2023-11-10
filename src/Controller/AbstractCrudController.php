@@ -254,7 +254,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             'entity' => $entity,
             'form' => $form->createView(),
         ];
-        $event = new ViewModelEvent($entityClass, $crudOperation, $context);
+        $event = new ViewModelEvent($entityClass, $crudOperation, $context, $request);
         $this->getEventDispatcher()->dispatch($event);
 
         return $this->render($template, $event->context);
