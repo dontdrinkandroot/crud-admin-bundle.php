@@ -12,17 +12,19 @@ class ListActionTest extends AbstractTestCase
 {
     public function testUnauthorized(): void
     {
-        $this->loadClientAndFixtures([ExampleEntities::class]);
-        $crawler = $this->client->request('GET', '/example_entities/');
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([ExampleEntities::class]);
+        $crawler = $client->request('GET', '/example_entities/');
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
 
     public function testStandardRequest(): void
     {
-        $this->loadClientAndFixtures([ExampleEntities::class]);
-        $this->logIn('user');
-        $crawler = $this->client->request('GET', '/example_entities/');
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([ExampleEntities::class]);
+        self::logIn($client, 'user');
+        $crawler = $client->request('GET', '/example_entities/');
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         $rows = $crawler->filter('tr');
         $this->assertCount(11, $rows); /* Header + 10 Entities */
@@ -32,11 +34,12 @@ class ListActionTest extends AbstractTestCase
 
     public function testStandardRequestDepartment(): void
     {
-        $this->loadClientAndFixtures([DepartmentOne::class, DepartmentTwo::class]);
-        $this->logIn('user');
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([DepartmentOne::class, DepartmentTwo::class]);
+        self::logIn($client, 'user');
 
-        $crawler = $this->client->request('GET', '/deps/');
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/deps/');
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         self::assertEquals('Overrridden - Departments', $crawler->filter('title')->text());
 

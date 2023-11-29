@@ -27,7 +27,7 @@ class YamlFileLoader extends Loader
     /**
      * {@inheritdoc}
      */
-    public function load($resource, string $type = null): array
+    public function load(mixed $resource, string $type = null): array
     {
         $path = Asserted::string($this->locator->locate($resource));
 
@@ -37,7 +37,7 @@ class YamlFileLoader extends Loader
     /**
      * {@inheritdoc}
      */
-    public function supports($resource, string $type = null): bool
+    public function supports(mixed $resource, string $type = null): bool
     {
         if (!is_string($resource)) {
             return false;

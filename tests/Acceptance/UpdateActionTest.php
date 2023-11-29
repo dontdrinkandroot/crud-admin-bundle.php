@@ -11,55 +11,56 @@ class UpdateActionTest extends AbstractTestCase
 {
     public function testUnauthorized(): void
     {
-        $this->loadClientAndFixtures([ExampleEntities::class]);
-        $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
-        assert($exampleEntity instanceof ExampleEntity);
-        $crawler = $this->client->request('GET', '/example_entities/' . $exampleEntity->getId() . '/edit');
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([ExampleEntities::class]);
+        $exampleEntity = $referenceRepository->getReference('example-entity-1', ExampleEntity::class);
+        $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId() . '/edit');
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
 
     public function testForbidden(): void
     {
-        $this->loadClientAndFixtures([ExampleEntities::class]);
-        $this->logIn('user');
-        $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
-        assert($exampleEntity instanceof ExampleEntity);
-        $crawler = $this->client->request('GET', '/example_entities/' . $exampleEntity->getId() . '/edit');
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $this->client->getResponse()->getStatusCode());
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([ExampleEntities::class]);
+        self::logIn($client, 'user');
+        $exampleEntity = $referenceRepository->getReference('example-entity-1', ExampleEntity::class);
+        self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
+        $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId() . '/edit');
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
     public function testStandardRequest(): void
     {
-        $this->loadClientAndFixtures([ExampleEntities::class]);
-        $this->logIn('admin');
-        $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
-        assert($exampleEntity instanceof ExampleEntity);
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([ExampleEntities::class]);
+        self::logIn($client, 'admin');
+        $exampleEntity = $referenceRepository->getReference('example-entity-1', ExampleEntity::class);
 
         /* Test page is callable */
-        $this->logIn('admin');
-        $crawler = $this->client->request('GET', '/example_entities/' . $exampleEntity->getId() . '/edit');
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        self::logIn($client, 'admin');
+        $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId() . '/edit');
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         /* Test validation is working */
-        $crawler = $this->client->submitForm('Save', ['form[required]' => null]);
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $crawler = $client->submitForm('Save', ['form[required]' => null]);
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $formGroups = $crawler->filter('form > div > div');
         $formGroupRequired = $formGroups->eq(1);
         $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text(null, true));
 
         /* Test submission is working */
-        $crawler = $this->client->submitForm('Save', ['form[required]' => 'ChangedValue']);
-        $this->assertEquals(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        $crawler = $client->submitForm('Save', ['form[required]' => 'ChangedValue']);
+        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
         self::assertResponseRedirects('/example_entities/');
 
         /* Test redirect to LIST page after submission */
-        $crawler = $this->client->followRedirect();
+        $crawler = $client->followRedirect();
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
         $trs = $crawler->filter('tbody tr');
         $this->assertCount(10, $trs);
 
         /* Test values are set as expected */
-        $crawler = $this->client->request('GET', '/example_entities/' . $exampleEntity->getId());
+        $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId());
         self::assertResponseStatusCodeSame(200);
         $dds = $crawler->filter('dd');
         $this->assertCount(6, $dds);

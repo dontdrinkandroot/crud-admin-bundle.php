@@ -11,31 +11,34 @@ class CreateActionTest extends AbstractTestCase
 {
     public function testUnauthorized(): void
     {
-        $this->loadClientAndFixtures();
-        $crawler = $this->client->request('GET', '/example_entities/__NEW__/edit');
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
+        $client = static::createClient();
+        self::loadFixtures();
+        $crawler = $client->request('GET', '/example_entities/__NEW__/edit');
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
 
     public function testForbidden(): void
     {
-        $this->loadClientAndFixtures();
-        $this->logIn('user');
-        $crawler = $this->client->request('GET', '/example_entities/__NEW__/edit');
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $this->client->getResponse()->getStatusCode());
+        $client = static::createClient();
+        self::loadFixtures();
+        self::logIn($client, 'user');
+        $crawler = $client->request('GET', '/example_entities/__NEW__/edit');
+        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
     public function testValidationAndSubmission(): void
     {
-        $this->loadClientAndFixtures();
+        $client = static::createClient();
+        self::loadFixtures();
 
         /* Test page is callable */
-        $this->logIn('admin');
-        $crawler = $this->client->request('GET', '/example_entities/__NEW__/edit');
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        self::logIn($client, 'admin');
+        $crawler = $client->request('GET', '/example_entities/__NEW__/edit');
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         /* Test validation is working */
-        $crawler = $this->client->submitForm('Save', []);
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $crawler = $client->submitForm('Save', []);
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $formGroups = $crawler->filter('form > div > div');
         $formGroupRequired = $formGroups->eq(0);
         $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text());
@@ -43,15 +46,15 @@ class CreateActionTest extends AbstractTestCase
         $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text());
 
         /* Test submission is working */
-        $crawler = $this->client->submitForm('Save', [
+        $crawler = $client->submitForm('Save', [
             'form[requiredReadonly]' => 'requiredReadonlyValue',
             'form[required]' => 'requiredValue',
         ]);
-        $this->assertEquals(Response::HTTP_FOUND, $this->client->getResponse()->getStatusCode());
+        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
         self::assertResponseRedirects('/example_entities/');
 
         /* Test redirect to LIST page after submission */
-        $crawler = $this->client->followRedirect();
+        $crawler = $client->followRedirect();
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
 
         /* Test values are set as expected */

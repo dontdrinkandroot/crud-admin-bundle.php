@@ -13,23 +13,25 @@ class ReadActionTest extends AbstractTestCase
 {
     public function testUnauthorized(): void
     {
-        $this->loadClientAndFixtures([ExampleEntities::class]);
-        $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([ExampleEntities::class]);
+        $exampleEntity = $referenceRepository->getReference('example-entity-1');
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
-        $crawler = $this->client->request('GET', '/example_entities/' . $exampleEntity->getId());
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId());
+        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
 
     public function testStandardRequest(): void
     {
-        $this->loadClientAndFixtures([ExampleEntities::class]);
-        $this->logIn('user');
-        $exampleEntity = $this->referenceRepository->getReference('example-entity-1');
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([ExampleEntities::class]);
+        self::logIn($client, 'user');
+        $exampleEntity = $referenceRepository->getReference('example-entity-1');
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
-        $crawler = $this->client->request('GET', '/example_entities/' . $exampleEntity->getId());
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId());
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         /* Test expected values */
         $dds = $crawler->filter('dd');
@@ -44,19 +46,20 @@ class ReadActionTest extends AbstractTestCase
 
     public function testStandardRequestDepartment(): void
     {
-        $this->loadClientAndFixtures([DepartmentTwo::class]);
-        $this->logIn('user');
-        $department = $this->referenceRepository->getReference(DepartmentTwo::class);
+        $client = self::createClient();
+        $referenceRepository = self::loadFixtures([DepartmentTwo::class]);
+        self::logIn($client, 'user');
+        $department = $referenceRepository->getReference(DepartmentTwo::class);
         self::assertInstanceOf(Department::class, $department);
 
-        $crawler = $this->client->request('GET', '/deps/' . $department->id);
-        $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $crawler = $client->request('GET', '/deps/' . $department->getId());
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         /* Test expected values */
         $dds = $crawler->filter('dd');
         $this->assertCount(3, $dds);
         /* Id */
-        $this->assertEquals((string)$department->id, $dds->eq(0)->text(null, true));
+        $this->assertEquals((string)$department->getId(), $dds->eq(0)->text(null, true));
         /* Name */
         $this->assertEquals('two', $dds->eq(1)->text(null, true));
         /* PhonePrefix*/

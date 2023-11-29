@@ -32,7 +32,7 @@ class CrudRoutesLoader extends Loader
     /**
      * {@inheritdoc}
      */
-    public function load($resource, string $type = null): RouteCollection
+    public function load(mixed $resource, string $type = null): RouteCollection
     {
         if (true === $this->loaded) {
             throw new RuntimeException('Do not add the "ddr_crud" loader twice');

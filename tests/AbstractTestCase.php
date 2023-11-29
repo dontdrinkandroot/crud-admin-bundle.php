@@ -13,22 +13,11 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class AbstractTestCase extends WebTestCase
 {
-    protected ReferenceRepository $referenceRepository;
-
-    protected KernelBrowser $client;
-
-    protected function loadClientAndFixtures(array $classNames = []): ReferenceRepository
+    protected static function loadFixtures(array $classNames = []): ReferenceRepository
     {
-        $this->client = self::createClient();
-        $databaseToolCollection = Asserted::instanceOf(
-            self::getContainer()->get(DatabaseToolCollection::class),
-            DatabaseToolCollection::class
-        );
-        $this->referenceRepository = $databaseToolCollection->get()
+        return self::getService(DatabaseToolCollection::class)->get()
             ->loadFixtures($classNames)
             ->getReferenceRepository();
-
-        return $this->referenceRepository;
     }
 
     /**
@@ -53,13 +42,13 @@ class AbstractTestCase extends WebTestCase
         return $document->saveHtml($document);
     }
 
-    protected function logIn(string $identifier): void
+    protected static function logIn(KernelBrowser $client, string $identifier): void
     {
         $userProvider = Asserted::instanceOf(
             self::getContainer()->get(UserProviderInterface::class),
             UserProviderInterface::class
         );
         $user = $userProvider->loadUserByIdentifier($identifier);
-        $this->client->loginUser($user);
+        $client->loginUser($user);
     }
 }

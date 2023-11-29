@@ -18,6 +18,7 @@ class FieldDefinitionResolverTest extends AbstractTestCase
             CrudOperation::CREATE
         );
 
+        self::assertNotNull($fieldDefinitions);
         self::assertCount(5, $fieldDefinitions);
     }
 
@@ -29,6 +30,7 @@ class FieldDefinitionResolverTest extends AbstractTestCase
             CrudOperation::READ
         );
 
+        self::assertNotNull($fieldDefinitions);
         self::assertCount(3, $fieldDefinitions);
     }
 }

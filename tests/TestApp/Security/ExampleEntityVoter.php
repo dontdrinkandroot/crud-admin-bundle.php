@@ -8,6 +8,9 @@ use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string,string|ExampleEntity>
+ */
 class ExampleEntityVoter extends Voter
 {
     public function __construct(private readonly AuthorizationCheckerInterface $authorizationChecker)
