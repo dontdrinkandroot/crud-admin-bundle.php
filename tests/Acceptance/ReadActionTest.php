@@ -15,7 +15,7 @@ class ReadActionTest extends AbstractTestCase
     {
         $client = self::createClient();
         $referenceRepository = self::loadFixtures([ExampleEntities::class]);
-        $exampleEntity = $referenceRepository->getReference('example-entity-1');
+        $exampleEntity = $referenceRepository->getReference('example-entity-1', ExampleEntity::class);
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
         $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId());
@@ -27,7 +27,7 @@ class ReadActionTest extends AbstractTestCase
         $client = self::createClient();
         $referenceRepository = self::loadFixtures([ExampleEntities::class]);
         self::logIn($client, 'user');
-        $exampleEntity = $referenceRepository->getReference('example-entity-1');
+        $exampleEntity = $referenceRepository->getReference('example-entity-1', ExampleEntity::class);
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
         $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId());
@@ -39,9 +39,9 @@ class ReadActionTest extends AbstractTestCase
         /* Id */
         $this->assertEquals('2', $dds->eq(0)->text(null, true));
         /* NullField */
-        $this->assertEquals('requiredReadonly00001', $dds->eq(1)->text(null, true));
+        $this->assertEquals('requiredReadonly00001', $dds->eq(1)->text());
         /* RequiredField */
-        $this->assertEquals('required00001', $dds->eq(2)->text(null, true));
+        $this->assertEquals('required00001', $dds->eq(2)->text());
     }
 
     public function testStandardRequestDepartment(): void
@@ -49,7 +49,7 @@ class ReadActionTest extends AbstractTestCase
         $client = self::createClient();
         $referenceRepository = self::loadFixtures([DepartmentTwo::class]);
         self::logIn($client, 'user');
-        $department = $referenceRepository->getReference(DepartmentTwo::class);
+        $department = $referenceRepository->getReference(DepartmentTwo::class, Department::class);
         self::assertInstanceOf(Department::class, $department);
 
         $crawler = $client->request('GET', '/deps/' . $department->getId());
@@ -61,8 +61,8 @@ class ReadActionTest extends AbstractTestCase
         /* Id */
         $this->assertEquals((string)$department->getId(), $dds->eq(0)->text(null, true));
         /* Name */
-        $this->assertEquals('two', $dds->eq(1)->text(null, true));
+        $this->assertEquals('two', $dds->eq(1)->text());
         /* PhonePrefix*/
-        $this->assertEquals('023', $dds->eq(2)->text(null, true));
+        $this->assertEquals('023', $dds->eq(2)->text());
     }
 }
