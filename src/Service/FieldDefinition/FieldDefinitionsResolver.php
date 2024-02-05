@@ -5,15 +5,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 
 /**
  * @extends AbstractProviderService<FieldDefinitionsProviderInterface>
  */
 class FieldDefinitionsResolver extends AbstractProviderService implements FieldDefinitionsResolverInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function resolveFieldDefinitions(string $entityClass, CrudOperation $crudOperation): ?array
     {
         foreach ($this->providers as $provider) {
