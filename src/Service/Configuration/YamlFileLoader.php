@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Configuration;
 
-use Dontdrinkandroot\Common\Asserted;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -29,7 +28,7 @@ class YamlFileLoader extends Loader
      */
     public function load(mixed $resource, string $type = null): array
     {
-        $path = Asserted::string($this->locator->locate($resource));
+        $path = $this->locator->locate($resource);
 
         return $this->loadFile($path);
     }

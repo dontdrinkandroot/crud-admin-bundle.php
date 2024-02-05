@@ -9,6 +9,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\DefaultRouteInfoProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Override;
+use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * @template T of object
@@ -57,6 +58,9 @@ abstract class ConfigurableCrudController extends AbstractCrudController
         return DefaultRouteInfoProvider::getDefaultPathPrefix($this->getEntityClass());
     }
 
+    /**
+     * @return class-string<FormTypeInterface>|null
+     */
     protected function getFormType(): ?string
     {
         return null;
