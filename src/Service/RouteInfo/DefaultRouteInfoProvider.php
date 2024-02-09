@@ -5,13 +5,12 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo;
 use Dontdrinkandroot\Common\ClassNameUtils;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
+use Override;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
 class DefaultRouteInfoProvider implements RouteInfoProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo
     {
         return self::getRouteInfo(

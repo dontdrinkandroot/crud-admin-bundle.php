@@ -4,12 +4,11 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
 use Doctrine\DBAL\Types\Types;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Override;
 
 class DecimalRendererProvider  implements FieldRendererProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
         return
@@ -17,9 +16,7 @@ class DecimalRendererProvider  implements FieldRendererProviderInterface
             || Types::DECIMAL === $fieldDefinition->displayType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
         return number_format($value, 2);

@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service;
 
 use Closure;
 use Dontdrinkandroot\Common\Asserted;
+use Override;
 use ReflectionClass;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -26,9 +27,9 @@ class ReflectionDataMapper implements DataMapperInterface
     /**
      * @var ReflectionClass<T>
      */
-    private ReflectionClass $reflectedClass;
+    private readonly ReflectionClass $reflectedClass;
 
-    private PropertyPathAccessor $propertyPathAccessor;
+    private readonly PropertyPathAccessor $propertyPathAccessor;
 
     /**
      * @param class-string<T> $class
@@ -45,7 +46,7 @@ class ReflectionDataMapper implements DataMapperInterface
      */
     public function getInstantiator(array $customDefaults = []): Closure
     {
-        return function (FormInterface $form) use ($customDefaults) {
+        return function (FormInterface $form) use ($customDefaults): object {
             $constructor = $this->reflectedClass->getConstructor();
             if (null === $constructor) {
                 return $this->reflectedClass->newInstance();
@@ -67,7 +68,7 @@ class ReflectionDataMapper implements DataMapperInterface
 
                 if (null === $value && !$parameter->allowsNull()) {
                     $type = self::getType($parameter);
-                    $value = $this->resolveDefaultForType($type);
+                    $value = self::resolveDefaultForType($type);
                 }
                 $args[] = $value;
             }
@@ -79,10 +80,10 @@ class ReflectionDataMapper implements DataMapperInterface
     /**
      * Similar to DataMapper, but if empty it sets the values to the default values of the constructor.
      *
-     * {@inheritdoc}
      * @param Traversable<FormInterface> $forms
      * @psalm-suppress MoreSpecificImplementedParamType
      */
+    #[Override]
     public function mapDataToForms(mixed $viewData, Traversable $forms): void
     {
         $empty = null === $viewData || [] === $viewData;
@@ -93,7 +94,7 @@ class ReflectionDataMapper implements DataMapperInterface
         if ($empty) {
             $propertiesWithDefaults = array_filter(
                 $this->reflectedClass->getProperties(),
-                fn(ReflectionProperty $property) => $property->hasDefaultValue()
+                fn(ReflectionProperty $property): bool => $property->hasDefaultValue()
             );
             $constructorArgumentsWithDefaults = array_filter(
                 $this->reflectedClass->getConstructor()?->getParameters() ?? [],
@@ -104,7 +105,7 @@ class ReflectionDataMapper implements DataMapperInterface
                     $propertiesWithDefaults,
                     $constructorArgumentsWithDefaults
                 ),
-                fn(array $carry, ReflectionProperty|ReflectionParameter $property) => array_merge(
+                fn(array $carry, ReflectionProperty|ReflectionParameter $property): array => array_merge(
                     $carry,
                     [$property->getName() => $property->getDefaultValue()]
                 ),
@@ -134,10 +135,10 @@ class ReflectionDataMapper implements DataMapperInterface
     /**
      * Similar to DataMapper, but it does not set the data if it has not changed for readonly properties (excluding default) of if it is not nullable and the current value is the default value.
      *
-     * {@inheritdoc}
      * @param Traversable<FormInterface> $forms
      * @psalm-suppress MoreSpecificImplementedParamType
      */
+    #[Override]
     public function mapFormsToData(Traversable $forms, mixed &$viewData): void
     {
         if (null === $viewData) {

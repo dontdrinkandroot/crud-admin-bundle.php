@@ -12,6 +12,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
+use Override;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
@@ -30,9 +31,7 @@ class CrudAdminExtension extends AbstractExtension
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getFilters(): array
     {
         return [
@@ -45,9 +44,7 @@ class CrudAdminExtension extends AbstractExtension
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getFunctions(): array
     {
         return [

@@ -3,14 +3,15 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Override;
 use Stringable;
 
 class ToStringTitleProvider implements TitleProviderInterface
 {
     /**
-     * {@inheritdoc}
      * @psalm-suppress InvalidCast
      */
+    #[Override]
     public function provideTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?string
     {
         if (

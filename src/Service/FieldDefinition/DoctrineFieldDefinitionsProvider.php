@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Override;
 use RuntimeException;
 
 class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
@@ -17,9 +18,7 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideFieldDefinitions(string $entityClass): ?array
     {
         $entityManager = Asserted::instanceOfOrNull(

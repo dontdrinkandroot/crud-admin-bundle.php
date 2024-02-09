@@ -11,7 +11,6 @@ interface TemplateProviderInterface extends ProviderInterface
      * @template T of object
      *
      * @param class-string<T> $entityClass
-     * @param CrudOperation $crudOperation
      *
      * @return string|null
      */

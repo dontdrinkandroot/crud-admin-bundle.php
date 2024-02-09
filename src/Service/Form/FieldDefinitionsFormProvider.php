@@ -7,6 +7,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsRes
 use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
 use Dontdrinkandroot\CrudAdminBundle\Service\ReflectionDataMapper;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -22,9 +23,7 @@ class FieldDefinitionsFormProvider implements FormProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?FormInterface
     {
         $fieldDefinitions = $this->fieldDefinitionsResolver->resolveFieldDefinitions($entityClass, $crudOperation);

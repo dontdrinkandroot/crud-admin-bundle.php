@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Override;
 
 class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
@@ -17,9 +18,7 @@ class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterfac
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideFieldDefinitions(string $entityClass): ?array
     {
         if (
@@ -32,7 +31,7 @@ class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterfac
         foreach ($this->fieldDefinitionConfigurations as $fieldDefinitionConfiguration) {
             /** @var list<CrudOperation> $crudOperations */
             $crudOperations = array_map(
-                fn(string $crudOperation) => CrudOperation::from(strtoupper($crudOperation)),
+                fn(string $crudOperation): CrudOperation => CrudOperation::from(strtoupper($crudOperation)),
                 $fieldDefinitionConfiguration['crud_operations']
             );
             $parsedDefinitions[] = new FieldDefinition(

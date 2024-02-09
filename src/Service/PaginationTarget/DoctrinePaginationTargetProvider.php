@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Service\Query\QueryExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
+use Override;
 
 class DoctrinePaginationTargetProvider implements PaginationTargetProvider
 {
@@ -22,9 +23,7 @@ class DoctrinePaginationTargetProvider implements PaginationTargetProvider
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function providePaginationTarget(string $entityClass): ?Query
     {
         $entityManager = Asserted::instanceOfOrNull(

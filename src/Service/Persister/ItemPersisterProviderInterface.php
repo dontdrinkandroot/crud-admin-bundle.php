@@ -11,7 +11,6 @@ interface ItemPersisterProviderInterface extends ProviderInterface
      * @template T of object
      *
      * @param class-string<T> $entityClass
-     * @param CrudOperation $crudOperation
      * @param T $entity
      */
     public function persist(string $entityClass, CrudOperation $crudOperation, object $entity): bool|null;

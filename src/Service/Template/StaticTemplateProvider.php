@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Override;
 
 class StaticTemplateProvider implements TemplateProviderInterface
 {
@@ -14,9 +15,7 @@ class StaticTemplateProvider implements TemplateProviderInterface
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideTemplate(string $entityClass, CrudOperation $crudOperation): ?string
     {
         if (

@@ -2,6 +2,8 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 
+use Override;
+
 /**
  * @template T of object
  *
@@ -16,9 +18,7 @@ class CrudController extends AbstractCrudController
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getEntityClass(): string
     {
         return $this->entityClass;

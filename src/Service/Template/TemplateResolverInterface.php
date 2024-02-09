@@ -8,7 +8,6 @@ interface TemplateResolverInterface
 {
     /**
      * @param class-string  $entityClass
-     * @param CrudOperation $crudOperation
      *
      * @return ?string
      */

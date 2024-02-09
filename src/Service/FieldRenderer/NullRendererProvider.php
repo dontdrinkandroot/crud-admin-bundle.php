@@ -3,20 +3,17 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Override;
 
 class NullRendererProvider implements FieldRendererProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
         return null === $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
         return '';

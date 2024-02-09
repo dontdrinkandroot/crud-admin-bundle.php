@@ -9,8 +9,6 @@ interface IdProviderInterface extends ProviderInterface
 {
     /**
      * @param class-string  $entityClass
-     * @param CrudOperation $crudOperation
-     * @param object        $entity
      *
      * @return mixed
      */

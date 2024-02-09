@@ -10,9 +10,7 @@ interface FormProviderInterface extends ProviderInterface
 {
     /**
      * @param class-string $entityClass
-     * @param CrudOperation $crudOperation
      * @param object|null $entity
-     *
      * @return FormInterface|null
      */
     public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?FormInterface;

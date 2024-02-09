@@ -4,21 +4,18 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
 use BackedEnum;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Override;
 use UnitEnum;
 
 class ToStringRendererProvider implements FieldRendererProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
         return true;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
         if ($value instanceof BackedEnum) {

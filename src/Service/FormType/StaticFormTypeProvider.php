@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FormType;
 
+use Override;
 use Symfony\Component\Form\FormTypeInterface;
 
 class StaticFormTypeProvider implements FormTypeProviderInterface
@@ -14,9 +15,7 @@ class StaticFormTypeProvider implements FormTypeProviderInterface
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideFormType(string $entityClass): ?string
     {
         if ($entityClass !== $this->entityClass) {

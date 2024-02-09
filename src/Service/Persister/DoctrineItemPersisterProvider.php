@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Override;
 
 class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
 {
@@ -13,9 +14,7 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function persist(string $entityClass, CrudOperation $crudOperation, object $entity): bool|null
     {
         if (!in_array(

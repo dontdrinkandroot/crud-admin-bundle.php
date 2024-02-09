@@ -6,21 +6,18 @@ use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
+use Override;
 
 class DateTimeRendererProvider implements FieldRendererProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {
         return Types::DATETIME_MUTABLE === $fieldDefinition->displayType
             || Types::DATE_IMMUTABLE === $fieldDefinition->displayType;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
         return FieldRenderer::escapeHtml(

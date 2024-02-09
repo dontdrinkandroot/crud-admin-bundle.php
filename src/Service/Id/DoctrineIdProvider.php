@@ -6,6 +6,7 @@ use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManagerInterface;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Override;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -17,9 +18,7 @@ class DoctrineIdProvider implements IdProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
     {
         $realEntityClass = ClassUtils::getClass($entity);

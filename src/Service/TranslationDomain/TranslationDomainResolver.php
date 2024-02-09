@@ -3,15 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 
 /**
  * @extends AbstractProviderService<TranslationDomainProviderInterface>
  */
 class TranslationDomainResolver extends AbstractProviderService implements TranslationDomainResolverInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function resolveTranslationDomain(string $entityClass): ?string
     {
         foreach ($this->providers as $provider) {

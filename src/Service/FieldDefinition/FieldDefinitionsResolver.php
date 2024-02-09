@@ -20,7 +20,7 @@ class FieldDefinitionsResolver extends AbstractProviderService implements FieldD
             if (null !== $fieldDefinitions) {
                 return array_filter(
                     $fieldDefinitions,
-                    fn(FieldDefinition $fieldDefinition) => in_array(
+                    fn(FieldDefinition $fieldDefinition): bool => in_array(
                         $crudOperation,
                         $fieldDefinition->crudOperations,
                         true

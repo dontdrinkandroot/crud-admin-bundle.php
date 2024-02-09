@@ -16,6 +16,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
+use Override;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -40,9 +41,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
     protected ?ContainerInterface $container = null;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function listAction(Request $request): Response
     {
         $entityClass = $this->getEntityClass();
@@ -80,9 +79,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->render($template, $event->context);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function readAction(Request $request, mixed $id): Response
     {
         $entityClass = $this->getEntityClass();
@@ -121,9 +118,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->render($template, $event->context);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function createAction(Request $request): Response
     {
         $entityClass = $this->getEntityClass();
@@ -139,9 +134,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->createOrUpdateAction($request, $crudOperation);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function updateAction(Request $request, mixed $id): Response
     {
         $entityClass = $this->getEntityClass();
@@ -207,6 +200,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->render($template, $event->context);
     }
 
+    #[Override]
     public function deleteAction(Request $request, mixed $id): Response
     {
         $entityClass = $this->getEntityClass();
@@ -269,9 +263,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $previous;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public static function getSubscribedServices(): array
     {
         return [

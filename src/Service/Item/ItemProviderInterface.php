@@ -10,8 +10,6 @@ interface ItemProviderInterface extends ProviderInterface
 {
     /**
      * @param class-string $entityClass
-     * @param CrudOperation $crudOperation
-     * @param mixed $id
      *
      * @return object|null
      *

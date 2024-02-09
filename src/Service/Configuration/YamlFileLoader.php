@@ -2,6 +2,7 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Configuration;
 
+use Override;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
@@ -23,9 +24,7 @@ class YamlFileLoader extends Loader
         parent::__construct($env);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function load(mixed $resource, string $type = null): array
     {
         $path = $this->locator->locate($resource);
@@ -33,9 +32,7 @@ class YamlFileLoader extends Loader
         return $this->loadFile($path);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function supports(mixed $resource, string $type = null): bool
     {
         if (!is_string($resource)) {

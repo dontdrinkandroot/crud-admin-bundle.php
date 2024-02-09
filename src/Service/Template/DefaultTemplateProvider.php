@@ -3,12 +3,11 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
+use Override;
 
 class DefaultTemplateProvider implements TemplateProviderInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideTemplate(string $entityClass, CrudOperation $crudOperation): string
     {
         $prefix = '@DdrCrudAdmin/';

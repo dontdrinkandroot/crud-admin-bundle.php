@@ -2,6 +2,8 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
+use Override;
+
 class StaticTranslationDomainProvider implements TranslationDomainProviderInterface
 {
     /**
@@ -11,9 +13,7 @@ class StaticTranslationDomainProvider implements TranslationDomainProviderInterf
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideTranslationDomain(string $entityClass): ?string
     {
         if ($entityClass !== $this->entityClass) {

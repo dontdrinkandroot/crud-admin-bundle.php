@@ -11,6 +11,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\StaticRouteInfoProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Sort\StaticDefaultSortProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\StaticTemplateProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\StaticTranslationDomainProvider;
+use Override;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -19,6 +20,7 @@ use Symfony\Component\Finder\Finder;
 
 class CrudConfigCompilerPass implements CompilerPassInterface
 {
+    #[Override]
     public function process(ContainerBuilder $container): void
     {
         $paths = $this->getBundlesResourcesPaths($container);

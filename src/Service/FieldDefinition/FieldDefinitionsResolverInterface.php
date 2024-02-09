@@ -9,7 +9,6 @@ interface FieldDefinitionsResolverInterface
 {
     /**
      * @param class-string  $entityClass
-     * @param CrudOperation $crudOperation
      *
      * @return array<array-key, FieldDefinition>|null
      */

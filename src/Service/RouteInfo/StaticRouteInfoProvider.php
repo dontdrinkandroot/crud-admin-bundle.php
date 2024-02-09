@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
+use Override;
 
 class StaticRouteInfoProvider implements RouteInfoProviderInterface
 {
@@ -14,9 +15,7 @@ class StaticRouteInfoProvider implements RouteInfoProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo
     {
         if ($entityClass !== $this->entityClass) {

@@ -8,12 +8,8 @@ use Symfony\Component\Form\FormTypeInterface;
 class FieldDefinition
 {
     /**
-     * @param string $propertyPath
-     * @param string $displayType
      * @param list<CrudOperation> $crudOperations
      * @param class-string<FormTypeInterface>|null $formType
-     * @param bool $sortable
-     * @param bool $filterable
      */
     public function __construct(
         public readonly string $propertyPath,

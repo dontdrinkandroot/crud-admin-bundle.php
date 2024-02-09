@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeResolver;
+use Override;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
@@ -16,9 +17,7 @@ class FormTypeFormProvider implements FormProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideForm(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?FormInterface
     {
         $formType = $this->formTypeResolver->resolveFormType($entityClass);

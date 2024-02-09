@@ -4,22 +4,19 @@ namespace Dontdrinkandroot\CrudAdminBundle;
 
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\CrudConfigCompilerPass;
 use Dontdrinkandroot\CrudAdminBundle\DependencyInjection\RegisterControllerCompilerPass;
+use Override;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class DdrCrudAdminBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function getPath(): string
     {
         return dirname(__DIR__);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function build(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new CrudConfigCompilerPass());

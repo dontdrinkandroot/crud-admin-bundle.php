@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
+use Override;
 use Symfony\Contracts\Cache\CacheInterface;
 
 class CachedFieldDefinitionsResolver extends FieldDefinitionsResolver
@@ -13,9 +14,7 @@ class CachedFieldDefinitionsResolver extends FieldDefinitionsResolver
         parent::__construct($providers);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function resolveFieldDefinitions(string $entityClass, CrudOperation $crudOperation): ?array
     {
         $key = ProviderCacheKey::create('field_definitions', $entityClass, $crudOperation);

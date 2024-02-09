@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Sort;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\DefaultSort;
+use Override;
 
 class StaticDefaultSortProvider implements DefaultSortProviderInterface
 {
@@ -16,9 +17,7 @@ class StaticDefaultSortProvider implements DefaultSortProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideDefaultSort(string $entityClass): ?DefaultSort
     {
         if ($entityClass !== $this->entityClass) {

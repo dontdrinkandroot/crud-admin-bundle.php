@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
+use Override;
 use Symfony\Contracts\Cache\CacheInterface;
 
 class CachedTemplateResolver extends TemplateResolver
@@ -13,9 +14,7 @@ class CachedTemplateResolver extends TemplateResolver
         parent::__construct($providers);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function resolveTemplate(string $entityClass, CrudOperation $crudOperation): ?string
     {
         $key = ProviderCacheKey::create('template', $entityClass, $crudOperation);

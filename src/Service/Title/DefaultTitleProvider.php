@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 use Dontdrinkandroot\Common\ClassNameUtils;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
+use Override;
 use Symfony\Component\String\Inflector\EnglishInflector;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -20,9 +21,7 @@ class DefaultTitleProvider implements TitleProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): string
     {
         if ($this->type === self::TYPE_MANUAL) {

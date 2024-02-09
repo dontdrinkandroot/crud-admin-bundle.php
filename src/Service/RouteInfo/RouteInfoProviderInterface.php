@@ -12,7 +12,6 @@ interface RouteInfoProviderInterface extends ProviderInterface
      * @template T of object
      *
      * @param class-string<T> $entityClass
-     * @param CrudOperation $crudOperation
      *
      * @return RouteInfo|null
      */

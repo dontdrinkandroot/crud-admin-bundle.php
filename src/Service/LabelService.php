@@ -24,7 +24,9 @@ class LabelService
     public function humanizePropertyPath(string $text): string
     {
         return ucfirst(
-            strtolower(trim(preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], str_replace('.', ' ', $text))))
+            strtolower(
+                trim((string)preg_replace(['/([A-Z])/', '/[_\s]+/'], ['_$1', ' '], str_replace('.', ' ', $text)))
+            )
         );
     }
 }

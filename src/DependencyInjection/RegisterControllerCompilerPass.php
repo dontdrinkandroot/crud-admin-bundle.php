@@ -3,15 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\DependencyInjection;
 
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
+use Override;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 class RegisterControllerCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function process(ContainerBuilder $container): void
     {
         $controllerRegistry = $container->register(CrudControllerRegistry::class, CrudControllerRegistry::class);

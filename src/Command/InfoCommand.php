@@ -8,6 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsRes
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
+use Override;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand('ddr:crud-admin:info')]
 class InfoCommand extends Command
 {
-    final const ARGUMENT_ENTITY_CLASS = 'entity-class';
+    final public const ARGUMENT_ENTITY_CLASS = 'entity-class';
 
     public function __construct(
         private readonly CrudControllerRegistry $crudControllerRegistry,
@@ -30,17 +31,13 @@ class InfoCommand extends Command
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function configure(): void
     {
         $this->addArgument(self::ARGUMENT_ENTITY_CLASS, InputArgument::OPTIONAL);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $entityClass = $input->getArgument(self::ARGUMENT_ENTITY_CLASS);

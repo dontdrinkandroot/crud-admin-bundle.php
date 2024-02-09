@@ -12,6 +12,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetRe
 use Dontdrinkandroot\CrudAdminBundle\Service\Sort\DefaultSortProviderInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
+use Override;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 class DefaultPaginationProvider implements PaginationProviderInterface
@@ -28,9 +29,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
     ) {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function providePagination(string $entityClass): ?PaginationInterface
     {
         $paginationTarget = Asserted::notNull(

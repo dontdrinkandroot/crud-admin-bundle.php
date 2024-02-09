@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
+use Override;
 use Symfony\Contracts\Cache\CacheInterface;
 
 class CachedRouteInfoResolver extends RouteInfoResolver
@@ -14,9 +15,7 @@ class CachedRouteInfoResolver extends RouteInfoResolver
         parent::__construct($providers);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function resolveRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo
     {
         $key = ProviderCacheKey::create('route_info', $entityClass, $crudOperation);

@@ -9,7 +9,6 @@ interface RouteInfoResolverInterface
 {
     /**
      * @param class-string  $entityClass
-     * @param CrudOperation $crudOperation
      *
      * @return ?RouteInfo
      */

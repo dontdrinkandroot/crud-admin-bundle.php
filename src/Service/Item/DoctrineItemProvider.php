@@ -7,6 +7,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\EntityNotFoundException;
+use Override;
 
 class DoctrineItemProvider implements ItemProviderInterface
 {
@@ -14,9 +15,7 @@ class DoctrineItemProvider implements ItemProviderInterface
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function provideItem(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object
     {
         $entityManager = Asserted::instanceOfOrNull(

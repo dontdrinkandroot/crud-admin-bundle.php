@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Routing;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\CrudControllerRegistry;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
+use Override;
 use RuntimeException;
 use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
@@ -21,17 +22,13 @@ class CrudRoutesLoader extends Loader
         parent::__construct();
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function supports($resource, string $type = null): bool
     {
         return 'ddr_crud' === $type;
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function load(mixed $resource, string $type = null): RouteCollection
     {
         if (true === $this->loaded) {

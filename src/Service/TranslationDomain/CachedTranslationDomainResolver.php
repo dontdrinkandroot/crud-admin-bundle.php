@@ -3,6 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
+use Override;
 use Symfony\Contracts\Cache\CacheInterface;
 
 class CachedTranslationDomainResolver extends TranslationDomainResolver
@@ -12,9 +13,7 @@ class CachedTranslationDomainResolver extends TranslationDomainResolver
         parent::__construct($providers);
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function resolveTranslationDomain(string $entityClass): ?string
     {
         $key = ProviderCacheKey::create('translation_domain', $entityClass);

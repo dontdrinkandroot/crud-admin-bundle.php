@@ -20,6 +20,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlProviderInterface;
+use Override;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
@@ -50,9 +51,7 @@ class DdrCrudAdminExtension extends Extension
     final public const PRIORITY_MEDIUM = -192;
     final public const PRIORITY_HIGH = -128;
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
