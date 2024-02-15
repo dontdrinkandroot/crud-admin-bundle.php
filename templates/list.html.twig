@@ -29,7 +29,7 @@
     {% set filterFields = [] %}
     {% for fieldDefinition in fieldDefinitions %}
         {% if fieldDefinition.filterable %}
-            {% set filterFields = filterFields|merge({("entity." ~ fieldDefinition.propertyPath): fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain)}) %}
+            {% set filterFields = filterFields|merge({(fieldDefinition.propertyPath): fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain)}) %}
         {% endif %}
     {% endfor %}
 

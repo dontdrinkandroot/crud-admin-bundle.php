@@ -5,6 +5,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Config;
 use Dontdrinkandroot\CrudAdminBundle\Command\InfoCommand;
 use Dontdrinkandroot\CrudAdminBundle\Event\Listener\AuthorizationListener;
 use Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultRedirectAfterWriteListener;
+use Dontdrinkandroot\CrudAdminBundle\Event\Listener\FilterListener;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PreSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
@@ -80,4 +81,9 @@ return function (ContainerConfigurator $configurator): void {
             service(FieldDefinitionsResolverInterface::class),
         ])
         ->tag('console.command');
+
+    $services
+        ->set(FilterListener::class)
+        ->autowire()
+        ->tag('kernel.event_listener', ['event' => 'knp_pager.items', 'method' => 'onItems', 'priority' => 1]);
 };
