@@ -23,12 +23,12 @@ class FilterListener
     {
         $request = $this->requestStack->getMainRequest() ?? new Request();
 
-        $fieldNames = $request->query->get($event->options[PaginatorInterface::FILTER_FIELD_PARAMETER_NAME]);
+        $fieldNames = Asserted::stringOrNull($request->query->get($event->options[PaginatorInterface::FILTER_FIELD_PARAMETER_NAME]));
         if (null !== $fieldNames) {
             $fieldNames = explode(',', $fieldNames);
             $rewrittenFieldNames = [];
             foreach ($fieldNames as $fieldName) {
-                if (false === strpos($fieldName, '.')) {
+                if (!str_contains($fieldName, '.')) {
                     $rewrittenFieldNames[] = 'entity.' . $fieldName;
                 } else {
                     $rewrittenFieldNames[] = $fieldName;
