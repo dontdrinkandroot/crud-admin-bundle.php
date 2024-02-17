@@ -29,7 +29,7 @@
     {% set filterFields = [] %}
     {% for fieldDefinition in fieldDefinitions %}
         {% if fieldDefinition.filterable %}
-            {% set filterFields = filterFields|merge({(fieldDefinition.propertyPath): fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain)}) %}
+            {% set filterFields = filterFields|merge({(fieldDefinition.propertyPath): fieldDefinition|ddrCrudAdminLabel, options = {translationDomain: translationDomain}}) %}
         {% endif %}
     {% endfor %}
 
@@ -42,7 +42,7 @@
         <tr class="text-nowrap">
             {% for fieldDefinition in fieldDefinitions %}
                 {% if fieldDefinition.sortable %}
-                    <th>{{ knp_pagination_sortable(entities, fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain), 'entity.'~fieldDefinition.propertyPath) }}</th>
+                    <th>{{ knp_pagination_sortable(entities, fieldDefinition|ddrCrudAdminLabel, 'entity.'~fieldDefinition.propertyPath, options = {translationDomain: translationDomain}) }}</th>
                 {% else %}
                     <th>{{ fieldDefinition|ddrCrudAdminLabel|trans({}, translationDomain) }}</th>
                 {% endif %}

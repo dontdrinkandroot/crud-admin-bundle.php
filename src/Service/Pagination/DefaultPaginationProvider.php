@@ -78,7 +78,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
             [
                 PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
-                PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection
+                PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection,
             ]
         );
     }
