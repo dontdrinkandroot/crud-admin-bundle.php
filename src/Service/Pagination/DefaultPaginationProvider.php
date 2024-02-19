@@ -45,12 +45,27 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         }
 
         $sortFields = [];
+        $filterFields = [];
         $fieldDefinitions = Asserted::notNull(
             $this->fieldDefinitionsResolver->resolveFieldDefinitions($entityClass, CrudOperation::LIST)
         );
         foreach ($fieldDefinitions as $fieldDefinition) {
             if ($fieldDefinition->sortable) {
-                $sortFields[] = $fieldPrefix . $fieldDefinition->propertyPath;
+                if (str_contains($fieldDefinition->propertyPath, '.')) {
+                    /* If it contains a dot, it's a joined field, so we don't need to prefix it */
+                    $sortFields[] = $fieldDefinition->propertyPath;
+                } else {
+                    $sortFields[] = $fieldPrefix . $fieldDefinition->propertyPath;
+                }
+
+            }
+            if ($fieldDefinition->filterable) {
+                if (str_contains($fieldDefinition->propertyPath, '.')) {
+                    /* If it contains a dot, it's a joined field, so we don't need to prefix it */
+                    $filterFields[] = $fieldDefinition->propertyPath;
+                } else {
+                    $filterFields[] = $fieldPrefix . $fieldDefinition->propertyPath;
+                }
             }
         }
 
@@ -79,6 +94,8 @@ class DefaultPaginationProvider implements PaginationProviderInterface
                 PaginatorInterface::SORT_FIELD_ALLOW_LIST => $sortFields,
                 PaginatorInterface::DEFAULT_SORT_FIELD_NAME => $defaultSortFieldName,
                 PaginatorInterface::DEFAULT_SORT_DIRECTION => $defaultSortDirection,
+                PaginatorInterface::FILTER_FIELD_ALLOW_LIST => $filterFields,
+                PaginatorInterface::DEFAULT_FILTER_FIELDS => $filterFields,
             ]
         );
     }
