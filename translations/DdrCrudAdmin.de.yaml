@@ -17,3 +17,4 @@ title:
     read: '%name%'
     update: '%name% bearbeiten'
     delete: '%name% löschen'
+no_entries: Keine Einträge vorhanden.
