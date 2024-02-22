@@ -17,6 +17,9 @@ class RouteInfoResolver extends AbstractProviderService implements RouteInfoReso
     {
         foreach ($this->providers as $provider) {
             $routeInfo = $provider->provideRouteInfo($entityClass, $crudOperation);
+            if (false === $routeInfo) {
+                return null;
+            }
             if (null !== $routeInfo) {
                 return $routeInfo;
             }

@@ -9,11 +9,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 interface RouteInfoProviderInterface extends ProviderInterface
 {
     /**
-     * @template T of object
-     *
-     * @param class-string<T> $entityClass
-     *
-     * @return RouteInfo|null
+     * @param class-string $entityClass
      */
-    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo;
+    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo|false|null;
 }

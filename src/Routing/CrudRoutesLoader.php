@@ -13,6 +13,8 @@ use Symfony\Component\Routing\RouteCollection;
 
 class CrudRoutesLoader extends Loader
 {
+    public const string TYPE = 'ddr_crud';
+
     private bool $loaded = false;
 
     public function __construct(
@@ -25,14 +27,14 @@ class CrudRoutesLoader extends Loader
     #[Override]
     public function supports($resource, string $type = null): bool
     {
-        return 'ddr_crud' === $type;
+        return self::TYPE === $type;
     }
 
     #[Override]
     public function load(mixed $resource, string $type = null): RouteCollection
     {
         if (true === $this->loaded) {
-            throw new RuntimeException('Do not add the "ddr_crud" loader twice');
+            throw new RuntimeException(sprintf('Do not add the "%s" loader twice', self::TYPE));
         }
 
         $routes = new RouteCollection();

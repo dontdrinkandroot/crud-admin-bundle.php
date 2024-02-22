@@ -23,7 +23,7 @@ abstract class ConfigurableCrudController extends AbstractCrudController
     implements RouteInfoProviderInterface, FormTypeProviderInterface, TemplateProviderInterface, DefaultSortProviderInterface, FieldDefinitionsProviderInterface
 {
     #[Override]
-    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo
+    public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo|false|null
     {
         if ($entityClass !== $this->getEntityClass()) {
             return null;

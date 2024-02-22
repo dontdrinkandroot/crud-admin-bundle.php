@@ -37,7 +37,7 @@ use Twig\Environment;
  */
 abstract class AbstractCrudController implements CrudControllerInterface, ServiceSubscriberInterface
 {
-    final public const NEW_ID = '__NEW__';
+    final public const string NEW_ID = '__NEW__';
 
     protected ?ContainerInterface $container = null;
 
