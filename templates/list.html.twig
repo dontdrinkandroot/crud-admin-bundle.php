@@ -29,12 +29,12 @@
     {% set filterFields = [] %}
     {% for fieldDefinition in fieldDefinitions %}
         {% if fieldDefinition.filterable %}
-            {% set filterFields = filterFields|merge({(fieldDefinition.propertyPath): fieldDefinition|ddrCrudAdminLabel, options = {translationDomain: translationDomain}}) %}
+            {% set filterFields = filterFields|merge({(fieldDefinition.propertyPath): fieldDefinition|ddrCrudAdminLabel}) %}
         {% endif %}
     {% endfor %}
 
     {% if filterFields is not empty %}
-        {{ knp_pagination_filter(entities, filterFields) }}
+        {{ knp_pagination_filter(entities, filterFields, options = {translationDomain: translationDomain}) }}
     {% endif %}
 
     <table class="table table-sm table-bordered">
