@@ -22,6 +22,10 @@ class DefaultRedirectAfterWriteListener
 
     public function onRedirectAfterWrite(RedirectAfterWriteEvent $event): void
     {
+        if (null !== $event->response) {
+            return;
+        }
+
         Asserted::instanceOf($event->request->getSession(), Session::class)->getFlashBag()->add(
             'success',
             new TranslatableMessage(
