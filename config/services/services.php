@@ -6,6 +6,8 @@ use Dontdrinkandroot\CrudAdminBundle\Command\InfoCommand;
 use Dontdrinkandroot\CrudAdminBundle\Event\Listener\AuthorizationListener;
 use Dontdrinkandroot\CrudAdminBundle\Event\Listener\DefaultRedirectAfterWriteListener;
 use Dontdrinkandroot\CrudAdminBundle\Event\Listener\FilterListener;
+use Dontdrinkandroot\CrudAdminBundle\Event\Listener\PostPersistFlashListener;
+use Dontdrinkandroot\CrudAdminBundle\Event\PostPersistEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PreSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
@@ -53,6 +55,9 @@ return function (ContainerConfigurator $configurator): void {
             'kernel.event_listener',
             ['event' => RedirectAfterWriteEvent::class, 'method' => 'onRedirectAfterWrite', 'priority' => -250]
         );
+
+    $services->set(PostPersistFlashListener::class)
+        ->tag('kernel.event_listener', ['event' => PostPersistEvent::class, 'method' => 'onPostPersist']);
 
     $services->set(AuthorizationListener::class, AuthorizationListener::class)
         ->args([

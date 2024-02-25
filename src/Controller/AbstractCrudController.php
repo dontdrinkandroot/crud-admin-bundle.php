@@ -4,7 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
+use Dontdrinkandroot\CrudAdminBundle\Event\PostPersistEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PostSetDataEvent;
+use Dontdrinkandroot\CrudAdminBundle\Event\PrePersistEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\PreSetDataEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\ViewModelEvent;
@@ -16,11 +18,13 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
+use League\Uri\Http;
 use Override;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -177,7 +181,9 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             $entity = Asserted::instanceOf($form->getData(), $entityClass);
+            $this->getEventDispatcher()->dispatch(new PrePersistEvent($entityClass, $crudOperation, $request, $entity));
             $this->getItemPersister()->persistItem($crudOperation, $entityClass, $entity);
+            $this->getEventDispatcher()->dispatch(new PostPersistEvent($entityClass, $crudOperation, $request, $entity));
 
             $event = new RedirectAfterWriteEvent($entityClass, $crudOperation, $entity, $request);
             $this->getEventDispatcher()->dispatch($event);
@@ -231,12 +237,24 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $this->getEventDispatcher()->dispatch(new PrePersistEvent($entityClass, $crudOperation, $request, $entity));
             $this->getItemPersister()->persistItem($crudOperation, $entityClass, $entity);
+            $this->getEventDispatcher()->dispatch(new PostPersistEvent($entityClass, $crudOperation, $request, $entity));
 
             $event = new RedirectAfterWriteEvent($entityClass, $crudOperation, $entity, $request);
             $this->getEventDispatcher()->dispatch($event);
             if (null !== ($response = $event->response)) {
                 return $response;
+            }
+
+            $redirectUrl = $this->getUrlResolver()->resolveUrl($entityClass, CrudOperation::LIST, $entity);
+            if (
+                null !== $redirectUrl
+                && $this->getAuthorizationChecker()->isGranted(CrudOperation::LIST->value, $entityClass)
+            ) {
+                return new RedirectResponse($redirectUrl);
+            } else {
+                return new Response(status: Response::HTTP_NO_CONTENT);
             }
         }
 

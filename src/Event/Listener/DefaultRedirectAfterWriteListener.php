@@ -26,14 +26,6 @@ class DefaultRedirectAfterWriteListener
             return;
         }
 
-        Asserted::instanceOf($event->request->getSession(), Session::class)->getFlashBag()->add(
-            'success',
-            new TranslatableMessage(
-                message: 'success.' . strtolower($event->crudOperation->value),
-                domain: 'DdrCrudAdmin'
-            )
-        );
-
         $redirectUrl = $this->urlResolver->resolveUrl($event->entityClass, CrudOperation::LIST, $event->entity);
         if (
             null !== $redirectUrl
