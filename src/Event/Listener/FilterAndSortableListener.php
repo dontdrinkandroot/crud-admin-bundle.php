@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * Prefixes and Postfixes filter requests with wildcards by default and sets the case insensitive flag.
+ * Prefixes and Postfixes filter and sortable requests with wildcards by default and sets the case insensitive flag.
  */
-class FilterListener
+class FilterAndSortableListener
 {
     public function __construct(private readonly RequestStack $requestStack)
     {
@@ -32,6 +32,18 @@ class FilterListener
                 $value = '%' . $value . '%';
                 $query->setHint(WhereWalker::HINT_PAGINATOR_FILTER_CASE_INSENSITIVE, true);
                 $request->query->set($event->options[PaginatorInterface::FILTER_VALUE_PARAMETER_NAME], $value);
+            }
+
+            $sortFieldParameter = $event->options[PaginatorInterface::SORT_FIELD_PARAMETER_NAME];
+            if (
+                null !== $sortFieldParameter
+                && null !== ($sortField = $request->query->get($sortFieldParameter))
+                && is_string($sortField)
+            ) {
+                if (!str_contains($sortField, '.')) {
+                    $sortField = 'entity.' . $sortField;
+                }
+                $request->query->set($sortFieldParameter, $sortField);
             }
         }
     }
