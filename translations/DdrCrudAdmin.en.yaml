@@ -18,3 +18,4 @@ title:
     update: 'Edit %name%'
     delete: 'Delete %name%'
 no_entries: No entries available
+sort: Sort
