@@ -57,7 +57,6 @@ class DefaultPaginationProvider implements PaginationProviderInterface
                 } else {
                     $sortFields[] = $fieldPrefix . $fieldDefinition->propertyPath;
                 }
-
             }
             if ($fieldDefinition->filterable) {
                 if (str_contains($fieldDefinition->propertyPath, '.')) {
@@ -73,7 +72,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         $defaultSortDirection = null;
         $defaultSort = $this->resolveDefaultSort($entityClass);
         if (null !== $defaultSort) {
-            $defaultSortFieldName = $fieldPrefix . $defaultSort->field;
+            $defaultSortFieldName = $defaultSort->field;
             $defaultSortDirection = $defaultSort->order;
             if (!in_array($defaultSortFieldName, $sortFields, true)) {
                 $sortFields[] = $defaultSortFieldName;
