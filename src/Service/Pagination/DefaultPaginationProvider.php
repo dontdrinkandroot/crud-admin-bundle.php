@@ -75,7 +75,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
             $defaultSortFieldName = $defaultSort->field;
             $defaultSortDirection = $defaultSort->order;
             if (!in_array($defaultSortFieldName, $sortFields, true)) {
-                $sortFields[] = $defaultSortFieldName;
+                $sortFields[] = $fieldPrefix . $defaultSortFieldName;
             }
         }
 
