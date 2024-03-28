@@ -18,11 +18,11 @@
                         <button class="dropdown-toggle btn btn-lg btn-primary"
                                 type="button"
                                 id="dropdownMenuButton"
-                                data-toggle="dropdown"
+                                data-bs-toggle="dropdown"
                                 aria-haspopup="true"
                                 aria-expanded="false"
                         >
-                            {{ 'ACTIONS'|trans({}, 'DdrCrudAdmin') }}
+                            {{ 'actions'|trans({}, 'DdrCrudAdmin') }}
                         </button>
                         <div class="dropdown-menu dropdown-menu-right">
                             {% if updateRoute is not null and is_granted('UPDATE', entity) %}
