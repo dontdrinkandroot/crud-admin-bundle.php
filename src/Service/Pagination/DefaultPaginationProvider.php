@@ -7,6 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\DefaultSort;
+use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
 use Dontdrinkandroot\CrudAdminBundle\Service\Sort\DefaultSortProviderInterface;
@@ -50,21 +51,13 @@ class DefaultPaginationProvider implements PaginationProviderInterface
             $this->fieldDefinitionsResolver->resolveFieldDefinitions($entityClass, CrudOperation::LIST)
         );
         foreach ($fieldDefinitions as $fieldDefinition) {
+
             if ($fieldDefinition->sortable) {
-                if (str_contains($fieldDefinition->propertyPath, '.')) {
-                    /* If it contains a dot, it's a joined field, so we don't need to prefix it */
-                    $sortFields[] = $fieldDefinition->propertyPath;
-                } else {
-                    $sortFields[] = $fieldPrefix . $fieldDefinition->propertyPath;
-                }
+                $sortFields[] = $this->getSortFieldPath($fieldDefinition, $fieldPrefix);
             }
+
             if ($fieldDefinition->filterable) {
-                if (str_contains($fieldDefinition->propertyPath, '.')) {
-                    /* If it contains a dot, it's a joined field, so we don't need to prefix it */
-                    $filterFields[] = $fieldDefinition->propertyPath;
-                } else {
-                    $filterFields[] = $fieldPrefix . $fieldDefinition->propertyPath;
-                }
+                $filterFields[] = $this->getFilterFieldPath($fieldDefinition, $fieldPrefix);
             }
         }
 
@@ -112,5 +105,26 @@ class DefaultPaginationProvider implements PaginationProviderInterface
         }
 
         return null;
+    }
+
+    private function getSortFieldPath(FieldDefinition $fieldDefinition, string $prefix): string
+    {
+        if (str_contains($fieldDefinition->propertyPath, '.')) {
+            /* If it contains a dot, it's a joined field, so we don't need to prefix it */
+            return $fieldDefinition->propertyPath;
+        }
+
+        return $prefix . $fieldDefinition->propertyPath;
+    }
+
+    private function getFilterFieldPath(FieldDefinition $fieldDefinition, string $prefix): string
+    {
+        $path = $fieldDefinition->filterPath ?? $fieldDefinition->propertyPath;
+        if (str_contains($path, '.')) {
+            /* If it contains a dot, it's a joined field, so we don't need to prefix it */
+            return $path;
+        }
+
+        return $prefix . $path;
     }
 }

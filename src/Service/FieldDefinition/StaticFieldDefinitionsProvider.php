@@ -41,6 +41,7 @@ class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterfac
                 formType: $fieldDefinitionConfiguration['form_type'] ?? null,
                 sortable: $fieldDefinitionConfiguration['sortable'] ?? false,
                 filterable: $fieldDefinitionConfiguration['filterable'] ?? false,
+                filterPath: $fieldDefinitionConfiguration['filter_path'] ?? null
             );
         }
 

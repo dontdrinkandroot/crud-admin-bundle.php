@@ -17,7 +17,8 @@ class FieldDefinition
         public readonly array $crudOperations = [],
         public readonly ?string $formType = null,
         public readonly bool $sortable = false,
-        public readonly bool $filterable = false
+        public readonly bool $filterable = false,
+        public readonly ?string $filterPath = null,
     ) {
     }
 }
