@@ -19,7 +19,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand('ddr:crud-admin:info')]
 class InfoCommand extends Command
 {
-    final public const ARGUMENT_ENTITY_CLASS = 'entity-class';
+    final public const string ARGUMENT_ENTITY_CLASS = 'entity-class';
 
     public function __construct(
         private readonly CrudControllerRegistry $crudControllerRegistry,

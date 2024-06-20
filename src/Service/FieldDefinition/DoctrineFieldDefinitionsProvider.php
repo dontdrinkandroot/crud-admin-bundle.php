@@ -39,7 +39,7 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
                 $crudOperations = CrudOperation::all();
                 /* Exclude auto generated id fields for CREATE and UPDATE */
                 if (
-                    true === ($fieldMapping['id'] ?? false)
+                    true === ($fieldMapping->id ?? false)
                     && $classMetadata->generatorType !== ClassMetadata::GENERATOR_TYPE_NONE
                 ) {
                     $crudOperations = [CrudOperation::LIST, CrudOperation::READ];
