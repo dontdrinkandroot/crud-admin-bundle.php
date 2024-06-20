@@ -5,12 +5,11 @@ namespace Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity;
+use Override;
 
 class ExampleEntities extends Fixture
 {
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     public function load(ObjectManager $manager): void
     {
         for ($i = 0; $i < 20; $i++) {

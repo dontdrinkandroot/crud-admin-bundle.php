@@ -28,28 +28,28 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 class DdrCrudAdminExtension extends Extension
 {
-    final public const TAG_CONTROLLER = 'ddr_crud_admin.controller';
-    final public const TAG_FORM_TYPE_PROVIDER = 'ddr_crud_admin.form_type_provider';
-    final public const TAG_TEMPLATE_PROVIDER = 'ddr_crud_admin.template_provider';
-    final public const TAG_ROUTE_INFO_PROVIDER = 'ddr_crud_admin.route_info_provider';
-    final public const TAG_ID_PROVIDER = 'ddr_crud_admin.id_provider';
-    final public const TAG_FIELD_DEFINITIONS_PROVIDER = 'ddr_crud_admin.field_definitions_provider';
-    final public const TAG_QUERY_EXTENSION_PROVIDER = 'ddr_crud_admin.query_extension_provider';
-    final public const TAG_DEFAULT_SORT_PROVIDER = 'ddr_crud_admin.default_sort_provider';
-    final public const TAG_FIELD_RENDERER_PROVIDER = 'ddr_crud_admin.field_renderer_provider';
-    final public const TAG_PAGINATION_PROVIDER = 'ddr_crud_admin.pagination_provider';
-    final public const TAG_PAGINATION_TARGET_PROVIDER = 'ddr_crud_admin.pagination_target_provider';
-    final public const TAG_FORM_PROVIDER = 'ddr_crud_admin.form_provider';
-    final public const TAG_ITEM_PROVIDER = 'ddr_crud_admin.item_provider';
-    final public const TAG_TITLE_PROVIDER = 'ddr_crud_admin.title_provider';
-    final public const TAG_ITEM_PERSISTER_PROVIDER = 'ddr_crud_admin.item_persister_provider';
-    final public const TAG_URL_PROVIDER = 'ddr_crud_admin.url_provider';
-    final public const TAG_TRANSLATION_DOMAIN_PROVIDER = 'ddr_crud_admin.translation_domain_provider';
-    final public const TAG_QUERY_BUILDER_EXTENSION_PROVIDER = 'ddr_crud_admin.query_builder_extension_provider';
+    final public const string TAG_CONTROLLER = 'ddr_crud_admin.controller';
+    final public const string TAG_FORM_TYPE_PROVIDER = 'ddr_crud_admin.form_type_provider';
+    final public const string TAG_TEMPLATE_PROVIDER = 'ddr_crud_admin.template_provider';
+    final public const string TAG_ROUTE_INFO_PROVIDER = 'ddr_crud_admin.route_info_provider';
+    final public const string TAG_ID_PROVIDER = 'ddr_crud_admin.id_provider';
+    final public const string TAG_FIELD_DEFINITIONS_PROVIDER = 'ddr_crud_admin.field_definitions_provider';
+    final public const string TAG_QUERY_EXTENSION_PROVIDER = 'ddr_crud_admin.query_extension_provider';
+    final public const string TAG_DEFAULT_SORT_PROVIDER = 'ddr_crud_admin.default_sort_provider';
+    final public const string TAG_FIELD_RENDERER_PROVIDER = 'ddr_crud_admin.field_renderer_provider';
+    final public const string TAG_PAGINATION_PROVIDER = 'ddr_crud_admin.pagination_provider';
+    final public const string TAG_PAGINATION_TARGET_PROVIDER = 'ddr_crud_admin.pagination_target_provider';
+    final public const string TAG_FORM_PROVIDER = 'ddr_crud_admin.form_provider';
+    final public const string TAG_ITEM_PROVIDER = 'ddr_crud_admin.item_provider';
+    final public const string TAG_TITLE_PROVIDER = 'ddr_crud_admin.title_provider';
+    final public const string TAG_ITEM_PERSISTER_PROVIDER = 'ddr_crud_admin.item_persister_provider';
+    final public const string TAG_URL_PROVIDER = 'ddr_crud_admin.url_provider';
+    final public const string TAG_TRANSLATION_DOMAIN_PROVIDER = 'ddr_crud_admin.translation_domain_provider';
+    final public const string TAG_QUERY_BUILDER_EXTENSION_PROVIDER = 'ddr_crud_admin.query_builder_extension_provider';
 
-    final public const PRIORITY_LOW = -256;
-    final public const PRIORITY_MEDIUM = -192;
-    final public const PRIORITY_HIGH = -128;
+    final public const int PRIORITY_LOW = -256;
+    final public const int PRIORITY_MEDIUM = -192;
+    final public const int PRIORITY_HIGH = -128;
 
     #[Override]
     public function load(array $configs, ContainerBuilder $container): void

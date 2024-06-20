@@ -4,6 +4,7 @@ namespace Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Security;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\ExampleEntity;
+use Override;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -17,18 +18,14 @@ class ExampleEntityVoter extends Voter
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function supports(string $attribute, $subject): bool
     {
         return is_a($subject, ExampleEntity::class, true)
             && in_array(CrudOperation::tryFrom($attribute), CrudOperation::all());
     }
 
-    /**
-     * {@inheritdoc}
-     */
+    #[Override]
     protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
     {
         if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
