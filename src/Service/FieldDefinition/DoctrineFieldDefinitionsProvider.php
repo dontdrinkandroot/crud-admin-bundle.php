@@ -45,8 +45,8 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
                     $crudOperations = [CrudOperation::LIST, CrudOperation::READ];
                 }
 
-                $type = $fieldMapping['type'];
-                $fieldName = $fieldMapping['fieldName'];
+                $type = $fieldMapping->type;
+                $fieldName = $fieldMapping->fieldName;
                 $filterable = false;
                 if (in_array($type, ['string', 'integer'])) {
                     $filterable = true;
@@ -60,7 +60,7 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
                 );
             } elseif ($classMetadata->hasAssociation($field)) {
                 $associationMapping = $classMetadata->associationMappings[$field];
-                $fieldName = $associationMapping['fieldName'];
+                $fieldName = $associationMapping->fieldName;
                 $fieldDefinitions[$fieldName] = new FieldDefinition(
                     propertyPath: $fieldName,
                     displayType: 'string',
