@@ -10,6 +10,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\DecimalRendererProvid
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\JsonRendererProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\NullRendererProvider;
+use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\TextRendererProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\ToStringRendererProvider;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -46,6 +47,10 @@ return function (ContainerConfigurator $configurator): void {
         );
 
     $services->set(DecimalRendererProvider::class)
+        ->tag(DdrCrudAdminExtension::TAG_FIELD_RENDERER_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_MEDIUM]
+        );
+
+    $services->set(TextRendererProvider::class)
         ->tag(DdrCrudAdminExtension::TAG_FIELD_RENDERER_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_MEDIUM]
         );
 
