@@ -13,6 +13,9 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class AbstractTestCase extends WebTestCase
 {
+    /**
+     * @psalm-suppress InternalMethod
+     */
     protected static function loadFixtures(array $classNames = []): ReferenceRepository
     {
         return self::getService(DatabaseToolCollection::class)->get()
