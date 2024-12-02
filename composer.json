@@ -15,7 +15,7 @@
     "require": {
         "php": ">=8.3",
         "ext-json": "*",
-        "dontdrinkandroot/common": "^0.2",
+        "dontdrinkandroot/common": "^0.3",
         "knplabs/knp-paginator-bundle": "^6.3",
         "symfony/config": "^6.4",
         "symfony/dependency-injection": "^6.4",
