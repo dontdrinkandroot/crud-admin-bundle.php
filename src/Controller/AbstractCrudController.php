@@ -376,7 +376,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $this->getTwig()->render($view, $context);
     }
 
-    protected function render(string $view, array $context = [], Response $response = null): Response
+    protected function render(string $view, array $context = [], ?Response $response = null): Response
     {
         $content = $this->renderView($view, $context);
 
