@@ -25,7 +25,7 @@ class YamlFileLoader extends Loader
     }
 
     #[Override]
-    public function load(mixed $resource, string $type = null): array
+    public function load(mixed $resource, ?string $type = null): array
     {
         $path = $this->locator->locate($resource);
 
@@ -33,7 +33,7 @@ class YamlFileLoader extends Loader
     }
 
     #[Override]
-    public function supports(mixed $resource, string $type = null): bool
+    public function supports(mixed $resource, ?string $type = null): bool
     {
         if (!is_string($resource)) {
             return false;
