@@ -18,6 +18,7 @@ return static function (RectorConfig $rectorConfig): void {
         LevelSetList::UP_TO_PHP_81,
         LevelSetList::UP_TO_PHP_82,
         LevelSetList::UP_TO_PHP_83,
+        LevelSetList::UP_TO_PHP_84,
         SetList::TYPE_DECLARATION,
         SymfonySetList::SYMFONY_61,
         SymfonySetList::SYMFONY_62,

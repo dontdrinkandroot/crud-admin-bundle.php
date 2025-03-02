@@ -19,7 +19,7 @@ class ReadActionTest extends AbstractTestCase
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
         $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId());
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
 
     public function testStandardRequest(): void
@@ -31,17 +31,17 @@ class ReadActionTest extends AbstractTestCase
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
 
         $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId());
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         /* Test expected values */
         $dds = $crawler->filter('dd');
-        $this->assertCount(6, $dds);
+        self::assertCount(6, $dds);
         /* Id */
-        $this->assertEquals('2', $dds->eq(0)->text(null, true));
+        self::assertEquals('2', $dds->eq(0)->text(null, true));
         /* NullField */
-        $this->assertEquals('requiredReadonly00001', $dds->eq(1)->text());
+        self::assertEquals('requiredReadonly00001', $dds->eq(1)->text());
         /* RequiredField */
-        $this->assertEquals('required00001', $dds->eq(2)->text());
+        self::assertEquals('required00001', $dds->eq(2)->text());
     }
 
     public function testStandardRequestDepartment(): void
@@ -53,16 +53,16 @@ class ReadActionTest extends AbstractTestCase
         self::assertInstanceOf(Department::class, $department);
 
         $crawler = $client->request('GET', '/deps/' . $department->getId());
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         /* Test expected values */
         $dds = $crawler->filter('dd');
-        $this->assertCount(3, $dds);
+        self::assertCount(3, $dds);
         /* Id */
-        $this->assertEquals((string)$department->getId(), $dds->eq(0)->text(null, true));
+        self::assertEquals((string)$department->getId(), $dds->eq(0)->text(null, true));
         /* Name */
-        $this->assertEquals('two', $dds->eq(1)->text());
+        self::assertEquals('two', $dds->eq(1)->text());
         /* PhonePrefix*/
-        $this->assertEquals('023', $dds->eq(2)->text());
+        self::assertEquals('023', $dds->eq(2)->text());
     }
 }

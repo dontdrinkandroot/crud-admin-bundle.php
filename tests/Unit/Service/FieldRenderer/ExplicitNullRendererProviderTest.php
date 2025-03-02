@@ -13,7 +13,7 @@ class ExplicitNullRendererProviderTest extends TestCase
         $renderer = new ExplicitNullRendererProvider();
         $fieldDefinition = new FieldDefinition('path', 'date');
         $value = null;
-        $this->assertTrue($renderer->supports($fieldDefinition, $value));
-        $this->assertEquals('<em>null</em>', $renderer->render($fieldDefinition, $value));
+        self::assertTrue($renderer->supports($fieldDefinition, $value));
+        self::assertEquals('<em>null</em>', $renderer->render($fieldDefinition, $value));
     }
 }

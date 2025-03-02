@@ -22,12 +22,10 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template T
+     * @template T of object
      *
      * @param class-string<T> $entityClass
      *
-     * @psalm-suppress InvalidReturnType
-     * @psalm-suppress InvalidReturnStatement
      * @return CrudControllerInterface<T>|null
      */
     public function findControllerByEntityClass(string $entityClass): ?CrudControllerInterface
@@ -36,11 +34,10 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template T
+     * @template T of object
      *
      * @param class-string<T> $entityClass
      *
-     * @psalm-suppress InvalidReturnType
      * @return CrudControllerInterface<T>
      */
     public function getControllerByEntityClass(string $entityClass): CrudControllerInterface
@@ -49,6 +46,10 @@ class CrudControllerRegistry
             ?? throw new RuntimeException('No controller found for entityClass ' . $entityClass);
     }
 
+    /**
+     * @template T of object
+     * @param CrudControllerInterface<T> $controller
+     */
     public function registerController(string $serviceId, CrudControllerInterface $controller): void
     {
         $entityClass = $controller->getEntityClass();

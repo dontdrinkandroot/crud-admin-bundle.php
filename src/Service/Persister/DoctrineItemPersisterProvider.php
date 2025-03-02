@@ -47,6 +47,7 @@ class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
                 return true;
         }
 
+        /** @phpstan-ignore deadCode.unreachable */
         return null;
     }
 }

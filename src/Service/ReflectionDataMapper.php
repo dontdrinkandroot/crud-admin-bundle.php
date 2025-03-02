@@ -98,7 +98,7 @@ class ReflectionDataMapper implements DataMapperInterface
             );
             $constructorArgumentsWithDefaults = array_filter(
                 $this->reflectedClass->getConstructor()?->getParameters() ?? [],
-                fn(ReflectionParameter $parameter) => $parameter->isDefaultValueAvailable()
+                    fn(ReflectionParameter $parameter): bool => $parameter->isDefaultValueAvailable()
             );
             $namesWithDefaultValues = array_reduce(
                 array_merge(

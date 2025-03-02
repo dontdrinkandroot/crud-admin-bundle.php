@@ -14,7 +14,7 @@ class DateRendererProviderTest extends TestCase
         $renderer = new DateRendererProvider();
         $fieldDefinition = new FieldDefinition('path', 'date');
         $value = new DateTime('2020-02-03');
-        $this->assertTrue($renderer->supports($fieldDefinition, $value));
-        $this->assertEquals('2020-02-03', $renderer->render($fieldDefinition, $value));
+        self::assertTrue($renderer->supports($fieldDefinition, $value));
+        self::assertEquals('2020-02-03', $renderer->render($fieldDefinition, $value));
     }
 }

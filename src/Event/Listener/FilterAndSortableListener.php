@@ -38,7 +38,6 @@ class FilterAndSortableListener
             if (
                 null !== $sortFieldParameter
                 && null !== ($sortField = $request->query->get($sortFieldParameter))
-                && is_string($sortField)
             ) {
                 if (!str_contains($sortField, '.')) {
                     $sortField = 'entity.' . $sortField;

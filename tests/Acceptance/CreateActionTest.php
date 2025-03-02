@@ -14,7 +14,7 @@ class CreateActionTest extends AbstractTestCase
         $client = static::createClient();
         self::loadFixtures();
         $crawler = $client->request('GET', '/example_entities/__NEW__/edit');
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
 
     public function testForbidden(): void
@@ -23,7 +23,7 @@ class CreateActionTest extends AbstractTestCase
         self::loadFixtures();
         self::logIn($client, 'user');
         $crawler = $client->request('GET', '/example_entities/__NEW__/edit');
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
     public function testValidationAndSubmission(): void
@@ -34,23 +34,23 @@ class CreateActionTest extends AbstractTestCase
         /* Test page is callable */
         self::logIn($client, 'admin');
         $crawler = $client->request('GET', '/example_entities/__NEW__/edit');
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         /* Test validation is working */
         $crawler = $client->submitForm('Save', []);
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
         $formGroups = $crawler->filter('form > div > div');
         $formGroupRequired = $formGroups->eq(0);
-        $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text());
+        self::assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text());
         $formGroupRequired = $formGroups->eq(1);
-        $this->assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text());
+        self::assertEquals('This value should not be blank.', $formGroupRequired->filter('ul li')->text());
 
         /* Test submission is working */
         $crawler = $client->submitForm('Save', [
             'form[requiredReadonly]' => 'requiredReadonlyValue',
             'form[required]' => 'requiredValue',
         ]);
-        $this->assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_FOUND, $client->getResponse()->getStatusCode());
         self::assertResponseRedirects('/example_entities/');
 
         /* Test redirect to LIST page after submission */

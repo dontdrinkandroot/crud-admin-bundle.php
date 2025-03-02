@@ -2,11 +2,9 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
-use BackedEnum;
 use Doctrine\DBAL\Types\Types;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
-use UnitEnum;
 
 class TextRendererProvider implements FieldRendererProviderInterface
 {
@@ -20,8 +18,8 @@ class TextRendererProvider implements FieldRendererProviderInterface
     #[Override]
     public function render(FieldDefinition $fieldDefinition, mixed $value): string
     {
-        $lines = explode("\n", $value);
-        $escapedLines = array_map(fn($line) => FieldRenderer::escapeHtml($line), $lines);
+        $lines = explode("\n", (string)$value);
+        $escapedLines = array_map(fn($line): string => FieldRenderer::escapeHtml($line), $lines);
 
         return implode("<br/>", $escapedLines);
     }

@@ -16,7 +16,7 @@ class DeleteActionTest extends AbstractTestCase
         $exampleEntity = $referenceRepository->getReference('example-entity-1', ExampleEntity::class);
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
         $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId() . '/delete');
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
 
     public function testForbidden(): void
@@ -27,7 +27,7 @@ class DeleteActionTest extends AbstractTestCase
         $exampleEntity = $referenceRepository->getReference('example-entity-1', ExampleEntity::class);
         self::assertInstanceOf(ExampleEntity::class, $exampleEntity);
         $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId() . '/delete');
-        $this->assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
     }
 
     public function testStandardRequest(): void
@@ -46,6 +46,6 @@ class DeleteActionTest extends AbstractTestCase
 
         /* Test READ throws 404 */
         $crawler = $client->request('GET', '/example_entities/' . $exampleEntity->getId());
-        $this->assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_NOT_FOUND, $client->getResponse()->getStatusCode());
     }
 }

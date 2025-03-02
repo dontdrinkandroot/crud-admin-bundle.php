@@ -19,7 +19,7 @@ class YamlFileLoader extends Loader
 {
     private ?YamlParser $yamlParser = null;
 
-    public function __construct(private readonly FileLocatorInterface $locator, string $env = null)
+    public function __construct(private readonly FileLocatorInterface $locator, ?string $env = null)
     {
         parent::__construct($env);
     }

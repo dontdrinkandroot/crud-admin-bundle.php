@@ -3,12 +3,10 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Tests;
 
 use Doctrine\Common\DataFixtures\ReferenceRepository;
-use DOMDocument;
 use Dontdrinkandroot\Common\Asserted;
 use Liip\TestFixturesBundle\Services\DatabaseToolCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class AbstractTestCase extends WebTestCase
@@ -33,16 +31,6 @@ class AbstractTestCase extends WebTestCase
         $service = self::getContainer()->get($class);
         self::assertInstanceOf($class, $service);
         return $service;
-    }
-
-    public static function getFormattedHtml(Crawler $crawler): string
-    {
-        $document = Asserted::instanceOf(
-            Asserted::notNull($crawler->getNode(0))->parentNode,
-            DOMDocument::class
-        );
-        $document->formatOutput = true;
-        return $document->saveHtml($document);
     }
 
     protected static function logIn(KernelBrowser $client, string $identifier): void

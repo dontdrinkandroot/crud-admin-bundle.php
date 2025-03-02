@@ -48,7 +48,7 @@ class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterf
                 $type = $fieldMapping->type;
                 $fieldName = $fieldMapping->fieldName;
                 $filterable = false;
-                if (in_array($type, ['string', 'integer'])) {
+                if (in_array($type, ['string', 'integer'], true)) {
                     $filterable = true;
                 }
                 $fieldDefinitions[$fieldName] = new FieldDefinition(

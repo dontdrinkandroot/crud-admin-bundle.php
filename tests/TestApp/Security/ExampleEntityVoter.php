@@ -22,7 +22,7 @@ class ExampleEntityVoter extends Voter
     protected function supports(string $attribute, $subject): bool
     {
         return is_a($subject, ExampleEntity::class, true)
-            && in_array(CrudOperation::tryFrom($attribute), CrudOperation::all());
+            && in_array(CrudOperation::tryFrom($attribute), CrudOperation::all(), true);
     }
 
     #[Override]

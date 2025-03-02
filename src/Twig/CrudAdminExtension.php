@@ -68,7 +68,7 @@ class CrudAdminExtension extends AbstractExtension
     }
 
     /**
-     * @template T
+     * @template T of object
      *
      * @param class-string<T>|T $entityOrClass
      *
@@ -81,7 +81,7 @@ class CrudAdminExtension extends AbstractExtension
     }
 
     /**
-     * @template T
+     * @template T of object
      *
      * @param class-string<T>|T $entityOrClass
      *
@@ -97,7 +97,7 @@ class CrudAdminExtension extends AbstractExtension
     }
 
     /**
-     * @template T
+     * @template T of object
      *
      * @param class-string<T>|T $entityOrClass
      */
@@ -111,7 +111,7 @@ class CrudAdminExtension extends AbstractExtension
     }
 
     /**
-     * @template T
+     * @template T of object
      *
      * @param class-string<T>|T $entityOrClass
      *

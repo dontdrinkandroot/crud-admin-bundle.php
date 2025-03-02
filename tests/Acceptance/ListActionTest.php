@@ -15,7 +15,7 @@ class ListActionTest extends AbstractTestCase
         $client = self::createClient();
         $referenceRepository = self::loadFixtures([ExampleEntities::class]);
         $crawler = $client->request('GET', '/example_entities/');
-        $this->assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_UNAUTHORIZED, $client->getResponse()->getStatusCode());
     }
 
     public function testStandardRequest(): void
@@ -24,12 +24,12 @@ class ListActionTest extends AbstractTestCase
         $referenceRepository = self::loadFixtures([ExampleEntities::class]);
         self::logIn($client, 'user');
         $crawler = $client->request('GET', '/example_entities/');
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         $rows = $crawler->filter('tr');
-        $this->assertCount(11, $rows); /* Header + 10 Entities */
+        self::assertCount(11, $rows); /* Header + 10 Entities */
         /* Test Sorting was correct */
-        $this->assertEquals('required00000', $rows->eq(1)->filter('td')->eq(2)->text(null, true));
+        self::assertEquals('required00000', $rows->eq(1)->filter('td')->eq(2)->text(null, true));
     }
 
     public function testStandardRequestDepartment(): void
@@ -39,20 +39,20 @@ class ListActionTest extends AbstractTestCase
         self::logIn($client, 'user');
 
         $crawler = $client->request('GET', '/deps/');
-        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        self::assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
 
         self::assertEquals('Overrridden - Departments', $crawler->filter('title')->text());
 
         $rows = $crawler->filter('tr');
-        $this->assertCount(3, $rows); /* Header + 2 Entity */
+        self::assertCount(3, $rows); /* Header + 2 Entity */
 
         $cols = $rows->eq(0)->filter('th');
         self::assertCount(2, $cols);
-        $this->assertEquals('Name', $cols->eq(0)->text());
+        self::assertEquals('Name', $cols->eq(0)->text());
 
         /* Test Sorting was correct */
         self::assertCount(2, $cols);
-        $this->assertEquals('two', $rows->eq(1)->filter('td')->eq(0)->text());
-        $this->assertEquals('one', $rows->eq(2)->filter('td')->eq(0)->text());
+        self::assertEquals('two', $rows->eq(1)->filter('td')->eq(0)->text());
+        self::assertEquals('one', $rows->eq(2)->filter('td')->eq(0)->text());
     }
 }

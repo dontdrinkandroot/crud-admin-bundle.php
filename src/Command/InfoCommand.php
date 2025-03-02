@@ -53,12 +53,12 @@ class InfoCommand extends Command
             $controllersByEntityClass = $this->crudControllerRegistry->getControllersByEntityClass();
         }
 
-        foreach ($controllersByEntityClass as $entityClass => $controller) {
-            $output->writeln($entityClass . ":");
+        foreach ($controllersByEntityClass as $controllerEntityClass => $controller) {
+            $output->writeln($controllerEntityClass . ":");
             $output->writeln("\t" . 'controller: ' . $controller::class);
             $output->writeln("\t" . 'routes:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, $crudOperation);
+                $routeInfo = $this->routeInfoResolver->resolveRouteInfo($controllerEntityClass, $crudOperation);
                 $output->write("\t\t" . $crudOperation->value . ":");
                 if (null === $routeInfo) {
                     $output->writeln(' null');
@@ -70,18 +70,18 @@ class InfoCommand extends Command
             }
             $output->writeln("\t" . 'templates:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $template = $this->templateResolver->resolveTemplate($entityClass, $crudOperation);
+                $template = $this->templateResolver->resolveTemplate($controllerEntityClass, $crudOperation);
                 $output->writeln(sprintf("\t\t%s: %s", $crudOperation->value, $template ?? 'null'));
             }
             $output->writeln("\t" . 'translation_domains:');
             foreach (CrudOperation::all() as $crudOperation) {
-                $translationDomain = $this->translationDomainResolver->resolveTranslationDomain($entityClass);
+                $translationDomain = $this->translationDomainResolver->resolveTranslationDomain($controllerEntityClass);
                 $output->writeln(sprintf("\t\t%s: %s", $crudOperation->value, $translationDomain ?? 'null'));
             }
             $output->writeln("\t" . 'field_definitions:');
             foreach (CrudOperation::all() as $crudOperation) {
                 $fieldDefinitions = $this->fieldDefinitionsResolver->resolveFieldDefinitions(
-                    $entityClass,
+                    $controllerEntityClass,
                     $crudOperation
                 );
                 $output->write("\t\t" . $crudOperation->value . ":");

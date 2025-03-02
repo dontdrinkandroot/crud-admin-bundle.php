@@ -25,16 +25,7 @@ class CrudConfigCompilerPass implements CompilerPassInterface
     {
         $paths = $this->getBundlesResourcesPaths($container);
         $projectDir = Asserted::string($container->getParameter('kernel.project_dir'));
-
-        $path = $projectDir . '/config/ddr_crud_admin';
-        if ($container->fileExists($path, '/\.(ya?ml)$/')) {
-            $paths['app'] = $path;
-        }
-
-        $path = $projectDir . '/config/ddr_crud';
-        if ($container->fileExists($path, '/\.(ya?ml)$/')) {
-            $paths['app'] = $path;
-        }
+        $paths = $this->addConfigPaths($projectDir, $container, $paths);
 
         foreach ($paths as $path) {
             if (!is_dir($path)) {
@@ -145,5 +136,20 @@ class CrudConfigCompilerPass implements CompilerPassInterface
         }
 
         return $bundlesResourcesPaths;
+    }
+
+    public function addConfigPaths(string $projectDir, ContainerBuilder $container, array $paths): array
+    {
+        $path = $projectDir . '/config/ddr_crud_admin';
+        if ($container->fileExists($path, '/\.(ya?ml)$/')) {
+            $paths['app'] = $path;
+        }
+
+        $path = $projectDir . '/config/ddr_crud';
+        if ($container->fileExists($path, '/\.(ya?ml)$/')) {
+            $paths['app'] = $path;
+        }
+
+        return $paths;
     }
 }

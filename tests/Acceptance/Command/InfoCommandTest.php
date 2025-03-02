@@ -18,6 +18,6 @@ class InfoCommandTest extends KernelTestCase
         $commandTester->execute([]);
 
         $output = $commandTester->getDisplay();
-        $this->assertNotEmpty($output);
+        self::assertNotEmpty($output);
     }
 }

@@ -14,15 +14,15 @@ class JsonRendererProviderTest extends TestCase
         $fieldDefinition = new FieldDefinition('path', 'json');
 
         $value = ['a', 'b' => ['c', 1 => 'foo']];
-        $this->assertTrue($renderer->supports($fieldDefinition, $value));
-        $this->assertEquals(
+        self::assertTrue($renderer->supports($fieldDefinition, $value));
+        self::assertEquals(
             '{&quot;0&quot;:&quot;a&quot;,&quot;b&quot;:[&quot;c&quot;,&quot;foo&quot;]}',
             $renderer->render($fieldDefinition, $value)
         );
 
         $value = ['ROLE_USER', 'ROLE_ADMIN'];
-        $this->assertTrue($renderer->supports($fieldDefinition, $value));
-        $this->assertEquals(
+        self::assertTrue($renderer->supports($fieldDefinition, $value));
+        self::assertEquals(
             '[&quot;ROLE_USER&quot;,&quot;ROLE_ADMIN&quot;]',
             $renderer->render($fieldDefinition, $value)
         );
