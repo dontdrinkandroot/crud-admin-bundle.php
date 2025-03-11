@@ -8,7 +8,8 @@ use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 interface RouteInfoResolverInterface
 {
     /**
-     * @param class-string  $entityClass
+     * @template T of object
+     * @param class-string<T> $entityClass
      */
     public function resolveRouteInfo(string $entityClass, CrudOperation $crudOperation): ?RouteInfo;
 }

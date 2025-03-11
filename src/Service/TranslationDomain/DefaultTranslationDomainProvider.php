@@ -5,6 +5,10 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 use Dontdrinkandroot\Common\ClassNameUtils;
 use Override;
 
+/**
+ * @template T of object
+ * @implements TranslationDomainProviderInterface<T>
+ */
 class DefaultTranslationDomainProvider implements TranslationDomainProviderInterface
 {
     #[Override]

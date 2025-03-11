@@ -17,6 +17,9 @@ class CrudRoutesLoader extends Loader
 
     private bool $loaded = false;
 
+    /**
+     * @param CrudControllerRegistry<object> $controllerRegistry
+     */
     public function __construct(
         private readonly CrudControllerRegistry $controllerRegistry,
         private readonly RouteInfoResolverInterface $routeInfoResolver
@@ -40,7 +43,6 @@ class CrudRoutesLoader extends Loader
         $routes = new RouteCollection();
         foreach ($this->controllerRegistry->getControllersByServiceId() as $id => $controller) {
 
-            /** @var class-string $entityClass */
             $entityClass = $controller->getEntityClass();
 
             if (null !== $routeInfo = $this->routeInfoResolver->resolveRouteInfo($entityClass, CrudOperation::LIST)) {

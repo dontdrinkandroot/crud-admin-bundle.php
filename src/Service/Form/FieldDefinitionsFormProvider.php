@@ -13,6 +13,10 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * @template T of object
+ * @implements FormProviderInterface<T>
+ */
 class FieldDefinitionsFormProvider implements FormProviderInterface
 {
     public function __construct(

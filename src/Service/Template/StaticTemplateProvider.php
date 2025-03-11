@@ -5,11 +5,15 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 use Dontdrinkandroot\Common\CrudOperation;
 use Override;
 
+/**
+ * @template T of object
+ * @implements TemplateProviderInterface<T>
+ */
 class StaticTemplateProvider implements TemplateProviderInterface
 {
     /**
-     * @param class-string $entityClass
-     * @param array<string, string>  $templates
+     * @param class-string<T> $entityClass
+     * @param array<string, string> $templates
      */
     public function __construct(private readonly string $entityClass, private readonly array $templates)
     {

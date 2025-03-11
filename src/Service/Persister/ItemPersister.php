@@ -4,18 +4,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 
 /**
  * @extends AbstractProviderService<ItemPersisterProviderInterface>
  */
-class ItemPersister extends AbstractProviderService
+class ItemPersister extends AbstractProviderService implements ItemPersisterInterface
 {
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $entityClass
-     * @param T $entity
-     */
+    #[Override]
     public function persistItem(CrudOperation $crudOperation, string $entityClass, object $entity): void
     {
         foreach ($this->providers as $provider) {

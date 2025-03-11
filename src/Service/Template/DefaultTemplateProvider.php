@@ -5,6 +5,10 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 use Dontdrinkandroot\Common\CrudOperation;
 use Override;
 
+/**
+ * @template T of object
+ * @implements TemplateProviderInterface<T>
+ */
 class DefaultTemplateProvider implements TemplateProviderInterface
 {
     #[Override]

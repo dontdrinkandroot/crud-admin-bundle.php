@@ -3,23 +3,24 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FormType;
 
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 use Symfony\Component\Form\FormTypeInterface;
 
 /**
- * @extends AbstractProviderService<FormTypeProviderInterface>
+ * @template P of FormTypeProviderInterface
+ * @extends AbstractProviderService<P>
  */
-class FormTypeResolver extends AbstractProviderService
+class FormTypeResolver extends AbstractProviderService implements FormTypeResolverInterface
 {
     /**
      * @template T of object
-     *
-     * @param class-string<T> $entityClass
-     *
-     * @return class-string<FormTypeInterface>|null
+     * @return class-string<FormTypeInterface<T>>|null
      */
+    #[Override]
     public function resolveFormType(string $entityClass): ?string
     {
         foreach ($this->providers as $provider) {
+            /** @var class-string<FormTypeInterface<T>>|null $formType */
             $formType = $provider->provideFormType($entityClass);
             if (null !== $formType) {
                 return $formType;
@@ -28,5 +29,4 @@ class FormTypeResolver extends AbstractProviderService
 
         return null;
     }
-
 }

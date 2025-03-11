@@ -8,6 +8,10 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Override;
 
+/**
+ * @template T of object
+ * @implements ItemPersisterProviderInterface<T>
+ */
 class DoctrineItemPersisterProvider implements ItemPersisterProviderInterface
 {
     public function __construct(private readonly ManagerRegistry $managerRegistry)

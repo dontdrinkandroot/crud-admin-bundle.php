@@ -21,6 +21,9 @@ class InfoCommand extends Command
 {
     final public const string ARGUMENT_ENTITY_CLASS = 'entity-class';
 
+    /**
+     * @param CrudControllerRegistry<object> $crudControllerRegistry
+     */
     public function __construct(
         private readonly CrudControllerRegistry $crudControllerRegistry,
         private readonly TemplateResolverInterface $templateResolver,
@@ -40,6 +43,7 @@ class InfoCommand extends Command
     #[Override]
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        /** @var class-string|null $entityClass */
         $entityClass = $input->getArgument(self::ARGUMENT_ENTITY_CLASS);
         if (null !== $entityClass) {
             $controller = $this->crudControllerRegistry->findControllerByEntityClass($entityClass);

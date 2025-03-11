@@ -8,7 +8,9 @@ use Symfony\Component\HttpFoundation\Request;
 class ViewModelEvent
 {
     /**
-     * @param class-string $entityClass
+     * @template T of object
+     * @param class-string<T> $entityClass
+     * @param array<string, mixed> $context
      */
     public function __construct(
         public readonly string $entityClass,

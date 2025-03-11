@@ -11,6 +11,10 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 use RuntimeException;
 
+/**
+ * @template T of object
+ * @implements FieldDefinitionsProviderInterface<T>
+ */
 class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
     public function __construct(

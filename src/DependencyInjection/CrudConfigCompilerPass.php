@@ -114,6 +114,9 @@ class CrudConfigCompilerPass implements CompilerPassInterface
         }
     }
 
+    /**
+     * @return array<string, string>
+     */
     private function getBundlesResourcesPaths(ContainerBuilder $container): array
     {
         $bundlesResourcesPaths = [];
@@ -138,6 +141,10 @@ class CrudConfigCompilerPass implements CompilerPassInterface
         return $bundlesResourcesPaths;
     }
 
+    /**
+     * @param array<string, string> $paths
+     * @return array<string, string>
+     */
     public function addConfigPaths(string $projectDir, ContainerBuilder $container, array $paths): array
     {
         $path = $projectDir . '/config/ddr_crud_admin';

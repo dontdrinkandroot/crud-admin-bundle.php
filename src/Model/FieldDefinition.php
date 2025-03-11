@@ -8,8 +8,9 @@ use Symfony\Component\Form\FormTypeInterface;
 class FieldDefinition
 {
     /**
+     * @template T of object
      * @param list<CrudOperation> $crudOperations
-     * @param class-string<FormTypeInterface>|null $formType
+     * @param class-string<FormTypeInterface<T>>|null $formType
      */
     public function __construct(
         public readonly string $propertyPath,

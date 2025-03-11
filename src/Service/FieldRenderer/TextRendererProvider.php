@@ -8,7 +8,6 @@ use Override;
 
 class TextRendererProvider implements FieldRendererProviderInterface
 {
-
     #[Override]
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool
     {

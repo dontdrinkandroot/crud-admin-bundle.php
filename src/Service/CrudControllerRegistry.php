@@ -5,15 +5,18 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service;
 use Dontdrinkandroot\CrudAdminBundle\Controller\CrudControllerInterface;
 use RuntimeException;
 
+/**
+ * @template T of object
+ */
 class CrudControllerRegistry
 {
     /**
-     * @var array<class-string, CrudControllerInterface>
+     * @var array<class-string<T>, CrudControllerInterface<T>>
      */
     private array $controllersByEntityClass = [];
 
     /**
-     * @var array<string, CrudControllerInterface>
+     * @var array<string, CrudControllerInterface<T>>
      */
     private array $controllersByServiceId = [];
 
@@ -22,10 +25,7 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template T of object
-     *
      * @param class-string<T> $entityClass
-     *
      * @return CrudControllerInterface<T>|null
      */
     public function findControllerByEntityClass(string $entityClass): ?CrudControllerInterface
@@ -34,10 +34,7 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template T of object
-     *
      * @param class-string<T> $entityClass
-     *
      * @return CrudControllerInterface<T>
      */
     public function getControllerByEntityClass(string $entityClass): CrudControllerInterface
@@ -47,7 +44,6 @@ class CrudControllerRegistry
     }
 
     /**
-     * @template T of object
      * @param CrudControllerInterface<T> $controller
      */
     public function registerController(string $serviceId, CrudControllerInterface $controller): void
@@ -63,11 +59,17 @@ class CrudControllerRegistry
         $this->controllersByEntityClass[$entityClass] = $controller;
     }
 
+    /**
+     * @return array<class-string<T>, CrudControllerInterface<T>>
+     */
     public function getControllersByEntityClass(): array
     {
         return $this->controllersByEntityClass;
     }
 
+    /**
+     * @return array<string, CrudControllerInterface<T>>
+     */
     public function getControllersByServiceId(): array
     {
         return $this->controllersByServiceId;

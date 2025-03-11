@@ -4,11 +4,13 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
-interface PaginationTargetProvider extends ProviderInterface
+/**
+ * @template T of object
+ */
+interface PaginationTargetProviderInterface extends ProviderInterface
 {
     /**
-     * @param class-string $entityClass
-     *
+     * @param class-string<T> $entityClass
      * @return mixed
      */
     public function providePaginationTarget(string $entityClass): mixed;

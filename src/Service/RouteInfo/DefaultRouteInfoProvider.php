@@ -8,6 +8,10 @@ use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Override;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
+/**
+ * @template T of object
+ * @implements RouteInfoProviderInterface<T>
+ */
 class DefaultRouteInfoProvider implements RouteInfoProviderInterface
 {
     #[Override]

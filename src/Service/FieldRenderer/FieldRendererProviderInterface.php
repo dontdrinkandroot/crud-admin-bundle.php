@@ -3,9 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
-use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
-interface FieldRendererProviderInterface extends ProviderInterface
+interface FieldRendererProviderInterface
 {
     public function supports(FieldDefinition $fieldDefinition, mixed $value): bool;
 

@@ -3,11 +3,11 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service;
 
 /**
- * @template T
+ * @template P
  */
 class AbstractProviderService
 {
-    /** @param iterable<T> $providers */
+    /** @param iterable<P> $providers */
     public function __construct(protected iterable $providers = [])
     {
     }

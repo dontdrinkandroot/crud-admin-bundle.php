@@ -10,7 +10,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationProviderInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetProvider;
+use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Query\QueryExtensionProviderInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
@@ -92,7 +92,7 @@ class DdrCrudAdminExtension extends Extension
             ->registerForAutoconfiguration(PaginationProviderInterface::class)
             ->addTag(self::TAG_PAGINATION_PROVIDER);
         $container
-            ->registerForAutoconfiguration(PaginationTargetProvider::class)
+            ->registerForAutoconfiguration(PaginationTargetProviderInterface::class)
             ->addTag(self::TAG_PAGINATION_TARGET_PROVIDER);
         $container
             ->registerForAutoconfiguration(FieldDefinitionsProviderInterface::class)

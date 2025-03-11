@@ -4,19 +4,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 
 /**
  * @extends AbstractProviderService<UrlProviderInterface>
  */
-class UrlResolver extends AbstractProviderService
+class UrlResolver extends AbstractProviderService implements UrlResolverInterface
 {
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $entityClass
-     * @param T|null $entity
-     *
-     */
+    #[Override]
     public function resolveUrl(string $entityClass, CrudOperation $crudOperation, ?object $entity = null): ?string
     {
         foreach ($this->providers as $provider) {

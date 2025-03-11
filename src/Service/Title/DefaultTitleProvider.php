@@ -9,6 +9,10 @@ use Override;
 use Symfony\Component\String\Inflector\EnglishInflector;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+/**
+ * @template T of object
+ * @implements TitleProviderInterface<T>
+ */
 class DefaultTitleProvider implements TitleProviderInterface
 {
     final public const string TYPE_AUTO = 'auto';

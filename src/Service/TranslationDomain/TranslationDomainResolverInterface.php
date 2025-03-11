@@ -5,8 +5,8 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 interface TranslationDomainResolverInterface
 {
     /**
-     * @param class-string $entityClass
-     *
+     * @template T of object
+     * @param class-string<T> $entityClass
      * @return ?string
      */
     public function resolveTranslationDomain(string $entityClass): ?string;

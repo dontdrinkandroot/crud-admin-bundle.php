@@ -7,8 +7,9 @@ use Doctrine\ORM\Query;
 interface QueryExtensionProviderInterface
 {
     /**
-     * @param class-string $entityClass
-     *
+     * @template T of object
+     * @param class-string<T> $entityClass
+     * @param Query<mixed, T> $query
      */
     public function extendQuery(string $entityClass, Query $query): void;
 }

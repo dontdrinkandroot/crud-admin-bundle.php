@@ -7,8 +7,8 @@ use Dontdrinkandroot\Common\CrudOperation;
 interface TemplateResolverInterface
 {
     /**
-     * @param class-string  $entityClass
-     *
+     * @template T of object
+     * @param class-string<T> $entityClass
      * @return ?string
      */
     public function resolveTemplate(string $entityClass, CrudOperation $crudOperation): ?string;

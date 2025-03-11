@@ -6,8 +6,15 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
 use Override;
 use Symfony\Contracts\Cache\CacheInterface;
 
+/**
+ * @template P of TranslationDomainProviderInterface
+ * @extends TranslationDomainResolver<P>
+ */
 class CachedTranslationDomainResolver extends TranslationDomainResolver
 {
+    /**
+     * @param iterable<P> $providers
+     */
     public function __construct(iterable $providers, private readonly CacheInterface $cache)
     {
         parent::__construct($providers);

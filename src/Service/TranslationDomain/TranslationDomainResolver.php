@@ -6,7 +6,8 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Override;
 
 /**
- * @extends AbstractProviderService<TranslationDomainProviderInterface>
+ * @template P of TranslationDomainProviderInterface
+ * @extends AbstractProviderService<P>
  */
 class TranslationDomainResolver extends AbstractProviderService implements TranslationDomainResolverInterface
 {

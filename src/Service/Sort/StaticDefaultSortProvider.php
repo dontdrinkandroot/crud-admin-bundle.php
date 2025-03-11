@@ -5,10 +5,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Sort;
 use Dontdrinkandroot\CrudAdminBundle\Model\DefaultSort;
 use Override;
 
+/**
+ * @template T of object
+ * @implements DefaultSortProviderInterface<T>
+ */
 class StaticDefaultSortProvider implements DefaultSortProviderInterface
 {
     /**
-     * @param class-string $entityClass
+     * @param class-string<T> $entityClass
      */
     public function __construct(
         private readonly string $entityClass,

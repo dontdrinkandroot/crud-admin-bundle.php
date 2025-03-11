@@ -8,8 +8,8 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 interface QueryBuilderExtensionProviderInterface extends ProviderInterface
 {
     /**
-     * @param class-string $entityClass
-     *
+     * @template T of object
+     * @param class-string<T> $entityClass
      */
     public function extendQueryBuilder(string $entityClass, QueryBuilder $queryBuilder): void;
 }

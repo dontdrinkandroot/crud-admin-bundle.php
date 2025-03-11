@@ -31,7 +31,7 @@ return function (ContainerConfigurator $configurator): void {
     $services->set(ToStringTitleProvider::class)
         ->tag(DdrCrudAdminExtension::TAG_TITLE_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_MEDIUM]);
 
-    $services->set(DefaultTitleProvider::class, DefaultTitleProvider::class)
+    $services->set(DefaultTitleProvider::class)
         ->args([
             service(TranslationDomainResolverInterface::class),
             service('translator'),

@@ -6,11 +6,15 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 
+/**
+ * @template T of object
+ * @implements FieldDefinitionsProviderInterface<T>
+ */
 class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
     /**
-     * @param class-string $entityClass
-     * @param array<string, array> $fieldDefinitionConfigurations
+     * @param class-string<T> $entityClass
+     * @param array<string, mixed[]> $fieldDefinitionConfigurations
      */
     public function __construct(
         private readonly string $entityClass,

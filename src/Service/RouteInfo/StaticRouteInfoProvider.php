@@ -6,8 +6,15 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 use Override;
 
+/**
+ * @template T of object
+ * @implements RouteInfoProviderInterface<T>
+ */
 class StaticRouteInfoProvider implements RouteInfoProviderInterface
 {
+    /**
+     * @param class-string<T> $entityClass
+     */
     public function __construct(
         private readonly string $entityClass,
         private readonly ?string $namePrefix = null,

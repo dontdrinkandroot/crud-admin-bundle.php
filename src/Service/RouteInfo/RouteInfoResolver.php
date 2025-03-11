@@ -8,7 +8,8 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Override;
 
 /**
- * @extends AbstractProviderService<RouteInfoProviderInterface>
+ * @template P of RouteInfoProviderInterface
+ * @extends AbstractProviderService<P>
  */
 class RouteInfoResolver extends AbstractProviderService implements RouteInfoResolverInterface
 {

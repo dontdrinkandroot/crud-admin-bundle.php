@@ -9,9 +9,9 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
-use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolverInterface;
 use Override;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
@@ -23,8 +23,8 @@ class CrudAdminExtension extends AbstractExtension
     public function __construct(
         private readonly PropertyAccessor $propertyAccessor,
         private readonly FieldRenderer $fieldRenderer,
-        private readonly UrlResolver $urlResolver,
-        private readonly TitleResolver $titleResolver,
+        private readonly UrlResolverInterface $urlResolver,
+        private readonly TitleResolverInterface $titleResolver,
         private readonly TranslationDomainResolverInterface $translationDomainResolver,
         private readonly FieldDefinitionsResolverInterface $fieldDefinitionsResolver,
         private readonly LabelService $labelService

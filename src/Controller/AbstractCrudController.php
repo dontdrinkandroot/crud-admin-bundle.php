@@ -12,13 +12,12 @@ use Dontdrinkandroot\CrudAdminBundle\Event\RedirectAfterWriteEvent;
 use Dontdrinkandroot\CrudAdminBundle\Event\ViewModelEvent;
 use Dontdrinkandroot\CrudAdminBundle\Exception\AbortWithResponseException;
 use Dontdrinkandroot\CrudAdminBundle\Exception\EntityNotFoundException;
-use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersister;
+use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormResolverInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Item\ItemResolverInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\PaginationResolverInterface;
+use Dontdrinkandroot\CrudAdminBundle\Service\Persister\ItemPersisterInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\TemplateResolverInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolver;
-use League\Uri\Http;
+use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolverInterface;
 use Override;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -289,34 +288,18 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             Environment::class,
             UrlGeneratorInterface::class,
             TemplateResolverInterface::class,
-            ItemResolver::class,
-            FormResolver::class,
-            ItemPersister::class,
-            UrlResolver::class,
+            ItemResolverInterface::class,
+            FormResolverInterface::class,
+            ItemPersisterInterface::class,
+            UrlResolverInterface::class,
             EventDispatcherInterface::class,
-            PaginationResolver::class,
+            PaginationResolverInterface::class,
             FormFactoryInterface::class
         ];
     }
 
-    protected function getAuthorizationChecker(): AuthorizationCheckerInterface
-    {
-        return $this->getContainer()->get(AuthorizationCheckerInterface::class);
-    }
-
-    protected function getTwig(): Environment
-    {
-        return $this->getContainer()->get(Environment::class);
-    }
-
-    protected function getFormFactory(): FormFactoryInterface
-    {
-        return $this->getContainer()->get(FormFactoryInterface::class);
-    }
-
     /**
      * @param class-string $entityClass
-     *
      */
     public function fetchTemplate(string $entityClass, CrudOperation $crudOperation): string
     {
@@ -326,56 +309,17 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         );
     }
 
-    protected function getUrlGenerator(): UrlGeneratorInterface
-    {
-        return $this->getContainer()->get(UrlGeneratorInterface::class);
-    }
-
-    protected function getTemplateResolver(): TemplateResolverInterface
-    {
-        return $this->getContainer()->get(TemplateResolverInterface::class);
-    }
-
-    protected function getItemPersister(): ItemPersister
-    {
-        return $this->getContainer()->get(ItemPersister::class);
-    }
-
-    protected function getEventDispatcher(): EventDispatcherInterface
-    {
-        return $this->getContainer()->get(EventDispatcherInterface::class);
-    }
-
-    protected function getItemResolver(): ItemResolver
-    {
-        return $this->getContainer()->get(ItemResolver::class);
-    }
-
-    protected function getUrlResolver(): UrlResolver
-    {
-        return $this->getContainer()->get(UrlResolver::class);
-    }
-
-    protected function getPaginationResolver(): PaginationResolver
-    {
-        return $this->getContainer()->get(PaginationResolver::class);
-    }
-
-    protected function getFormResolver(): FormResolver
-    {
-        return $this->getContainer()->get(FormResolver::class);
-    }
-
-    protected function getContainer(): ContainerInterface
-    {
-        return Asserted::notNull($this->container, 'Container must not be null');
-    }
-
+    /**
+     * @param array<string, mixed> $context
+     */
     protected function renderView(string $view, array $context = []): string
     {
         return $this->getTwig()->render($view, $context);
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     protected function render(string $view, array $context = [], ?Response $response = null): Response
     {
         $content = $this->renderView($view, $context);
@@ -389,6 +333,10 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return $response;
     }
 
+    /**
+     * @param class-string $entityClass
+     * @param CrudOperation[] $validCrudOperations
+     */
     protected function matches(
         string $entityClass,
         ?CrudOperation $crudOperation = null,
@@ -409,4 +357,63 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
         return in_array($crudOperation, $validCrudOperations, true);
     }
 
+    protected function getAuthorizationChecker(): AuthorizationCheckerInterface
+    {
+        return $this->getContainer()->get(AuthorizationCheckerInterface::class);
+    }
+
+    protected function getTwig(): Environment
+    {
+        return $this->getContainer()->get(Environment::class);
+    }
+
+    protected function getFormFactory(): FormFactoryInterface
+    {
+        return $this->getContainer()->get(FormFactoryInterface::class);
+    }
+
+    protected function getUrlGenerator(): UrlGeneratorInterface
+    {
+        return $this->getContainer()->get(UrlGeneratorInterface::class);
+    }
+
+    protected function getTemplateResolver(): TemplateResolverInterface
+    {
+        return $this->getContainer()->get(TemplateResolverInterface::class);
+    }
+
+    protected function getItemPersister(): ItemPersisterInterface
+    {
+        return $this->getContainer()->get(ItemPersisterInterface::class);
+    }
+
+    protected function getEventDispatcher(): EventDispatcherInterface
+    {
+        return $this->getContainer()->get(EventDispatcherInterface::class);
+    }
+
+    protected function getItemResolver(): ItemResolverInterface
+    {
+        return $this->getContainer()->get(ItemResolverInterface::class);
+    }
+
+    protected function getUrlResolver(): UrlResolverInterface
+    {
+        return $this->getContainer()->get(UrlResolverInterface::class);
+    }
+
+    protected function getPaginationResolver(): PaginationResolverInterface
+    {
+        return $this->getContainer()->get(PaginationResolverInterface::class);
+    }
+
+    protected function getFormResolver(): FormResolverInterface
+    {
+        return $this->getContainer()->get(FormResolverInterface::class);
+    }
+
+    protected function getContainer(): ContainerInterface
+    {
+        return Asserted::notNull($this->container, 'Container must not be null');
+    }
 }

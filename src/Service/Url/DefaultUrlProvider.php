@@ -8,6 +8,10 @@ use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterfac
 use Override;
 use Symfony\Component\Routing\RouterInterface;
 
+/**
+ * @template T of object
+ * @implements UrlProviderInterface<T>
+ */
 class DefaultUrlProvider implements UrlProviderInterface
 {
     public function __construct(

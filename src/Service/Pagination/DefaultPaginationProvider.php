@@ -16,10 +16,15 @@ use Knp\Component\Pager\PaginatorInterface;
 use Override;
 use Symfony\Component\HttpFoundation\RequestStack;
 
+/**
+ * @template T of object
+ * @implements PaginationProviderInterface<T>
+ */
 class DefaultPaginationProvider implements PaginationProviderInterface
 {
     /**
-     * @param iterable<DefaultSortProviderInterface> $defaultSortProviders
+     * @template DSP of DefaultSortProviderInterface
+     * @param iterable<DSP> $defaultSortProviders
      */
     public function __construct(
         private readonly PaginatorInterface $paginator,

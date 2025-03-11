@@ -4,19 +4,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 
 /**
  * @extends AbstractProviderService<TitleProviderInterface>
  */
-class TitleResolver extends AbstractProviderService
+class TitleResolver extends AbstractProviderService implements TitleResolverInterface
 {
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $entityClass
-     * @param T|null $entity
-     *
-     */
+    #[Override]
     public function resolveTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?string
     {
         foreach ($this->providers as $provider) {

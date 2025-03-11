@@ -6,11 +6,12 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Override;
 use Stringable;
 
+/**
+ * @template T of object
+ * @implements TitleProviderInterface<T>
+ */
 class ToStringTitleProvider implements TitleProviderInterface
 {
-    /**
-     * @psalm-suppress InvalidCast
-     */
     #[Override]
     public function provideTitle(string $entityClass, CrudOperation $crudOperation, ?object $entity): ?string
     {

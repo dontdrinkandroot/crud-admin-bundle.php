@@ -8,8 +8,15 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
 use Override;
 use Symfony\Contracts\Cache\CacheInterface;
 
+/**
+ * @template P of RouteInfoProviderInterface
+ * @extends RouteInfoResolver<P>
+ */
 class CachedRouteInfoResolver extends RouteInfoResolver
 {
+    /**
+     * @param iterable<P> $providers
+     */
     public function __construct(iterable $providers, private readonly CacheInterface $cache)
     {
         parent::__construct($providers);

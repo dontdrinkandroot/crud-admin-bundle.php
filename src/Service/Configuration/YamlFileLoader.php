@@ -24,6 +24,9 @@ class YamlFileLoader extends Loader
         parent::__construct($env);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     #[Override]
     public function load(mixed $resource, ?string $type = null): array
     {
@@ -46,6 +49,9 @@ class YamlFileLoader extends Loader
         return in_array($type, ['yaml', 'yml'], true);
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     private function loadFile(string $file): array
     {
         if (!stream_is_local($file)) {
@@ -71,6 +77,10 @@ class YamlFileLoader extends Loader
         return $this->validate($configuration);
     }
 
+    /**
+     * @param array<string, mixed> $configuration
+     * @return array<string, mixed>
+     */
     private function validate(array $configuration): array
     {
         return $configuration;

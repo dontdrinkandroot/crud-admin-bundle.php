@@ -5,11 +5,12 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
+/**
+ * @template T of object
+ */
 interface ItemPersisterProviderInterface extends ProviderInterface
 {
     /**
-     * @template T of object
-     *
      * @param class-string<T> $entityClass
      * @param T $entity
      */

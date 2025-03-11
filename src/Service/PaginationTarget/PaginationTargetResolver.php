@@ -3,15 +3,14 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 
 /**
- * @extends AbstractProviderService<PaginationTargetProvider>
+ * @extends AbstractProviderService<PaginationTargetProviderInterface>
  */
-class PaginationTargetResolver extends AbstractProviderService
+class PaginationTargetResolver extends AbstractProviderService implements PaginationTargetResolverInterface
 {
-    /**
-     * @param class-string $entityClass
-     */
+    #[Override]
     public function resolvePaginationTarget(string $entityClass): mixed
     {
         foreach ($this->providers as $provider) {

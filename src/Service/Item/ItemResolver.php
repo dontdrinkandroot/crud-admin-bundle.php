@@ -3,21 +3,24 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Item;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Exception\EntityNotFoundException;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 
 /**
- * @extends AbstractProviderService<ItemProviderInterface>
+ * @template P of ItemProviderInterface
+ * @extends AbstractProviderService<P>
  */
-class ItemResolver extends AbstractProviderService
+class ItemResolver extends AbstractProviderService implements ItemResolverInterface
 {
     /**
-     * @param class-string $entityClass
-     * @throws EntityNotFoundException
+     * @template T of object
+     * @return T|null
      */
+    #[Override]
     public function resolveItem(string $entityClass, CrudOperation $crudOperation, mixed $id): ?object
     {
         foreach ($this->providers as $provider) {
+            /** @var T|null $item */
             $item = $provider->provideItem($entityClass, $crudOperation, $id);
             if (null !== $item) {
                 return $item;

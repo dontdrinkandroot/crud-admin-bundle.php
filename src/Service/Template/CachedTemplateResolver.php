@@ -7,8 +7,15 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
 use Override;
 use Symfony\Contracts\Cache\CacheInterface;
 
+/**
+ * @template P of TemplateProviderInterface
+ * @extends TemplateResolver<P>
+ */
 class CachedTemplateResolver extends TemplateResolver
 {
+    /**
+     * @param iterable<P> $providers
+     */
     public function __construct(iterable $providers, private readonly CacheInterface $cache)
     {
         parent::__construct($providers);

@@ -7,7 +7,8 @@ use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
 use Override;
 
 /**
- * @extends AbstractProviderService<TemplateProviderInterface>
+ * @template P of TemplateProviderInterface
+ * @extends AbstractProviderService<P>
  */
 class TemplateResolver extends AbstractProviderService implements TemplateResolverInterface
 {

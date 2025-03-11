@@ -5,11 +5,12 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
+/**
+ * @template T of object
+ */
 interface FieldDefinitionsProviderInterface extends ProviderInterface
 {
     /**
-     * @template T of object
-     *
      * @param class-string<T> $entityClass
      *
      * @return array<array-key, FieldDefinition>|null

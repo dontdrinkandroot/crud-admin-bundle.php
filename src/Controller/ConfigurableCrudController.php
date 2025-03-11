@@ -18,9 +18,15 @@ use Symfony\Component\Form\FormTypeInterface;
 /**
  * @template T of object
  * @extends AbstractCrudController<T>
+ * @implements RouteInfoProviderInterface<T>
+ * @implements FormTypeProviderInterface<T>
+ * @implements TemplateProviderInterface<T>
+ * @implements DefaultSortProviderInterface<T>
+ * @implements FieldDefinitionsProviderInterface<T>
  */
 abstract class ConfigurableCrudController extends AbstractCrudController
-    implements RouteInfoProviderInterface, FormTypeProviderInterface, TemplateProviderInterface, DefaultSortProviderInterface, FieldDefinitionsProviderInterface
+    implements RouteInfoProviderInterface, FormTypeProviderInterface, TemplateProviderInterface, DefaultSortProviderInterface,
+               FieldDefinitionsProviderInterface
 {
     #[Override]
     public function provideRouteInfo(string $entityClass, CrudOperation $crudOperation): RouteInfo|false|null
@@ -83,7 +89,7 @@ abstract class ConfigurableCrudController extends AbstractCrudController
     }
 
     /**
-     * @return class-string<FormTypeInterface>|null
+     * @return class-string<FormTypeInterface<T>>|null
      */
     protected function getFormType(): ?string
     {
@@ -103,7 +109,8 @@ abstract class ConfigurableCrudController extends AbstractCrudController
     /**
      * @return array<array-key, FieldDefinition>|null
      */
-    protected function getFieldDefinitions(): ?array {
+    protected function getFieldDefinitions(): ?array
+    {
         return null;
     }
 }

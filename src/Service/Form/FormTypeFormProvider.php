@@ -3,17 +3,21 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeResolverInterface;
 use Override;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * @template T of object
+ * @implements FormProviderInterface<T>
+ */
 class FormTypeFormProvider implements FormProviderInterface
 {
     public function __construct(
         private readonly FormFactoryInterface $formFactory,
-        private readonly FormTypeResolver $formTypeResolver,
+        private readonly FormTypeResolverInterface $formTypeResolver,
     ) {
     }
 
@@ -25,6 +29,8 @@ class FormTypeFormProvider implements FormProviderInterface
             return null;
         }
 
+        /** @var FormInterface<T> $form */
+        /** @phpstan-ignore varTag.type */
         $form = $this->formFactory->create($formType, $entity);
 
         $form->add(

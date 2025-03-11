@@ -9,6 +9,10 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Exception\EntityNotFoundException;
 use Override;
 
+/**
+ * @template T of object
+ * @implements ItemProviderInterface<T>
+ */
 class DoctrineItemProvider implements ItemProviderInterface
 {
     public function __construct(private readonly ManagerRegistry $managerRegistry)

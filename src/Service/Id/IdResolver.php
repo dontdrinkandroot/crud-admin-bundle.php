@@ -4,19 +4,14 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Service\AbstractProviderService;
+use Override;
 
 /**
  * @extends AbstractProviderService<IdProviderInterface>
  */
-class IdResolver extends AbstractProviderService
+class IdResolver extends AbstractProviderService implements IdResolverInterface
 {
-    /**
-     * @template T of object
-     *
-     * @param class-string<T> $entityClass
-     * @param T $entity
-     *
-     */
+    #[Override]
     public function resolveId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
     {
         foreach ($this->providers as $provider) {

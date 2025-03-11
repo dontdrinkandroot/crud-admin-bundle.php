@@ -10,11 +10,15 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Query\QueryExtensionProviderInterfa
 use Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder\QueryBuilderExtensionProviderInterface;
 use Override;
 
-class DoctrinePaginationTargetProvider implements PaginationTargetProvider
+/**
+ * @template T of object
+ * @implements PaginationTargetProviderInterface<T>
+ */
+class DoctrinePaginationTargetProvider implements PaginationTargetProviderInterface
 {
     /**
      * @param iterable<QueryBuilderExtensionProviderInterface> $queryBuilderExtensionProviders
-     * @param iterable<QueryExtensionProviderInterface>        $queryExtensionProviders
+     * @param iterable<QueryExtensionProviderInterface> $queryExtensionProviders
      */
     public function __construct(
         private readonly ManagerRegistry $managerRegistry,
@@ -23,6 +27,9 @@ class DoctrinePaginationTargetProvider implements PaginationTargetProvider
     ) {
     }
 
+    /**
+     * @return Query<mixed, T>
+     */
     #[Override]
     public function providePaginationTarget(string $entityClass): ?Query
     {

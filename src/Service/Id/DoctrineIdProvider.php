@@ -10,6 +10,10 @@ use Override;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
+/**
+ * @template T of object
+ * @implements IdProviderInterface<T>
+ */
 class DoctrineIdProvider implements IdProviderInterface
 {
     public function __construct(

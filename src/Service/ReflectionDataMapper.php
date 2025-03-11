@@ -42,7 +42,7 @@ class ReflectionDataMapper implements DataMapperInterface
 
     /**
      * @param array<string,mixed> $customDefaults
-     * @return Closure(FormInterface): T
+     * @return Closure(FormInterface<T>): T
      */
     public function getInstantiator(array $customDefaults = []): Closure
     {
@@ -81,7 +81,7 @@ class ReflectionDataMapper implements DataMapperInterface
      * Similar to DataMapper, but if empty it sets the values to the default values of the constructor.
      *
      * @param Traversable<FormInterface> $forms
-     * @psalm-suppress MoreSpecificImplementedParamType
+     * @phpstan-ignore missingType.generics
      */
     #[Override]
     public function mapDataToForms(mixed $viewData, Traversable $forms): void
@@ -136,7 +136,7 @@ class ReflectionDataMapper implements DataMapperInterface
      * Similar to DataMapper, but it does not set the data if it has not changed for readonly properties (excluding default) of if it is not nullable and the current value is the default value.
      *
      * @param Traversable<FormInterface> $forms
-     * @psalm-suppress MoreSpecificImplementedParamType
+     * @phpstan-ignore missingType.generics
      */
     #[Override]
     public function mapFormsToData(Traversable $forms, mixed &$viewData): void
