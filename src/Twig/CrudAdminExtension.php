@@ -11,6 +11,7 @@ use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Title\TitleResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain\TranslationDomainResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolverInterface;
+use Dontdrinkandroot\CrudAdminBundle\Util\DoctrineProxyUtils;
 use Override;
 use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Twig\Extension\AbstractExtension;
@@ -70,7 +71,6 @@ class CrudAdminExtension extends AbstractExtension
      * @template T of object
      *
      * @param class-string<T>|T $entityOrClass
-     *
      */
     public function getPath(string|object $entityOrClass, string $crudOperation): ?string
     {
@@ -83,7 +83,6 @@ class CrudAdminExtension extends AbstractExtension
      * @template T of object
      *
      * @param class-string<T>|T $entityOrClass
-     *
      */
     public function getTitle(string|object $entityOrClass, string $crudOperation): string
     {
@@ -118,7 +117,7 @@ class CrudAdminExtension extends AbstractExtension
      */
     public function getFieldDefinitions(string|object $entityOrClass, string $crudOperation): array
     {
-        $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
+        $entityClass = is_object($entityOrClass) ? DoctrineProxyUtils::getClass($entityOrClass) : $entityOrClass;
         return Asserted::notNull(
             $this->fieldDefinitionsResolver->resolveFieldDefinitions($entityClass, CrudOperation::from($crudOperation)),
             sprintf("No fieldDefinitions provided for %s::%s", $crudOperation, $entityClass)
@@ -128,17 +127,5 @@ class CrudAdminExtension extends AbstractExtension
     public function getLabel(FieldDefinition|string $value): string
     {
         return $this->labelService->getLabel($value);
-    }
-
-    /**
-     * @template T of object
-     *
-     * @param T $entity
-     *
-     * @return class-string<T>
-     */
-    private function getClass(object $entity): string
-    {
-        return $entity::class;
     }
 }
