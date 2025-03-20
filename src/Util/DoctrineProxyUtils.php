@@ -15,12 +15,10 @@ class DoctrineProxyUtils
     {
         $pos = strrpos($className, '\\' . Proxy::MARKER . '\\');
 
-        if ($pos === false) {
-            /** @var class-string<T> */
-            return $className;
-        }
-
-        return substr($className, $pos + Proxy::MARKER_LENGTH + 2);
+        /** @var class-string<T> */
+        return (false === $pos)
+            ? $className
+            : substr($className, $pos + Proxy::MARKER_LENGTH + 2);
     }
 
     /**
