@@ -74,7 +74,7 @@ class CrudAdminExtension extends AbstractExtension
      */
     public function getPath(string|object $entityOrClass, string $crudOperation): ?string
     {
-        $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
+        $entityClass = is_object($entityOrClass) ? DoctrineProxyUtils::getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
         return $this->urlResolver->resolveUrl($entityClass, CrudOperation::from($crudOperation), $entity);
     }
@@ -86,7 +86,7 @@ class CrudAdminExtension extends AbstractExtension
      */
     public function getTitle(string|object $entityOrClass, string $crudOperation): string
     {
-        $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
+        $entityClass = is_object($entityOrClass) ? DoctrineProxyUtils::getClass($entityOrClass) : $entityOrClass;
         $entity = is_object($entityOrClass) ? $entityOrClass : null;
         return Asserted::notNull(
             $this->titleResolver->resolveTitle($entityClass, CrudOperation::from($crudOperation), $entity),
@@ -101,7 +101,7 @@ class CrudAdminExtension extends AbstractExtension
      */
     public function getTranslationDomain(string|object $entityOrClass): string
     {
-        $entityClass = is_object($entityOrClass) ? $this->getClass($entityOrClass) : $entityOrClass;
+        $entityClass = is_object($entityOrClass) ? DoctrineProxyUtils::getClass($entityOrClass) : $entityOrClass;
         return Asserted::notNull(
             $this->translationDomainResolver->resolveTranslationDomain($entityClass),
             sprintf("No translationDomain provided for %s", $entityClass)
