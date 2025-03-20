@@ -25,15 +25,14 @@ class DoctrineIdProvider implements IdProviderInterface
     #[Override]
     public function provideId(string $entityClass, CrudOperation $crudOperation, object $entity): mixed
     {
-        $realEntityClass = ClassUtils::getClass($entity);
         $entityManager = Asserted::instanceOfOrNull(
-            $this->managerRegistry->getManagerForClass($realEntityClass),
+            $this->managerRegistry->getManagerForClass($entity::class),
             EntityManagerInterface::class
         );
         if (null === $entityManager) {
             return null;
         }
-        $classMetadata = $entityManager->getClassMetadata($realEntityClass);
+        $classMetadata = $entityManager->getClassMetadata($entity::class);
 
         $identifiers = $classMetadata->identifier;
         if (1 === count($identifiers)) {
@@ -42,4 +41,5 @@ class DoctrineIdProvider implements IdProviderInterface
 
         return null;
     }
+
 }

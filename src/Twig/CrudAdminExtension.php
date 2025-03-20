@@ -2,7 +2,6 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Twig;
 
-use Doctrine\Common\Util\ClassUtils;
 use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
@@ -140,11 +139,6 @@ class CrudAdminExtension extends AbstractExtension
      */
     private function getClass(object $entity): string
     {
-        $entityClass = $entity::class;
-        if (class_exists(ClassUtils::class)) {
-            return ClassUtils::getRealClass($entityClass);
-        }
-
-        return $entityClass;
+        return $entity::class;
     }
 }
