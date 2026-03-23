@@ -1,0 +1,112 @@
+#!/bin/bash
+
+CRAP_THRESHOLD=${CRAP_THRESHOLD:-30}
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+COVERAGE_DIR="$PROJECT_DIR/coverage"
+CRAP_FILE="$COVERAGE_DIR/crap4j.xml"
+
+if [ -x "$PROJECT_DIR/vendor/bin/paratest" ]; then
+    TEST_COMMAND="$PROJECT_DIR/vendor/bin/paratest"
+elif [ -x "$PROJECT_DIR/bin/phpunit" ]; then
+    TEST_COMMAND="$PROJECT_DIR/bin/phpunit"
+else
+    TEST_COMMAND="$PROJECT_DIR/vendor/bin/phpunit"
+fi
+
+set +e
+
+phpunit_failed=0
+phpstan_failed=0
+crap_failed=0
+
+mkdir -p "$COVERAGE_DIR"
+
+echo "=== Running PHPUnit with CRAP analysis ==="
+cd "$PROJECT_DIR" || exit 1
+XDEBUG_MODE=coverage "$TEST_COMMAND" --coverage-crap4j="$CRAP_FILE"
+phpunit_exit=$?
+if [ $phpunit_exit -ne 0 ]; then
+    phpunit_failed=1
+fi
+
+echo ""
+echo "=== Running PHPStan ==="
+phpstan analyse
+phpstan_exit=$?
+if [ $phpstan_exit -ne 0 ]; then
+    phpstan_failed=1
+fi
+
+echo ""
+echo "=== Evaluating CRAP Index (threshold: $CRAP_THRESHOLD) ==="
+if [ -f "$CRAP_FILE" ]; then
+    violations=$(php -r '
+        $threshold = (int)(getenv("CRAP_THRESHOLD") ?: 30);
+        $file = $argv[1];
+
+        $xml = simplexml_load_file($file);
+        if ($xml === false) {
+            fwrite(STDERR, "ERROR: Unable to parse CRAP report\n");
+            exit(2);
+        }
+
+        $violations = [];
+        foreach ($xml->methods->method as $method) {
+            $crap = (float)$method->crap;
+            if ($crap >= $threshold) {
+                $violations[] = [
+                    "class" => (string)$method->className,
+                    "method" => (string)$method->methodName,
+                    "crap" => $crap,
+                    "complexity" => (int)$method->complexity,
+                    "coverage" => (float)$method->coverage,
+                ];
+            }
+        }
+
+        usort($violations, fn($a, $b) => $b["crap"] <=> $a["crap"]);
+
+        if (empty($violations)) {
+            echo "✓ No CRAP violations found\n";
+            exit(0);
+        }
+
+        echo sprintf("%-60s %-30s %8s %12s %10s\n", "Class", "Method", "CRAP", "Complexity", "Coverage");
+        echo str_repeat("-", 125) . "\n";
+
+        foreach ($violations as $v) {
+            echo sprintf(
+                "%-60s %-30s %8.2f %12d %9.2f%%\n",
+                $v["class"],
+                $v["method"],
+                $v["crap"],
+                $v["complexity"],
+                $v["coverage"]
+            );
+        }
+
+        echo "\nFound " . count($violations) . " CRAP violation(s)\n";
+        exit(1);
+    ' "$CRAP_FILE")
+    crap_output_exit=$?
+    echo "$violations"
+    if [ $crap_output_exit -ne 0 ]; then
+        crap_failed=1
+    fi
+else
+    echo "ERROR: CRAP report not found at $CRAP_FILE"
+    echo "Make sure PHPUnit ran with coverage enabled."
+    crap_failed=1
+fi
+
+echo ""
+echo "=== Summary ==="
+[ $phpunit_failed -eq 0 ] && echo "✓ PHPUnit: PASSED" || echo "✗ PHPUnit: FAILED"
+[ $phpstan_failed -eq 0 ] && echo "✓ PHPStan: PASSED" || echo "✗ PHPStan: FAILED"
+[ $crap_failed -eq 0 ] && echo "✓ CRAP Index: PASSED" || echo "✗ CRAP Index: FAILED"
+
+if [ $phpunit_failed -ne 0 ] || [ $phpstan_failed -ne 0 ] || [ $crap_failed -ne 0 ]; then
+    exit 1
+fi
+
+exit 0

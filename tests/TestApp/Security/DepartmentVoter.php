@@ -7,6 +7,7 @@ use Dontdrinkandroot\CrudAdminBundle\Tests\TestApp\Entity\Department;
 use Override;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
@@ -26,7 +27,7 @@ class DepartmentVoter extends Voter
     }
 
     #[Override]
-    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         if ($this->authorizationChecker->isGranted('ROLE_ADMIN')) {
             return true;
