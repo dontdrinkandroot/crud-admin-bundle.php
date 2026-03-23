@@ -8,7 +8,6 @@ use Override;
 
 /**
  * @template T of object
- * @implements FieldDefinitionsProviderInterface<T>
  */
 class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
@@ -25,9 +24,7 @@ class StaticFieldDefinitionsProvider implements FieldDefinitionsProviderInterfac
     #[Override]
     public function provideFieldDefinitions(string $entityClass): ?array
     {
-        if (
-            $entityClass !== $this->entityClass
-        ) {
+        if ($entityClass !== $this->entityClass) {
             return null;
         }
 

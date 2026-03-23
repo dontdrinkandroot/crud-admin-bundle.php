@@ -22,7 +22,6 @@ use Symfony\Component\Form\FormTypeInterface;
  * @implements FormTypeProviderInterface<T>
  * @implements TemplateProviderInterface<T>
  * @implements DefaultSortProviderInterface<T>
- * @implements FieldDefinitionsProviderInterface<T>
  */
 abstract class ConfigurableCrudController extends AbstractCrudController
     implements RouteInfoProviderInterface, FormTypeProviderInterface, TemplateProviderInterface, DefaultSortProviderInterface,

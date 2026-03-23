@@ -8,8 +8,7 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 interface FieldDefinitionsResolverInterface
 {
     /**
-     * @template T of object
-     * @param class-string<T> $entityClass
+     * @param class-string $entityClass
      * @return array<array-key, FieldDefinition>|null
      */
     public function resolveFieldDefinitions(string $entityClass, CrudOperation $crudOperation): ?array;

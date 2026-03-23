@@ -10,7 +10,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 class CachedFieldDefinitionsResolver extends FieldDefinitionsResolver
 {
     /**
-     * @param iterable<FieldDefinitionsProviderInterface<object>> $providers
+     * @param iterable<FieldDefinitionsProviderInterface> $providers
      */
     public function __construct(iterable $providers, private readonly CacheInterface $cache)
     {
