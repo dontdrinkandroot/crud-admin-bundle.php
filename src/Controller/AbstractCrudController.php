@@ -97,11 +97,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             return $e->response;
         }
 
-        try {
-            $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
-        } catch (EntityNotFoundException $e) {
-            throw new NotFoundHttpException();
-        }
+        $entity = $this->resolveItemOrThrow($entityClass, $crudOperation, $id);
 
         $event = new PostSetDataEvent($entityClass, $crudOperation, $request, $entity);
         try {
@@ -152,10 +148,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             return $e->response;
         }
 
-        $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
-        if (null === $entity) {
-            throw new NotFoundHttpException();
-        }
+        $entity = $this->resolveItemOrThrow($entityClass, $crudOperation, $id);
 
         return $this->createOrUpdateAction($request, $crudOperation, $entity);
     }
@@ -220,10 +213,7 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
             return $e->response;
         }
 
-        $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
-        if (null === $entity) {
-            throw new NotFoundHttpException();
-        }
+        $entity = $this->resolveItemOrThrow($entityClass, $crudOperation, $id);
 
         $event = new PostSetDataEvent($entityClass, $crudOperation, $request, $entity);
         try {
@@ -412,6 +402,26 @@ abstract class AbstractCrudController implements CrudControllerInterface, Servic
     protected function getFormResolver(): FormResolverInterface
     {
         return $this->getContainer()->get(FormResolverInterface::class);
+    }
+
+    /**
+     * @param class-string<T> $entityClass
+     * @return T
+     */
+    private function resolveItemOrThrow(string $entityClass, CrudOperation $crudOperation, mixed $id): object
+    {
+        try {
+            $entity = $this->getItemResolver()->resolveItem($entityClass, $crudOperation, $id);
+        } catch (EntityNotFoundException $e) {
+            throw new NotFoundHttpException();
+        }
+
+        if (null === $entity) {
+            throw new NotFoundHttpException();
+        }
+
+        /** @var T $entity */
+        return $entity;
     }
 
     protected function getContainer(): ContainerInterface
