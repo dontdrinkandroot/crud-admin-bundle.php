@@ -48,6 +48,8 @@ class EntityConfiguration implements ConfigurationInterface
                         ->scalarNode('property_path')->isRequired()->end()
                         ->scalarNode('display_type')->isRequired()->end()
                         ->arrayNode('crud_operations')
+                            ->isRequired()
+                            ->cannotBeEmpty()
                             ->scalarPrototype()
                                 ->validate()
                                     ->ifNotInArray(['list', 'create', 'read', 'update', 'delete'])

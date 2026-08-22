@@ -106,7 +106,7 @@ Available options per field definition:
 |--------------------|-----------------------------------------------------------------------------|
 | `property_path`    | Property path of the field (required).                                      |
 | `display_type`     | Display type of the field, e.g. `string`, `text`, `date`, `datetime` (required). |
-| `crud_operations`  | CRUD operations this field applies to: `list`, `create`, `read`, `update`, `delete`. |
+| `crud_operations`  | CRUD operations this field applies to: `list`, `create`, `read`, `update`, `delete` (required). |
 | `form_type`        | Form type class used for this field.                                       |
 | `sortable`         | Whether the field can be used for sorting (default: `false`).               |
 | `filterable`       | Whether the field can be filtered (default: `false`).                       |
