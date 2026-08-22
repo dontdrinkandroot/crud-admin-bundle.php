@@ -31,7 +31,7 @@ fi
 
 echo ""
 echo "=== Running PHPStan ==="
-phpstan analyse
+php -d memory_limit=2G "$PROJECT_DIR/vendor/bin/phpstan" analyse
 phpstan_exit=$?
 if [ $phpstan_exit -ne 0 ]; then
     phpstan_failed=1
@@ -41,8 +41,8 @@ echo ""
 echo "=== Evaluating CRAP Index (threshold: $CRAP_THRESHOLD) ==="
 if [ -f "$CRAP_FILE" ]; then
     violations=$(php -r '
-        $threshold = (int)(getenv("CRAP_THRESHOLD") ?: 30);
-        $file = $argv[1];
+        $threshold = (int)$argv[1];
+        $file = $argv[2];
 
         $xml = simplexml_load_file($file);
         if ($xml === false) {
@@ -87,7 +87,7 @@ if [ -f "$CRAP_FILE" ]; then
 
         echo "\nFound " . count($violations) . " CRAP violation(s)\n";
         exit(1);
-    ' "$CRAP_FILE")
+    ' "$CRAP_THRESHOLD" "$CRAP_FILE")
     crap_output_exit=$?
     echo "$violations"
     if [ $crap_output_exit -ne 0 ]; then

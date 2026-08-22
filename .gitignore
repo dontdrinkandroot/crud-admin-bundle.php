@@ -4,3 +4,4 @@
 /.phpunit.cache
 /symfony.lock
 /coverage/
+.phpunit.result.cache

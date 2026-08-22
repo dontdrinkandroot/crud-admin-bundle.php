@@ -30,7 +30,6 @@ class FormTypeFormProvider implements FormProviderInterface
         }
 
         /** @var FormInterface<T> $form */
-        /** @phpstan-ignore varTag.type */
         $form = $this->formFactory->create($formType, $entity);
 
         $form->add(
