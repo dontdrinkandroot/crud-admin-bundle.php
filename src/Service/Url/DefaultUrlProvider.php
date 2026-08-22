@@ -3,7 +3,7 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
 use Dontdrinkandroot\Common\CrudOperation;
-use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
 use Override;
 use Symfony\Component\Routing\RouterInterface;
@@ -17,7 +17,7 @@ class DefaultUrlProvider implements UrlProviderInterface
     public function __construct(
         private readonly RouteInfoResolverInterface $routeInfoResolver,
         private readonly RouterInterface $router,
-        private readonly IdResolver $idResolver,
+        private readonly IdResolverInterface $idResolver,
     ) {
     }
 

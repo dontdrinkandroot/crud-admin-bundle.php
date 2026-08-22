@@ -7,10 +7,10 @@ use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsRes
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FieldDefinitionsFormProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\Form\FormTypeFormProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\FormType\FormTypeResolver;
-use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\Id\IdResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\LabelService;
 use Dontdrinkandroot\CrudAdminBundle\Service\Pagination\DefaultPaginationProvider;
-use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\DefaultRouteInfoProvider;
 use Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo\RouteInfoResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Template\DefaultTemplateProvider;
@@ -42,7 +42,7 @@ return function (ContainerConfigurator $configurator): void {
     $services->set(DefaultPaginationProvider::class)
         ->args([
             service('knp_paginator'),
-            service(PaginationTargetResolver::class),
+            service(PaginationTargetResolverInterface::class),
             service(FieldDefinitionsResolverInterface::class),
             service('request_stack'),
             tagged_iterator(DdrCrudAdminExtension::TAG_DEFAULT_SORT_PROVIDER),
@@ -59,7 +59,7 @@ return function (ContainerConfigurator $configurator): void {
         ->args([
             service(RouteInfoResolverInterface::class),
             service('router'),
-            service(IdResolver::class)
+            service(IdResolverInterface::class)
         ])
         ->tag(DdrCrudAdminExtension::TAG_URL_PROVIDER, ['priority' => DdrCrudAdminExtension::PRIORITY_LOW]);
 

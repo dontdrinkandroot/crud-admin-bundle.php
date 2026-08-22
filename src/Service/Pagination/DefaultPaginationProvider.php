@@ -9,7 +9,7 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\DefaultSort;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition\FieldDefinitionsResolverInterface;
-use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolver;
+use Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget\PaginationTargetResolverInterface;
 use Dontdrinkandroot\CrudAdminBundle\Service\Sort\DefaultSortProviderInterface;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -28,7 +28,7 @@ class DefaultPaginationProvider implements PaginationProviderInterface
      */
     public function __construct(
         private readonly PaginatorInterface $paginator,
-        private readonly PaginationTargetResolver $paginationTargetResolver,
+        private readonly PaginationTargetResolverInterface $paginationTargetResolver,
         private readonly FieldDefinitionsResolverInterface $fieldDefinitionsResolver,
         private readonly RequestStack $requestStack,
         private readonly iterable $defaultSortProviders
