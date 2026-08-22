@@ -1,0 +1,2 @@
+App\Entity\Foo:
+    form_type: 'App\Form\FooType'

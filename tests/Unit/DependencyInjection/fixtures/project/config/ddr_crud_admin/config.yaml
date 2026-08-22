@@ -1,0 +1,17 @@
+App\Entity\Foo:
+    form_type: 'App\Form\FooType'
+    translation_domain: 'CustomTranslationDomain'
+    route:
+        name_prefix: 'app.foo'
+        path_prefix: '/foos'
+    default_sort:
+        field: 'name'
+        order: 'desc'
+    field_definitions:
+        -   property_path: 'id'
+            display_type: 'integer'
+            crud_operations: [ 'list', 'read' ]
+            sortable: true
+            filterable: false
+    templates:
+        list: 'list.html.twig'
