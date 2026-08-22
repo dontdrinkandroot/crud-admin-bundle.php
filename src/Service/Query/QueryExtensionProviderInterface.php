@@ -3,11 +3,12 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service\Query;
 
 use Doctrine\ORM\Query;
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
 /**
  * Extends the Doctrine query of a pagination target.
  */
-interface QueryExtensionProviderInterface
+interface QueryExtensionProviderInterface extends ProviderInterface
 {
     /**
      * @template T of object

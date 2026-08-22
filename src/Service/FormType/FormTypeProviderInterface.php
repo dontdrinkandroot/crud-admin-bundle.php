@@ -2,12 +2,13 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\FormType;
 
+use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 use Symfony\Component\Form\FormTypeInterface;
 
 /**
  * @template T of object
  */
-interface FormTypeProviderInterface
+interface FormTypeProviderInterface extends ProviderInterface
 {
     /**
      * @param class-string<T> $entityClass
