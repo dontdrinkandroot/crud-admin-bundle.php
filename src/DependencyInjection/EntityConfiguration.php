@@ -60,6 +60,7 @@ class EntityConfiguration implements ConfigurationInterface
                         ->scalarNode('form_type')->end()
                         ->booleanNode('sortable')->defaultFalse()->end()
                         ->booleanNode('filterable')->defaultFalse()->end()
+                        ->scalarNode('filter_path')->end()
                     ->end()
                 ->end()
             ->end()

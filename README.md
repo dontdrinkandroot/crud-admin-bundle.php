@@ -110,6 +110,7 @@ Available options per field definition:
 | `form_type`        | Form type class used for this field.                                       |
 | `sortable`         | Whether the field can be used for sorting (default: `false`).               |
 | `filterable`       | Whether the field can be filtered (default: `false`).                       |
+| `filter_path`      | Property path used for filtering when it differs from `property_path`.       |
 
 The configuration is processed by `CrudConfigCompilerPass`, which registers static providers at a high priority. Entity configuration takes precedence over the default providers. Services implementing provider interfaces are registered with priority `0` by default, which is higher than `PRIORITY_HIGH`, so they take precedence over the YAML configuration (see [Customizing Providers](#customizing-providers)).
 
