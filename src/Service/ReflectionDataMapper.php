@@ -67,8 +67,9 @@ class ReflectionDataMapper implements DataMapperInterface
                 }
 
                 if (null === $value && !$parameter->allowsNull()) {
-                    $type = self::getType($parameter);
-                    $value = self::resolveDefaultForType($type);
+                    if (null !== ($type = self::getType($parameter))) {
+                        $value = self::resolveDefaultForType($type);
+                    }
                 }
                 $args[] = $value;
             }
@@ -163,9 +164,8 @@ class ReflectionDataMapper implements DataMapperInterface
 
                 if (
                     $this->reflectedClass->hasProperty($formName)
+                    && null !== ($type = self::getType($property = $this->reflectedClass->getProperty($formName)))
                 ) {
-                    $property = $this->reflectedClass->getProperty($formName);
-                    $type = self::getType($property);
                     if (
                         $property->isReadOnly()
                     ) {
@@ -210,18 +210,9 @@ class ReflectionDataMapper implements DataMapperInterface
         };
     }
 
-    private static function getType(ReflectionParameter|ReflectionProperty $parameter): ReflectionNamedType
+    private static function getType(ReflectionParameter|ReflectionProperty $parameter): ?ReflectionNamedType
     {
         $type = $parameter->getType();
-        if (!$type instanceof ReflectionNamedType) {
-            throw new RuntimeException(
-                sprintf(
-                    'Only reflection named types are supported, got %s',
-                    null !== $type ? $type::class : 'null'
-                )
-            );
-        }
-
-        return $type;
+        return $type instanceof ReflectionNamedType ? $type : null;
     }
 }
