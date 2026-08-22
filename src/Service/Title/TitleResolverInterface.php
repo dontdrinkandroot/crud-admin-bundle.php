@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Title;
 
 use Dontdrinkandroot\Common\CrudOperation;
 
+/**
+ * Resolves the title of an entity class for a CRUD operation.
+ */
 interface TitleResolverInterface
 {
     /**

@@ -8,6 +8,9 @@ use Dontdrinkandroot\CrudAdminBundle\Event\PreSetDataEvent;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
+/**
+ * Enforces authorization on CRUD operations.
+ */
 class AuthorizationListener
 {
     public function __construct(private readonly AuthorizationCheckerInterface $authorizationChecker)

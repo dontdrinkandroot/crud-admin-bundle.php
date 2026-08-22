@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldRenderer;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 
+/**
+ * Renders null values as an explicit null marker.
+ */
 class ExplicitNullRendererProvider implements FieldRendererProviderInterface
 {
     #[Override]

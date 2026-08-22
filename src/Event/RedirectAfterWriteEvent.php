@@ -6,6 +6,9 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Dispatched after a successful write operation to determine the redirect target.
+ */
 class RedirectAfterWriteEvent
 {
     /**

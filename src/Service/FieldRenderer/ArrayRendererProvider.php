@@ -7,6 +7,9 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 
+/**
+ * Renders array values as a comma-separated string.
+ */
 class ArrayRendererProvider implements FieldRendererProviderInterface
 {
     #[Override]

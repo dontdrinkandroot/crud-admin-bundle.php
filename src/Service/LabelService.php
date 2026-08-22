@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service;
 
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 
+/**
+ * Provides labels for field definitions and property paths.
+ */
 class LabelService
 {
     public function __construct(private readonly bool $humanize = false)
@@ -21,6 +24,9 @@ class LabelService
         return $resolvedValue;
     }
 
+    /**
+     * Converts a property path to a human readable label, e.g. "firstName" to "First name".
+     */
     public function humanizePropertyPath(string $text): string
     {
         return ucfirst(

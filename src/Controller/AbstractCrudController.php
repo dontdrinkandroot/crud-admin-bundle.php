@@ -34,6 +34,8 @@ use Symfony\Contracts\Service\ServiceSubscriberInterface;
 use Twig\Environment;
 
 /**
+ * Base controller implementing the CRUD actions using resolvers.
+ *
  * @template T of object
  *
  * @implements CrudControllerInterface<T>

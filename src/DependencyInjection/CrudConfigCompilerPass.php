@@ -18,6 +18,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * Registers controllers and static providers for entities configured in YAML files.
+ */
 class CrudConfigCompilerPass implements CompilerPassInterface
 {
     #[Override]

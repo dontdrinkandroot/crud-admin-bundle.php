@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Url;
 
 use Dontdrinkandroot\Common\CrudOperation;
 
+/**
+ * Resolves the URL of an entity class for a CRUD operation.
+ */
 interface UrlResolverInterface
 {
     /**

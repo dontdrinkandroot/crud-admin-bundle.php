@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Event;
 use Dontdrinkandroot\Common\CrudOperation;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Base event dispatched before and after an entity is persisted.
+ */
 abstract class AbstractPersistEvent
 {
     public function __construct(

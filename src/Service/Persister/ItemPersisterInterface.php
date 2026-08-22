@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Persister;
 
 use Dontdrinkandroot\Common\CrudOperation;
 
+/**
+ * Persists an entity for a CRUD operation.
+ */
 interface ItemPersisterInterface
 {
     /**

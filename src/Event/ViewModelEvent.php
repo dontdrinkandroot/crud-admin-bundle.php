@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Event;
 use Dontdrinkandroot\Common\CrudOperation;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * Dispatched before rendering a view to allow modification of the template context.
+ */
 class ViewModelEvent
 {
     /**

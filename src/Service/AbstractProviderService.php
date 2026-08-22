@@ -3,6 +3,8 @@
 namespace Dontdrinkandroot\CrudAdminBundle\Service;
 
 /**
+ * Base service that iterates over providers.
+ *
  * @template P
  */
 class AbstractProviderService

@@ -8,6 +8,9 @@ use Override;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+/**
+ * CRUD Admin Bundle.
+ */
 class DdrCrudAdminBundle extends Bundle
 {
     #[Override]

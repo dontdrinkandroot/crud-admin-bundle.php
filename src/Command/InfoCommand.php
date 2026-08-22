@@ -16,6 +16,9 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Prints the resolved routes, templates, translation domains and field definitions of registered entities.
+ */
 #[AsCommand('ddr:crud-admin:info')]
 class InfoCommand extends Command
 {

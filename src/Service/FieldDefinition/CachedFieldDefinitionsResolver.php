@@ -7,6 +7,9 @@ use Dontdrinkandroot\CrudAdminBundle\Service\ProviderCacheKey;
 use Override;
 use Symfony\Contracts\Cache\CacheInterface;
 
+/**
+ * Caches the resolved field definitions.
+ */
 class CachedFieldDefinitionsResolver extends FieldDefinitionsResolver
 {
     /**

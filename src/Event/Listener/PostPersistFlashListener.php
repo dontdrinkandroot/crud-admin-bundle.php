@@ -7,6 +7,9 @@ use Dontdrinkandroot\CrudAdminBundle\Event\PostPersistEvent;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Translation\TranslatableMessage;
 
+/**
+ * Adds a success flash message after an entity has been persisted.
+ */
 class PostPersistFlashListener
 {
     public function onPostPersist(PostPersistEvent $event): void

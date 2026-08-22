@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\QueryBuilder;
 use Doctrine\ORM\QueryBuilder;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
+/**
+ * Extends the Doctrine query builder of a pagination target.
+ */
 interface QueryBuilderExtensionProviderInterface extends ProviderInterface
 {
     /**

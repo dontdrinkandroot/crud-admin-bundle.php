@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Pagination;
 
 use Knp\Component\Pager\Pagination\PaginationInterface;
 
+/**
+ * Resolves the pagination of an entity class.
+ */
 interface PaginationResolverInterface
 {
     /**

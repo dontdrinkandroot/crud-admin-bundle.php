@@ -26,6 +26,9 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
+/**
+ * Loads the bundle configuration and registers services.
+ */
 class DdrCrudAdminExtension extends Extension
 {
     final public const string TAG_CONTROLLER = 'ddr_crud_admin.controller';

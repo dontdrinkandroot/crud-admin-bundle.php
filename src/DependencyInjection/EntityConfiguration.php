@@ -6,6 +6,9 @@ use Override;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Defines the configuration of a single entity in a ddr_crud_admin YAML file.
+ */
 class EntityConfiguration implements ConfigurationInterface
 {
     #[Override]

@@ -6,6 +6,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
+ * Contract for CRUD controllers.
+ *
  * @template T of object
  */
 interface CrudControllerInterface

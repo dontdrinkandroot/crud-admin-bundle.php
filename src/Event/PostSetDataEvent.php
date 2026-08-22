@@ -6,6 +6,9 @@ use Dontdrinkandroot\Common\CrudOperation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\Event;
 
+/**
+ * Dispatched after the data of a CRUD operation has been set.
+ */
 class PostSetDataEvent extends Event
 {
     public function __construct(

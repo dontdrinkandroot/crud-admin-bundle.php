@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FormType;
 
 use Symfony\Component\Form\FormTypeInterface;
 
+/**
+ * Resolves the form type of an entity class.
+ */
 interface FormTypeResolverInterface
 {
     /**

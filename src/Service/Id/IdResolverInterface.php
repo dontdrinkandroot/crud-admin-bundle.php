@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Id;
 
 use Dontdrinkandroot\Common\CrudOperation;
 
+/**
+ * Resolves the id of an entity.
+ */
 interface IdResolverInterface
 {
     /**

@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Dontdrinkandroot\CrudAdminBundle\Service\ProviderInterface;
 
+/**
+ * Provides field definitions for an entity class.
+ */
 interface FieldDefinitionsProviderInterface extends ProviderInterface
 {
     /**

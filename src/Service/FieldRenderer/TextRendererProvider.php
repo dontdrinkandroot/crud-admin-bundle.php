@@ -6,6 +6,9 @@ use Doctrine\DBAL\Types\Types;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 
+/**
+ * Renders multi-line text values with line breaks.
+ */
 class TextRendererProvider implements FieldRendererProviderInterface
 {
     #[Override]

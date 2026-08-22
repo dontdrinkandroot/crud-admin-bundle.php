@@ -7,6 +7,9 @@ use Override;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
+/**
+ * Defines the bundle configuration under the "ddr_crud_admin" root key.
+ */
 class Configuration implements ConfigurationInterface
 {
     #[Override]

@@ -11,6 +11,9 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 use RuntimeException;
 
+/**
+ * Provides field definitions derived from the Doctrine mapping of an entity.
+ */
 class DoctrineFieldDefinitionsProvider implements FieldDefinitionsProviderInterface
 {
     public function __construct(

@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Query;
 
 use Doctrine\ORM\Query;
 
+/**
+ * Extends the Doctrine query of a pagination target.
+ */
 interface QueryExtensionProviderInterface
 {
     /**

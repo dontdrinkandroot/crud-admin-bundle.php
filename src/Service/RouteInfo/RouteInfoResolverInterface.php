@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\RouteInfo;
 use Dontdrinkandroot\Common\CrudOperation;
 use Dontdrinkandroot\CrudAdminBundle\Model\RouteInfo;
 
+/**
+ * Resolves the route info of an entity class for a CRUD operation.
+ */
 interface RouteInfoResolverInterface
 {
     /**

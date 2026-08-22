@@ -2,6 +2,9 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\PaginationTarget;
 
+/**
+ * Resolves the pagination target of an entity class.
+ */
 interface PaginationTargetResolverInterface
 {
     /**

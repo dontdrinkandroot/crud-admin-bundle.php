@@ -15,6 +15,9 @@ use function is_string;
 
 use const PATHINFO_EXTENSION;
 
+/**
+ * Loads YAML configuration files.
+ */
 class YamlFileLoader extends Loader
 {
     private ?YamlParser $yamlParser = null;

@@ -8,6 +8,9 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 
+/**
+ * Renders date values in the format "Y-m-d".
+ */
 class DateRendererProvider implements FieldRendererProviderInterface
 {
     #[Override]

@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Util;
 
 use Doctrine\Persistence\Proxy;
 
+/**
+ * Utility functions for Doctrine proxy classes.
+ */
 class DoctrineProxyUtils
 {
     /**

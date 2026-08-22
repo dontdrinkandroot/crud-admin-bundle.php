@@ -16,6 +16,8 @@ use Override;
 use Symfony\Component\Form\FormTypeInterface;
 
 /**
+ * CRUD controller providing its configuration via overridable methods.
+ *
  * @template T of object
  * @extends AbstractCrudController<T>
  * @implements RouteInfoProviderInterface<T>

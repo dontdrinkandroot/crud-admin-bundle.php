@@ -6,6 +6,8 @@ use Dontdrinkandroot\CrudAdminBundle\Controller\CrudControllerInterface;
 use RuntimeException;
 
 /**
+ * Registry of all registered CRUD controllers.
+ *
  * @template T of object
  */
 class CrudControllerRegistry

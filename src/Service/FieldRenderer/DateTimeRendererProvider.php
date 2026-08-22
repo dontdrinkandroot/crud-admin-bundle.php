@@ -8,6 +8,9 @@ use Dontdrinkandroot\Common\Asserted;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 
+/**
+ * Renders date time values in the format "Y-m-d H:i:s".
+ */
 class DateTimeRendererProvider implements FieldRendererProviderInterface
 {
     #[Override]

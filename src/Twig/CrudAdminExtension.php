@@ -18,6 +18,9 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;
 
+/**
+ * Provides Twig filters and functions for the CRUD admin templates.
+ */
 class CrudAdminExtension extends AbstractExtension
 {
     public function __construct(

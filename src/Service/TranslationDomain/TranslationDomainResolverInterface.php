@@ -2,6 +2,9 @@
 
 namespace Dontdrinkandroot\CrudAdminBundle\Service\TranslationDomain;
 
+/**
+ * Resolves the translation domain of an entity class.
+ */
 interface TranslationDomainResolverInterface
 {
     /**

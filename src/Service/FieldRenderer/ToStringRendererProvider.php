@@ -7,6 +7,9 @@ use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 use UnitEnum;
 
+/**
+ * Renders values as strings, handling enums and objects with a string representation.
+ */
 class ToStringRendererProvider implements FieldRendererProviderInterface
 {
     #[Override]

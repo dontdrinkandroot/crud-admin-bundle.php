@@ -6,6 +6,9 @@ use Doctrine\DBAL\Types\Types;
 use Dontdrinkandroot\CrudAdminBundle\Model\FieldDefinition;
 use Override;
 
+/**
+ * Renders JSON values as a JSON string.
+ */
 class JsonRendererProvider implements FieldRendererProviderInterface
 {
     #[Override]

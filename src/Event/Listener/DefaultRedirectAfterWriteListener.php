@@ -8,6 +8,9 @@ use Dontdrinkandroot\CrudAdminBundle\Service\Url\UrlResolverInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
+/**
+ * Redirects to the list page after a successful write operation.
+ */
 class DefaultRedirectAfterWriteListener
 {
     public function __construct(

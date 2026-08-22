@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Exception;
 use Dontdrinkandroot\Common\CrudOperation;
 use Exception;
 
+/**
+ * Thrown when an entity could not be found for the given id.
+ */
 class EntityNotFoundException extends Exception
 {
     public function __construct(

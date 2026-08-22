@@ -4,6 +4,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Template;
 
 use Dontdrinkandroot\Common\CrudOperation;
 
+/**
+ * Resolves the template of an entity class for a CRUD operation.
+ */
 interface TemplateResolverInterface
 {
     /**

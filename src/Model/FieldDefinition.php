@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Model;
 use Dontdrinkandroot\Common\CrudOperation;
 use Symfony\Component\Form\FormTypeInterface;
 
+/**
+ * Describes how a property of an entity is displayed and edited.
+ */
 class FieldDefinition
 {
     /**

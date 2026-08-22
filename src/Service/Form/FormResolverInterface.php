@@ -5,6 +5,9 @@ namespace Dontdrinkandroot\CrudAdminBundle\Service\Form;
 use Dontdrinkandroot\Common\CrudOperation;
 use Symfony\Component\Form\FormInterface;
 
+/**
+ * Resolves the form of an entity class for a CRUD operation.
+ */
 interface FormResolverInterface
 {
     /**

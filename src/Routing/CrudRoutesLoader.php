@@ -11,6 +11,9 @@ use Symfony\Component\Config\Loader\Loader;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 
+/**
+ * Loads the CRUD routes of all registered controllers.
+ */
 class CrudRoutesLoader extends Loader
 {
     public const string TYPE = 'ddr_crud';

@@ -5,6 +5,8 @@ namespace Dontdrinkandroot\CrudAdminBundle\Controller;
 use Override;
 
 /**
+ * CRUD controller for a single entity class.
+ *
  * @template T of object
  *
  * @extends AbstractCrudController<T>
