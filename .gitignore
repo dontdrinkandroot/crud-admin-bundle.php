@@ -5,3 +5,4 @@
 /symfony.lock
 /coverage/
 .phpunit.result.cache
+/crap4j.xml

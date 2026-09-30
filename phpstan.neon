@@ -6,3 +6,7 @@ parameters:
     excludePaths:
         - 'tests/TestApp/config/reference.php'
     checkMissingOverrideMethodAttribute: true
+    composerAnalysis:
+        ignoreAllShadowDeps: true
+        ignoreAllUnusedDeps: true
+        ignoreAllProdDepsInDev: true
